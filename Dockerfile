@@ -7,7 +7,7 @@ RUN mkdir /opt/AI_MDM_Prototype
 WORKDIR /opt/AI_MDM_Prototype
 
 # Install spark
-RUN dnf install -y java-1.8.0-openjdk
+RUN dnf install -y java-1.8.0-openjdk procps
 RUN mkdir --parents external/spark
 RUN curl --output spark.tgz https://dlcdn.apache.org/spark/spark-3.4.0/spark-3.4.0-bin-hadoop3.tgz
 RUN tar --extract --file spark.tgz --directory external/spark --strip-components 1
