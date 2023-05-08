@@ -14,13 +14,15 @@ RUN microdnf install -y java-1.8.0-openjdk-headless procps-ng tar gzip nginx pyt
 RUN mkdir --parents external/spark \
     && curl --output spark.tgz https://dlcdn.apache.org/spark/spark-3.4.0/spark-3.4.0-bin-hadoop3.tgz \
     && tar --extract --file spark.tgz --directory external/spark --strip-components 1 \
-    && rm spark.tgz
+    && rm spark.tgz \
+    && rm -r external/spark/examples
 
 # Install zingg
 RUN mkdir --parents external/zingg \
     && curl --location --output zingg.tar.gz https://github.com/zinggAI/zingg/releases/download/v0.3.4/zingg-0.3.4-SNAPSHOT-spark-3.1.2.tar.gz \
     && tar --extract --file zingg.tar.gz --directory external/zingg --strip-components 1 \
-    && rm zingg.tar.gz
+    && rm zingg.tar.gz \
+    && rm -r external/zingg/examples
 
 # Install nginx
 RUN mkdir --parents /usr/share/nginx/html/reports \
