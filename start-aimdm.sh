@@ -4,7 +4,7 @@
 #source envs/ai-mdm/bin/activate
 
 # Start the websocket relay server
-nohup python run_websocketrelay_server.py &
+# nohup python run_websocketrelay_server.py &
 
 # Start gunicorn and streamlit
 nohup gunicorn --worker-class gevent -w 3 run_flask:app --access-logfile gunicorn.access.log --error-logfile gunicorn.error.log &
