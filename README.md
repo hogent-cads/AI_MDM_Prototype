@@ -157,3 +157,23 @@ location /aimdmtool {
 ```
 
 Voeg dit toe net voor de `location` die de forwarding doet naar `gunicorn`.
+
+## Docker
+
+Bouw de image en start de container:
+
+```
+sudo docker build --tag aimdm . && sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
+```
+
+Stop de container:
+
+```
+sudo docker container stop aimdm_container
+```
+
+Herstart de container:
+
+```
+sudo docker container start aimdm_container
+```
