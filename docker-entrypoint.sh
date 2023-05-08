@@ -4,7 +4,10 @@ echo "Starting nginx"
 nginx
 
 echo "Starting gunicorn"
-gunicorn --workers=3 run_flask:app --daemon
+gunicorn --worker-class gevent --workers=3 \
+         --access-logfile gunicorn.access.log \
+         --error-logfile gunicorn.error.log \
+         run_flask:app --daemon
 
 echo "Starting streamlit"
 streamlit run run_streamlit.py \
