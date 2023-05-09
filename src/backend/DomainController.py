@@ -12,92 +12,21 @@ from src.backend.Suggestions.SuggestionFinder import SuggestionFinder
 from src.backend.DataPreperation.DataPrepper import DataPrepper
 from src.backend.DataCleaning.DataFrameCleaner import DataFrameCleaner
 from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
-from src.backend.Deduplication.DeduperSessionManager import DeduperSessionManager
 from flask import json, request
 from flask_classful import FlaskView, route
 from src.backend.DataCleaning.FuzzyMatcher import FuzzyMatcher
 from src.backend.DataCleaning.StructureDetector import StructureDetector
 from src.backend.Deduplication.Zingg import Zingg
 
+
 class DomainController(FlaskView):
-    
+
     def __init__(self, session_dict={}, app=None) -> None:
         self.session_dict = session_dict
         self.app = app
         self.data_prepper = DataPrepper()
         self.rule_mediator = None
         self.suggestion_finder = None
-        self.deduper_session_manager = DeduperSessionManager()
-
-    # DEDUPE METHODS
-    @route('/create_deduper_object', methods=['POST'])
-    def create_deduper_object(self, dedupe_type_dict="", dedupe_data="") -> json:   
-        cfg.logger.debug(f"dedupe_type_dict={dedupe_type_dict}")
-        cfg.logger.debug(f"dedupe data has size={dedupe_data}")
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-            data_to_use = json.loads(request.data)
-            dedupe_type_dict = data_to_use["dedupe_type_dict"]
-            dedupe_data = data_to_use["dedupe_data"]
-            cfg.logger.debug("From the data in the request")
-            cfg.logger.debug(f"dedupe_type_dict={dedupe_type_dict}")
-            cfg.logger.debug(f"len(dedupe data)={len(dedupe_data)}")
-        finally:
-            self.deduper_session_manager.create_member(unique_storage_id = unique_storage_id , dedupe_type_dict = dedupe_type_dict, dedupe_data = dedupe_data)
-            # Add a return statement to fix this error
-            # TypeError: The view function for 'DomainController:create_deduper_object' did not return a valid response. 
-            # The function either returned None or ended without a return statement.
-            return ""
-        
-    @route('/dedupe_next_pair', methods=['GET'])
-    def dedupe_next_pair(self) -> json:
-        cfg.logger.debug("Calling dedupe_next_pair")
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-        finally:
-            return json.dumps(self.deduper_session_manager.read_member(unique_storage_id)["dedupe_object"].next_pair())
-    
-    @route('/dedupe_mark_pair', methods=['POST'])
-    def dedupe_mark_pair(self, labeled_pair="") -> json:
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-            data_to_use = json.loads(request.data)
-            labeled_pair = data_to_use["labeled_pair"]
-        finally:
-            self.deduper_session_manager.read_member(unique_storage_id)["dedupe_object"].mark_pair(labeled_pair=labeled_pair)
-            return ""
-
-    @route('/dedupe_get_stats', methods=['GET'])
-    def dedupe_get_stats(self) -> json:
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-        finally:
-            return json.dumps(self.deduper_session_manager.read_member(unique_storage_id)["dedupe_object"].get_stats())
-
-    @route('/dedupe_train', methods=['POST'])
-    def dedupe_train(self) -> json:
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-        finally:
-            self.deduper_session_manager.read_member(unique_storage_id)["dedupe_object"].train()
-            return ""
-
-    @route('/dedupe_get_clusters', methods=['GET'])
-    def dedupe_get_clusters(self) -> json:
-        unique_storage_id = "Local"
-        try:
-            unique_storage_id = request.cookies.get("session_flask")
-            tmp = json.dumps(self.deduper_session_manager.read_member(unique_storage_id)["dedupe_object"].get_clusters())
-            self.deduper_session_manager.delete_member(unique_storage_id)
-        except Exception as e:
-            print(e)
-        finally:
-            return tmp
 
     # ZINGG METHODS
     @route('/prepare_zingg', methods=['POST'])

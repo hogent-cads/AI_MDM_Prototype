@@ -1,7 +1,5 @@
 dask==2023.4.1
 dataprep==0.4.5
-dedupe==2.0.23
-dedupe_variable_datetime==0.1.5
 extra_streamlit_components==0.1.56
 Flask
 Flask_Classful==0.14.2
