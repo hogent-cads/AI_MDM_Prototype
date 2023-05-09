@@ -197,7 +197,7 @@ Voeg dit toe net voor de `location` die de forwarding doet naar `gunicorn`.
     Je kan ook extra comprimeren:
 
     ```
-    sudo docker save aimdm:latest | gzip > aimdm_latest.tar.gz
+    sudo docker save aimdm:latest | gzip --best > aimdm_latest.tar.gz
     ```
 
 

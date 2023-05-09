@@ -167,3 +167,8 @@ cython_debug/
 
 # Vagrant
 .vagrant/
+
+# Archives
+*.tar
+*.tar.gz
+*.tgz
