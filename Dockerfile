@@ -30,9 +30,8 @@ RUN mkdir --parents /usr/share/nginx/html/reports \
 COPY nginx.conf /etc/nginx/
 
 # Install AI_MDM_Prototype
-RUN pip3 install gunicorn gunicorn[gevent]
 COPY requirements.txt requirements.txt
-RUN pip3 install --requirement requirements.txt
+RUN pip3 install --no-cache-dir gunicorn gunicorn[event] --requirement requirements.txt
 COPY --link . /opt/AI_MDM_Prototype
 
 CMD ["./docker-entrypoint.sh"]
