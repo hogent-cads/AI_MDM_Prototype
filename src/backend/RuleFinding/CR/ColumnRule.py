@@ -48,7 +48,7 @@ class ColumnRule:
         return (self.rule_string
                 + " (" + str(self.confidence) + ")"
                 + ", met als mapping: "
-                + str(self.value_mapping)
+                + str(self.mapping_df)
                 )
 
     def _create_dataframe_to_be_corrected(self) -> pd.DataFrame:
@@ -265,7 +265,12 @@ class ColumnRule:
         """
         s = self.mapping_df['__SUPPORT_LHS_AND_RHS'].sum()
         num_tuples = self.original_df.shape[0]
-        self.g3_measure_ = 1 - (num_tuples - s)/(num_tuples - self.mapping_df.shape[0])
+        if num_tuples != self.mapping_df.shape[0]:
+            self.g3_measure_ = \
+                1 - (num_tuples - s)/(num_tuples - self.mapping_df.shape[0])
+        else:
+            assert num_tuples == s, "Error in mapping dataframe"
+            self.g3_measure_ = 1
         return self.g3_measure_
 
     def is_more_specific_than(self, other):
@@ -356,5 +361,8 @@ def g3_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
         # However, because the index isn't sorted, we know that the most frequent
         # value is the first one. So we can just take the first value.
         s += values.loc[x].iloc[0]
-
-    return 1 - (num_tuples - s)/(num_tuples - lhs_values.shape[0])
+    if num_tuples != lhs_values.shape[0]: # Avoid division by zero
+        return 1 - (num_tuples - s)/(num_tuples - lhs_values.shape[0])
+    else:
+        assert num_tuples == s
+        return 1

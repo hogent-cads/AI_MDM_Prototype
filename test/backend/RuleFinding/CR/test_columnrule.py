@@ -399,6 +399,27 @@ def test_g3_measure_empty_antecedent_on_cr():
     assert math.isclose(result, 9/14)
 
 
+def test_g3_measure_lhs_equals_domain():
+    df = pd.DataFrame({
+        'a': [_ for _ in range(0, 10)],
+        'b': [0, 2, 1, 1, 1, 2, 0, 2, 0, 0]
+        })
+    result = g3_measure(df, ['a'], 'b')
+    assert math.isclose(result, 1.0)
+
+
+def test_g3_measure_lhs_equals_domain_on_cr():
+    df = pd.DataFrame({
+        'a': [_ for _ in range(0, 10)],
+        'b': [0, 2, 1, 1, 1, 2, 0, 2, 0, 0]
+        })
+    cr = ColumnRule(rule_string="a => b",
+                    original_df=df,
+                    value_mapping=True)
+    result = cr.compute_g3_measure()
+    assert math.isclose(result, 1.0)
+
+
 def test_fi_measure_empty_antecedent():
     # When the antecedent is empty, FI measure is always equal to zero
     a = ['a'] * 15
@@ -543,6 +564,24 @@ def test_fi_measure_3():
     assert math.isclose(result, result_manual)
 
 
+def test_fi_measure_4():
+    # Table 3.1
+    a = ['a1'] * 10 + ['a2'] * 5
+    b = ['b1'] * 9 + ['b2'] + ['b3'] * 4 + ['b2']
+
+    # Create a column rule to compute G3 from.
+    df = pd.DataFrame({'A': a, 'B': b})
+
+    result = fi_measure(df, ['A'], 'B')
+
+    entropy_y = -(9/15 * np.log2(9/15) + 4/15 * np.log2(4/15) + 2/15 * np.log2(2/15))
+    entropy_y_given_x = -(9/15 * np.log2(9/10) + 1/15 * np.log2(1/10)
+                          + 4/15 * np.log2(4/5) + 1/15 * np.log2(1/5))
+    result_manual = (entropy_y - entropy_y_given_x)/entropy_y
+
+    assert math.isclose(result, result_manual)
+
+
 def test_is_more_specific_1():
     # The actual values in the columns are irrelevant for this test
     a = ['1'] * 5 + ['2'] * 5 + ['3'] * 5
@@ -604,3 +643,6 @@ def test_c_measure_1():
     assert math.isclose(g3, 0.99, abs_tol=0.01)  # Using result from the thesis
     rfi = cr.compute_rfi_measure()
     assert math.isclose(rfi, 0.974, abs_tol=0.01)  # Using result from the thesis
+
+if __name__ == '__main__':
+    test_fi_measure_4()
