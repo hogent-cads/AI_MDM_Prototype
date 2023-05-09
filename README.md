@@ -160,20 +160,56 @@ Voeg dit toe net voor de `location` die de forwarding doet naar `gunicorn`.
 
 ## Docker
 
-Bouw de image en start de container:
+* Bouw de image:
 
-```
-sudo docker build --tag aimdm . && sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
-```
+    ```
+    sudo docker build --tag aimdm .
+    ```
 
-Stop de container:
+* Start de container (je kan poort 8080 vervangen naar een poort naar keuze):
 
-```
-sudo docker container stop aimdm_container
-```
+    ```
+    sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
+    ```
 
-Herstart de container:
+    Surf nu naar http://localhost:8080/aimdmtool
 
-```
-sudo docker container start aimdm_container
-```
+* Stop de container:
+
+    ```
+    sudo docker container stop aimdm_container
+    ```
+
+    Hiervoor open je best een andere terminal, aangezien de docker container niet reageert op Ctrl+C.
+
+* Herstart de container:
+
+    ```
+    sudo docker container start aimdm_container
+    ```
+
+* Exporteren van de image:
+
+    ```
+    sudo docker save --output aimdm_latest.tar aimdm:latest
+    ```
+
+    Je kan ook extra comprimeren:
+
+    ```
+    sudo docker save aimdm:latest | gzip > aimdm_latest.tar.gz
+    ```
+
+
+* Importeren van de image:
+
+    ```
+    sudo docker load --input aimdm_latest.tar
+    ```
+
+    Bij gebruik van extra comprimeren, moet er ook gedecomprimeerd worden:
+
+    ```
+    gunzip aimdm_latest.tar.gz
+    sudo docker load --input aimdm_latest.tar
+    ```
