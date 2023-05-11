@@ -16,9 +16,10 @@ logger.addHandler(handler)
 configuration = {
     # Data profiling report will be stored in the following directory under "reports"
     "WWW_ROOT": "/usr/share/nginx/html",
+    "HANDLER_TYPE": "Remote", # "Local" or "Remote
     "remote_url": '127.0.0.1',
-    # Change to 8000
-    "remote_port": '5000',
+    "remote_port": '8000',
     # Port for the web socket server
-    "WEBSOCKET_SERVER_URL": "wss://linode.liquidco.in"
+    "WEBSOCKET_SERVER_URL": "wss://linode.liquidco.in",
+    "WEBSOCKET_SERVER_PORT": 80
 }
