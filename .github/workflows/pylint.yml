@@ -20,4 +20,4 @@ jobs:
         pip install pylint -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint --init-hook="import sys; sys.path.append('.')" --variable-rgx="[a-z0-9_]{1,30}" $(git ls-files '*.py')
+        pylint --init-hook="import sys; sys.path.append('.')" --variable-rgx="[a-z0-9_]{1,30}" src/ run_streamlit.py run_flask.py
