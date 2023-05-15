@@ -1,6 +1,92 @@
 # Prototype AI-MDM
 
-## Installatie
+## Installatie in VM
+
+### Prerequisites:
+
+- Install Vagrant from https://developer.hashicorp.com/vagrant/downloads (choose your platform)
+- Make sure you know your github login and password. 
+- Make sure you have git including gitbash installed. If not install git+gitbash from https://git-scm.com/downloads 
+- Free disk space: 5 GB
+
+### Installation of the tool AI-MDM
+
+1. Create a directory for the tool.
+1. Download Vagrant file from https://github.com/hogent-cads/AI_MDM_Prototype as "Vagrantfile" (not Vagrant.txt!)
+2. Download install-aimdm.sh from https://github.com/hogent-cads/AI_MDM_Prototype as "install-aimdm.sh"
+3. Open Git Bash from the directory were you saved both files. 
+4. Type the following commands in the bash shell:
+   1. vagrant up
+   2. vagrant ssh. You now get a prompt like "[vagrant@localhost ~]". 
+   3. cp /vagrant/install-aimdm.sh .
+   4. ls -l. Check if you find both downloaded files. 
+   5. sudo dnf install dos2unix
+   6. dos2unix install-aimdm.sh
+   7. ./install-aimdm.sh
+   8. cd AI_MDM_Prototype/
+   9. ./start-aimdm.sh
+5.  Minimize bash window
+6.  Start web browser.
+7.  Surf to localhost:80/aimdmtool and start using the tool. 
+
+## Docker
+
+* Bouw de image:
+
+    ```
+    sudo docker build --tag aimdm .
+    ```
+
+* Start de container (je kan poort 8080 vervangen naar een poort naar keuze):
+
+    ```
+    sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
+    ```
+
+    Surf nu naar http://localhost:8080/aimdmtool
+
+* Stop de container:
+
+    ```
+    sudo docker container stop aimdm_container
+    ```
+
+    Hiervoor open je best een andere terminal, aangezien de docker container niet reageert op Ctrl+C.
+
+* Herstart de container:
+
+    ```
+    sudo docker container start aimdm_container
+    ```
+
+* Exporteren van de image:
+
+    ```
+    sudo docker save --output aimdm_latest.tar aimdm:latest
+    ```
+
+    Je kan ook extra comprimeren:
+
+    ```
+    sudo docker save aimdm:latest | gzip --best > aimdm_latest.tar.gz
+    ```
+
+
+* Importeren van de image:
+
+    ```
+    sudo docker load --input aimdm_latest.tar
+    ```
+
+    Bij gebruik van extra comprimeren, moet er ook gedecomprimeerd worden:
+
+    ```
+    gunzip aimdm_latest.tar.gz
+    sudo docker load --input aimdm_latest.tar
+    ```
+
+
+## Stand-alone installatie
 
 We gaan er bij deze installatiegids van uit dat Python en git reeds zijn geïnstalleerd.
 
@@ -32,7 +118,7 @@ Installeer de vereisten in de virtuele omgeving:
 pip install -r requirements.txt
 ```
 
-## Zingg & Apache Spark Installatie:
+### Zingg & Apache Spark Installatie:
 
 Zingg: Versie: zingg-0.3.4-SNAPSHOT-spark-3.1.2
 https://github.com/zinggAI/zingg/releases
@@ -158,58 +244,3 @@ location /aimdmtool {
 
 Voeg dit toe net voor de `location` die de forwarding doet naar `gunicorn`.
 
-## Docker
-
-* Bouw de image:
-
-    ```
-    sudo docker build --tag aimdm .
-    ```
-
-* Start de container (je kan poort 8080 vervangen naar een poort naar keuze):
-
-    ```
-    sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
-    ```
-
-    Surf nu naar http://localhost:8080/aimdmtool
-
-* Stop de container:
-
-    ```
-    sudo docker container stop aimdm_container
-    ```
-
-    Hiervoor open je best een andere terminal, aangezien de docker container niet reageert op Ctrl+C.
-
-* Herstart de container:
-
-    ```
-    sudo docker container start aimdm_container
-    ```
-
-* Exporteren van de image:
-
-    ```
-    sudo docker save --output aimdm_latest.tar aimdm:latest
-    ```
-
-    Je kan ook extra comprimeren:
-
-    ```
-    sudo docker save aimdm:latest | gzip --best > aimdm_latest.tar.gz
-    ```
-
-
-* Importeren van de image:
-
-    ```
-    sudo docker load --input aimdm_latest.tar
-    ```
-
-    Bij gebruik van extra comprimeren, moet er ook gedecomprimeerd worden:
-
-    ```
-    gunzip aimdm_latest.tar.gz
-    sudo docker load --input aimdm_latest.tar
-    ```
