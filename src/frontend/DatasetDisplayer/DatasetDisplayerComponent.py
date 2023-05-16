@@ -1,20 +1,34 @@
 import streamlit as st
 import pandas as pd
-from st_aggrid import GridOptionsBuilder, AgGrid
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode
+from src.frontend.enums.VarEnum import VarEnum
 
 
 
 class DatasetDisplayerComponent: 
 
-    def show(self, dataframe:pd.DataFrame):
-        # Toon de dataframe -> NIET EDITEERBAAR
-        MIN_HEIGHT = 50
-        MAX_HEIGHT = 500
-        ROW_HEIGHT = 60
+    def __init__(self) -> None:
+        pass
 
-        st.markdown(f"<h4>Loaded dataset: </h4>", unsafe_allow_html=True)
-        gb = GridOptionsBuilder.from_dataframe(dataframe)
+    def show(self, min_height:int = 50, max_height:int = 500, row_height:int = 60):
+
+        st.header('Loaded dataset:')
+        gb = GridOptionsBuilder.from_dataframe(st.session_state[VarEnum.sb_LOADED_DATAFRAME])
         gb.configure_side_bar()
-        gb.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc="sum", editable=False)
-        gridOptions = gb.build()
-        return AgGrid(dataframe, gridOptions=gridOptions, enable_enterprise_modules=True, height=min(MIN_HEIGHT + len(dataframe) * ROW_HEIGHT, MAX_HEIGHT))
+        gb.configure_default_column(editable=True)
+        standard_grid_options = gb.build()
+        
+        extra_grid_options = {
+            "alwaysShowHorizontalScroll": True,
+            "alwaysShowVerticalScroll": True,
+            "pagination": True,
+            "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
+                    }
+        
+        grid_options = standard_grid_options | extra_grid_options 
+        grid_response  = AgGrid(st.session_state[VarEnum.sb_LOADED_DATAFRAME], update_mode=GridUpdateMode.GRID_CHANGED, gridOptions=grid_options, enable_enterprise_modules=True, height=min(min_height + len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]) * row_height, max_height))     
+        # Check if data is changed
+        if st.session_state[VarEnum.sb_LOADED_DATAFRAME] is not grid_response["data"]:
+            st.session_state[VarEnum.sb_LOADED_DATAFRAME] = grid_response["data"]
+            # Force cache refresh when data is changed, (However the file will not be reloaded)
+            st.session_state[VarEnum.ddc_FORCE_RELOAD_CACHE] = True

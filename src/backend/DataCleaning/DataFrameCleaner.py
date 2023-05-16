@@ -1,6 +1,7 @@
 # from dataprep.clean import clean_df
 import pandas as pd
 import math
+import json
 """
 Clean a DataFrame column containing text data.
 """
@@ -220,10 +221,10 @@ NULL_VALUES = {
 }
 
 REGEX_BRACKETS = {
-    "angle": re.compile(r"(\<)[^<>]*(\>)"),
-    "curly": re.compile(r"(\{)[^{}]*(\})"),
-    "round": re.compile(r"(\()[^()]*(\))"),
-    "square": re.compile(r"(\[)[^\[\]]*(\])"),
+    "angle": re.compile(r"(\\\<)[^<>]*(\\\>)"),
+    "curly": re.compile(r"(\\\{)[^{}]*(\\\})"),
+    "round": re.compile(r"(\\\()[^()]*(\\\))"),
+    "square": re.compile(r"(\\\[)[^\[\]]*(\\\])"),
 }
 REGEX_DIGITS = re.compile(r"\d+")
 REGEX_DIGITS_BLOCK = re.compile(r"\b\d+\b")
@@ -359,6 +360,7 @@ class DataFrameCleaner:
             # the values and prevent them from being overwritten in subsequent loops
             if "parameters" in component:
                 custom_pipeline.append(self._wrapped_partial(operator, component["parameters"]))
+                # custom_pipeline.append(operator)
             else:
                 custom_pipeline.append(operator)
 
@@ -396,7 +398,14 @@ class DataFrameCleaner:
         """
         Replace all null values with NaN (default) or the supplied value.
         """
-        return value if text in NULL_VALUES else str(text)
+        try:
+            text = str(text).strip()
+        except Exception as e:
+            print(e)
+        try:
+            return value if (text in NULL_VALUES or math.isnan(text)) else text
+        except Exception as e:
+            return value if (text in NULL_VALUES) else text
 
     def _lowercase(self,text: Any) -> Any:
         """
@@ -449,14 +458,25 @@ class DataFrameCleaner:
         """
         if pd.isna(text):
             return text
+        
+        try:
+            brackets = eval(brackets)
+        except Exception as e:
+            print(e)
+            brackets = set(brackets)
 
         text = str(text)
-        value = "" if inclusive else r"\g<1>\g<2>"
-        if isinstance(brackets, set):
+        # value = "" if inclusive else r"\g<1>\g<2>"
+        if isinstance(brackets,set):
             for bracket in brackets:
-                text = re.sub(REGEX_BRACKETS[bracket], value, text)
+                # replace all content between brackets from the text, including the brackets
+                l_bracket = list(bracket)
+                text = re.sub(rf'\{l_bracket[0]}.*?\{l_bracket[1]}', '', text)
+                
+
+
         else:
-            text = re.sub(REGEX_BRACKETS[brackets], value, text)
+            text = re.sub(REGEX_BRACKETS[brackets], "", text)
 
         return text
 
@@ -482,9 +502,9 @@ class DataFrameCleaner:
         text = str(text)
         if isinstance(prefix, set):
             for pre in prefix:
-                text = re.sub(rf"{pre}\S+", "", text)
+                text = re.sub(rf"{pre}\S*", "", text)
         else:
-            text = re.sub(rf"{prefix}\S+", "", text)
+            text = re.sub(rf"{prefix}\S*", "", text)
 
         return text
 
@@ -635,4 +655,4 @@ class DataFrameCleaner:
         """
         partial_func = partial(func, **params)
         update_wrapper(partial_func, func)
-        return 
+        return partial_func

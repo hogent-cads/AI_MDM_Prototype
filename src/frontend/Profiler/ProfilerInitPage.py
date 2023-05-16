@@ -6,8 +6,11 @@ from ydata_profiling import ProfileReport
 import hashlib
 import os
 import config as cfg
+import extra_streamlit_components as stx
 
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums.VarEnum import VarEnum as v
+from src.frontend.enums.DialogEnum import DialogEnum as d
+from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
 
 
 class ProfilerInitPage:
@@ -16,31 +19,49 @@ class ProfilerInitPage:
         self.canvas = canvas
         self.handler = handler
 
-    def show_pandas_profiling(self):
-        st.header('The Data Profiling report is getting generated. Please wait...')
-        pr = ProfileReport(st.session_state[VarEnum.sb_LOADED_DATAFRAME.value])
-        st_profile_report(pr)
+    def show(self):
+        chosen_tab = stx.tab_bar(data=[
+            stx.TabBarItemData(id=1, title="Dataset", description=""),
+            stx.TabBarItemData(id=2, title=d.sb_DATA_PROFILING_option_pandas, description=""),
+            stx.TabBarItemData(id=3, title=d.sb_DATA_PROFILING_option_dataprep, description=""),
+            ], default=1)
 
-    def show_dataprep_profiling(self):
+        if chosen_tab == "1":
+            DatasetDisplayerComponent().show()
 
-        # Create MD5 of the dataframe to use as a filename
-        df = st.session_state[VarEnum.sb_LOADED_DATAFRAME.value]
-        md5_hash = hashlib.md5(df.to_string().encode("utf-8")).hexdigest()
+        if chosen_tab == "2":
+            self._show_pandas_profiling()
 
-        # Make path to directory to store the reports.
-        # We assume that this directory already exists.
-        directory = os.path.join(cfg.configuration["WWW_ROOT"], "reports")
+        if chosen_tab == "3":
+            self._show_dataprep_profiling()
+        
 
-        # Create and save the report
-        path = os.path.join(directory, f"{md5_hash}.html")
-        report = create_report(df)
-        report.save(path)
+    def _show_pandas_profiling(self):
+        if st.session_state[v.dp_PANDAS_PROFILE] is None:
+            generate_profiling = st.button("Generate Pandas Profiling Report")
+            if generate_profiling:
+                st.header('The Data Profiling report is getting generated. Please wait...')
+                st.session_state[v.dp_PANDAS_PROFILE] = ProfileReport(st.session_state[v.sb_LOADED_DATAFRAME])
+                st_profile_report(st.session_state[v.dp_PANDAS_PROFILE])
+        else:
+            st_profile_report(st.session_state[v.dp_PANDAS_PROFILE])
 
-        # Show a link to the report
-        text = "Link to the report"
-        st.header('The Data Profiling report is getting generated. ' +
-                  'Click on the link below to view it')
-        # The url starts from WWW_ROOT, so we need to go up one level
-        # in order to get rid of "aimdmtool" in the url
-        url = os.path.join("..", "reports", f"{md5_hash}.html")
-        st.markdown(f'<a href="{url}">{text}</a>', unsafe_allow_html=True)
+    def _show_dataprep_profiling(self):
+        if st.session_state[v.dp_DATAPREP_PROFILE] is None:
+            generate_profiling = st.button("Generate Dataprep Profiling Report")
+            if generate_profiling:
+                st.header('The Data Profiling report is getting generated. Please wait...')
+                # Make path to directory to store the reports.
+                # We assume that this directory already exists.
+                # The url starts from WWW_ROOT, so we need to go up one level
+                # in order to get rid of "aimdmtool" in the url
+                with st.spinner('Generating profile report...'):
+                    path = os.path.join(os.path.join(cfg.configuration["WWW_ROOT"], "reports"), f"{st.session_state[v.sb_LOADED_DATAFRAME_HASH]}.html")
+                    report = create_report(st.session_state[v.sb_LOADED_DATAFRAME])
+                    report.save(path)
+
+                st.session_state[v.dp_DATAPREP_PROFILE] = os.path.join("..", "reports", f"{st.session_state[v.sb_LOADED_DATAFRAME_HASH]}.html")
+                st.markdown(f'<a href="{st.session_state[v.dp_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)
+        else:
+            st.header('Click on the link below to view the report')
+            st.markdown(f'<a href="{st.session_state[v.dp_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)

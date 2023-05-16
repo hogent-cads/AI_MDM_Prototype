@@ -10,17 +10,57 @@ from sklearn.cluster import KMeans
 from src.frontend.enums.DialogEnum import DialogEnum
 from src.frontend.enums.VarEnum import VarEnum
 
+import extra_streamlit_components as stx
+
 class DataExtractorInitPage:
     def __init__(self, canvas, handler):
         self.canvas = canvas
         self.handler = handler
 
+    def show(self):
+        chosen_tab = stx.tab_bar(data=[
+            stx.TabBarItemData(id=1, title="Dataset", description=""),
+            stx.TabBarItemData(id=2, title="Data Extraction", description=""),
+            ], default=1)
+
+        if chosen_tab == "1":
+            DatasetDisplayerComponent().show()
+
+        if chosen_tab == "2":
+            st.info("This functionality is still under development, please use the other functionalities for now.")
+
     @st.cache_resource
     def _kmeans_cluster(_self, n_clusters, _tfidf_vectorizer_vectors):
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
     
-    def show(self):
-        st.info("This functionality is still under development, please use the other functionalities for now.")
+    def _gpt_code(self):
+        df = st.session_state[VarEnum.sb_LOADED_DATAFRAME.value]["Material Description EN"]
+        # st.write(type(df))
+
+        # randomize the order of the records
+        df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+        # Place each record in the series in <> and join them together
+        # to form a single string
+        text_to_cluster = df[:175].apply(lambda x: "<li>" + x + "<\li>").str.cat(sep=" ")
+
+        # remove all " and ' from the text"
+        text_to_cluster = text_to_cluster.replace('"', "")
+        text_to_cluster = text_to_cluster.replace("'", "")
+
+        gpt_prompt = f"""
+        Your task is to cluster material descriptions together. Each material description is defined in <li>-tags.
+        For example: |||<li>material description 1</li> <li>material description 2</li> ...|||. Return the ouput back in the following JSON-format:
+        {{
+        "cluster_id": cluster_id,
+        "records": [description_1, description_2, ...]
+        }}
+
+        The material descriptions you have to use: 
+        |||{text_to_cluster}|||
+        """
+        st.write(gpt_prompt)
+
 
 
 

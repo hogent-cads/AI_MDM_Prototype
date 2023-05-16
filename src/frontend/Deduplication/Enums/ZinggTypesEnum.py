@@ -3,9 +3,9 @@ import enum
  
 # creating enumerations using class
 class ZinggTypesEnum(str, enum.Enum):
+    DONT_USE= 'Appears in the output but no computation is done on these. Helpful for fields like ids that are required in the output.'
     FUZZY= 'Broad matches with typos, abbreviations, and other variations.'
     EXACT= 'No tolerance with variations, Preferable for country codes, pin codes, and other categorical variables where you expect no variations.'
-    DONT_USE= 'Appears in the output but no computation is done on these. Helpful for fields like ids that are required in the output.'
     EMAIL = 'Matches only the id part of the email before the @ character'
     PINCODE = 'Matches pin codes like xxxxx-xxxx with xxxxx'
     NULL_OR_BLANK = "By default Zingg marks matches as"

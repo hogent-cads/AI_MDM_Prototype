@@ -218,7 +218,7 @@ class DomainController(FlaskView):
             for k, v in custom_pipeline.items():
                 if k == "text":
                     df = pd.read_json(dataframe_in_json)
-                    df = dfc.clean_text(df=df, column=df.columns[0], pipeline=v)
+                    df = dfc.clean_text(df=df, column=df.columns[0], pipeline=v).astype(str)
                     return df.to_json()
             # return {}
             # When the pipeline is empty, return the original dataframe
@@ -402,7 +402,8 @@ class DomainController(FlaskView):
             md5_to_check=md5_of_config,
             md5_of_dataframe=md5_of_old_dataframe,
             # VERY HOT PATCH
-            unique_storage_id='None-'+md5_of_old_dataframe,
+            # unique_storage_id='None-'+md5_of_old_dataframe,
+            unique_storage_id=unique_storage_id,
             # unique_storage_id=unique_storage_id,
             seq="",
             save_file=False)
@@ -496,24 +497,5 @@ class DomainController(FlaskView):
 
         # RETURN RESULTS
         return json.dumps(result)
-
-
-
-    # RUNNING AND SHUTDOWN
-    @route('/shutdown_gracefully', methods=['GET'])
-    def gracefull_flask_shutdown(self):
-        self.deduper_session_manager.save_all_members()
-        print("Banaan")
-        os._exit(0)
-        # func = request.environ.get('werkzeug.server.shutdown')
-        # if func is None:
-        #     raise RuntimeError('Not running with the Werkzeug Server')
-
-        # # Save state of dedupe objects
-        # self.deduper_session_manager.save_all_members()
-        # func()
-
-    def run_flask(self):
-        self.app.run(debug=True)
 
 # DomainController.register(app, route_base="/")

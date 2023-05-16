@@ -8,7 +8,6 @@ import hashlib
 
 from src.frontend.enums.VarEnum import VarEnum
 
-
 class RuleLearnerSuggestionsPage:
 
     def __init__(self, canvas, handler: IHandler) -> None:
@@ -17,6 +16,13 @@ class RuleLearnerSuggestionsPage:
 
     def show(self):
         with self.canvas.container():
+            extra_grid_options = {
+                "alwaysShowHorizontalScroll": True,
+                "alwaysShowVerticalScroll": True,
+                "pagination": True,
+                "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
+                    }
+            
             st.title("Rule Learning")
             df_with_predictions = pd.read_json(eval(st.session_state["suggesties_df"]))
 
@@ -39,31 +45,28 @@ class RuleLearnerSuggestionsPage:
 
             suggestions_rows_selected = []
             list_of_df_idx = []
-            if st.session_state["select_all_suggestions_btn"]:
-                pre_selected = [*range(0, len(df_with_predictions))]
-            else:
-                pre_selected = []
 
             gb1 = GridOptionsBuilder.from_dataframe(df_with_predictions)
             gb1.configure_grid_options(fit_columns_on_grid_load=True)
             gb1.configure_selection(
                 'multiple',
-                pre_selected_rows=pre_selected,
+                pre_select_all_rows=False,
                 use_checkbox=True,
                 groupSelectsChildren=True,
-                groupSelectsFiltered=True)
+                groupSelectsFiltered=True, 
+                header_checkbox=True)
             response_selection_suggestion_finder = AgGrid(
                 df_with_predictions,
                 height=350,
                 editable=False,
-                gridOptions=gb1.build(),
+                gridOptions=gb1.build() | extra_grid_options,
                 data_return_mode="filtered_and_sorted",
                 update_mode="selection_changed",
                 theme="streamlit",
                 enable_enterprise_modules=False
             )
 
-            colb3, colb0, colb1, colb2,  = st.columns([1, 2, 1, 4])
+            colb0, colb1, colb2,  = st.columns([1, 1, 2])
 
             aangepaste_dataset = st.container()
 
@@ -74,7 +77,7 @@ class RuleLearnerSuggestionsPage:
                 # de sidebar gaan beginnen aanpassen
 
                 if apply_suggestions:
-                    st.session_state['temp_dataframe'] = st.session_state[VarEnum.sb_LOADED_DATAFRAME.value].copy()
+                    st.session_state['temp_dataframe'] = st.session_state[VarEnum.sb_LOADED_DATAFRAME].copy()
                     suggestions_rows_selected = response_selection_suggestion_finder['selected_rows']
                     list_of_df_idx = df_with_predictions.index
                     set_of_cols = set()
@@ -112,7 +115,7 @@ class RuleLearnerSuggestionsPage:
                         gridOptions = gb22.build()
                         _ = AgGrid(
                                 st.session_state["temp_dataframe"],
-                                gridOptions=gridOptions,
+                                gridOptions=gridOptions | extra_grid_options,
                                 enable_enterprise_modules=True, height=350, key="aangepaste_dataset")
 
 
@@ -125,10 +128,12 @@ class RuleLearnerSuggestionsPage:
                     json_rule_finding_config = rule_finding_config.to_json()
 
                     # recalculate unique storage id
-                    st.session_state[VarEnum.gb_SESSION_ID_WITH_FILE_HASH.value] = f"{st.session_state[VarEnum.gb_SESSION_ID.value]}-{hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()}"
+                    # st.session_state[VarEnum.gb_SESSION_ID_WITH_FILE_HASH] = f"{st.session_state[VarEnum.gb_SESSION_ID]}-{hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()}"
+
+                    st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH] = hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()
 
                     self.handler.recalculate_column_rules(
-                        old_df_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME.value].to_json(),
+                        old_df_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
                         new_df_in_json=st.session_state["temp_dataframe"].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
                         affected_columns=st.session_state["columns_affected_by_suggestion_application"])                  
@@ -138,16 +143,16 @@ class RuleLearnerSuggestionsPage:
                     cfg.logger.debug("Recalculate rules done")
 
                     # Restore state van de aangemaakte file in de session_map
-                    st.session_state[VarEnum.gb_SESSION_MAP.value] = self.handler.get_session_map(
+                    st.session_state[VarEnum.gb_SESSION_MAP] = self.handler.get_session_map(
                         st.session_state['temp_dataframe'].to_json())
                     StateManager.restore_state(
                         **{"handler": self.handler,
-                           "file_path": st.session_state[VarEnum.gb_SESSION_MAP.value]["1"]["rules"],
+                           "file_path": st.session_state[VarEnum.gb_SESSION_MAP]["1"]["rules"],
                            "chosen_seq": "1"})
                     
                     # Nieuwe dataframe, betekent sowieso dat current_session gelijk zal zijn aan 1:
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME.value] = st.session_state['temp_dataframe'].copy()
-                    st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER.value] = 1
+                    st.session_state[VarEnum.sb_LOADED_DATAFRAME] = st.session_state['temp_dataframe'].copy()
+                    st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER] = 1
 
                     st.experimental_rerun()
 
@@ -157,35 +162,6 @@ class RuleLearnerSuggestionsPage:
                     st.download_button(
                         label="Download modified dataset",
                         data=st.session_state["temp_dataframe"].to_csv(index=False).encode('utf-8'),
-                        file_name=f'new_{st.session_state[VarEnum.sb_LOADED_DATAFRAME_NAME.value]}',
+                        file_name=f'new_{st.session_state[VarEnum.sb_LOADED_DATAFRAME_NAME]}',
                         mime='text/csv',
                     )
-
-            with colb3:
-                # Select all button
-                select_all_rules_btn = st.button(
-                    'Select all',
-                    on_click=StateManager.turn_state_button_true,
-                    args=("select_all_suggestions_btn",))
-
-            # if apply_suggestions:
-            #     st.header("Modified dataset:")
-            #     rows_selected = []
-
-            #     for idx, row in enumerate(suggestions_rows_selected):
-            #         rows_selected.append(int(list_of_df_idx[idx]))
-
-            #     gb = GridOptionsBuilder.from_dataframe(st.session_state["temp_dataframe"])
-            #     gb.configure_side_bar()
-            #     gb.configure_selection('multiple', pre_selected_rows=rows_selected)
-            #     gb.configure_default_column(
-            #         groupable=True,
-            #         value=True,
-            #         enableRowGroup=True,
-            #         aggFunc="sum",
-            #         editable=False)
-            #     gridOptions = gb.build()
-            #     _ = AgGrid(
-            #             st.session_state["temp_dataframe"],
-            #             gridOptions=gridOptions,
-            #             enable_enterprise_modules=True)
