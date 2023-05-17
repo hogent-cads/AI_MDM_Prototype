@@ -1,0 +1,1001 @@
+lunch;test preparation course;gender;race/ethnicity;parental level of education;math_score_cat
+standard;none;female;group B;bachelor's degree;4
+standard;completed;female;group C;some college;4
+standard;none;female;group B;master's degree;5
+free/reduced;none;male;group A;associate's degree;3
+standard;none;male;group C;some college;4
+standard;none;female;group B;associate's degree;4
+standard;completed;female;group B;some college;5
+free/reduced;none;male;group B;some college;2
+free/reduced;completed;male;group D;high school;4
+free/reduced;none;female;group B;high school;2
+standard;none;male;group C;associate's degree;3
+standard;none;male;group D;associate's degree;2
+standard;none;female;group B;high school;4
+standard;completed;male;group A;some college;4
+standard;none;female;group A;master's degree;3
+standard;none;female;group C;some high school;4
+standard;none;male;group C;high school;5
+free/reduced;none;female;group B;some high school;1
+free/reduced;completed;male;group C;master's degree;3
+free/reduced;none;female;group C;associate's degree;3
+standard;none;male;group D;high school;4
+free/reduced;completed;female;group B;some college;4
+standard;none;male;group D;some college;3
+standard;none;female;group C;some high school;4
+free/reduced;completed;male;group D;bachelor's degree;4
+free/reduced;none;male;group A;master's degree;4
+standard;none;male;group B;some college;4
+standard;none;female;group C;bachelor's degree;4
+standard;none;male;group C;high school;4
+standard;none;female;group D;master's degree;4
+standard;none;female;group D;some college;4
+standard;none;female;group B;some college;4
+free/reduced;none;female;group E;master's degree;3
+standard;none;male;group D;some college;2
+standard;none;male;group E;some college;5
+standard;completed;male;group E;associate's degree;5
+standard;none;female;group D;associate's degree;4
+free/reduced;none;female;group D;some high school;3
+free/reduced;completed;female;group D;associate's degree;4
+free/reduced;none;male;group B;associate's degree;3
+free/reduced;none;male;group C;associate's degree;3
+standard;none;female;group C;associate's degree;3
+standard;none;female;group B;associate's degree;3
+free/reduced;completed;male;group B;some college;3
+free/reduced;none;female;group E;associate's degree;3
+standard;none;male;group B;associate's degree;4
+standard;completed;female;group A;associate's degree;3
+standard;none;female;group C;high school;4
+free/reduced;completed;female;group D;associate's degree;3
+standard;completed;male;group C;high school;5
+standard;none;male;group E;some college;3
+free/reduced;completed;male;group E;associate's degree;4
+standard;none;male;group C;some college;3
+standard;none;male;group D;high school;5
+free/reduced;completed;female;group C;some high school;4
+free/reduced;none;female;group C;high school;2
+standard;completed;female;group E;associate's degree;5
+standard;none;male;group D;associate's degree;3
+standard;completed;male;group D;some college;3
+free/reduced;none;female;group C;some high school;
+free/reduced;completed;male;group E;bachelor's degree;4
+free/reduced;none;male;group A;some high school;2
+free/reduced;none;male;group A;associate's degree;4
+standard;none;female;group C;associate's degree;4
+standard;none;female;group D;some high school;3
+standard;none;male;group B;some high school;4
+free/reduced;none;male;group D;some high school;3
+standard;none;female;group C;some college;3
+free/reduced;none;male;group B;associate's degree;4
+standard;none;female;group C;associate's degree;2
+free/reduced;completed;female;group D;some college;3
+standard;completed;male;group D;some college;4
+free/reduced;none;female;group A;associate's degree;3
+free/reduced;none;male;group C;some high school;4
+standard;none;male;group C;some high school;3
+free/reduced;none;male;group B;associate's degree;3
+standard;none;male;group E;some high school;2
+standard;completed;male;group A;bachelor's degree;4
+standard;completed;female;group D;some high school;4
+standard;none;female;group E;master's degree;4
+standard;none;female;group B;associate's degree;3
+free/reduced;none;male;group B;high school;3
+free/reduced;completed;male;group A;some college;3
+standard;none;male;group E;associate's degree;4
+free/reduced;none;male;group D;high school;3
+standard;none;female;group C;some college;4
+free/reduced;none;female;group C;some college;4
+standard;none;female;group D;associate's degree;4
+standard;none;female;group A;some college;3
+standard;none;female;group D;some high school;4
+standard;none;female;group C;bachelor's degree;4
+free/reduced;none;male;group C;high school;2
+standard;none;male;group C;high school;4
+free/reduced;completed;male;group C;associate's degree;3
+standard;none;female;group B;some college;4
+free/reduced;completed;male;group C;associate's degree;4
+standard;completed;male;group B;some high school;4
+standard;completed;female;group E;some college;4
+free/reduced;none;female;group D;some college;3
+standard;none;female;group D;bachelor's degree;4
+standard;none;male;group B;some college;4
+standard;completed;male;group D;bachelor's degree;4
+standard;none;female;group D;associate's degree;5
+standard;completed;male;group B;high school;3
+standard;completed;male;group C;some college;5
+standard;none;female;group C;some college;3
+standard;none;female;group D;master's degree;5
+standard;completed;male;group E;associate's degree;4
+free/reduced;none;female;group B;associate's degree;3
+standard;none;female;group B;some high school;4
+free/reduced;completed;female;group D;associate's degree;4
+standard;none;male;group C;high school;4
+standard;none;male;group A;associate's degree;3
+standard;none;female;group D;some college;3
+standard;completed;female;group E;bachelor's degree;5
+standard;none;male;group C;high school;5
+free/reduced;none;female;group B;bachelor's degree;4
+standard;none;female;group D;bachelor's degree;4
+standard;none;female;group D;some high school;3
+standard;none;female;group C;some college;3
+standard;completed;female;group C;bachelor's degree;4
+standard;completed;male;group B;associate's degree;5
+standard;completed;female;group C;some college;5
+free/reduced;none;male;group D;high school;4
+standard;none;male;group E;some college;5
+standard;none;female;group B;high school;5
+standard;none;male;group B;some high school;4
+standard;completed;male;group D;some college;4
+standard;none;male;group D;master's degree;5
+standard;none;female;group A;bachelor's degree;3
+standard;none;male;group D;master's degree;5
+free/reduced;completed;male;group C;some high school;3
+free/reduced;completed;male;group E;some college;5
+standard;completed;female;group C;some college;4
+free/reduced;completed;male;group D;bachelor's degree;4
+standard;none;male;group C;bachelor's degree;3
+standard;completed;male;group B;some high school;3
+standard;none;male;group E;high school;4
+standard;none;female;group C;associate's degree;3
+standard;completed;male;group D;some college;4
+standard;none;female;group D;some high school;4
+free/reduced;none;female;group C;some college;3
+free/reduced;completed;female;group E;some college;3
+standard;none;male;group A;high school;3
+standard;none;male;group D;some college;5
+free/reduced;none;female;group C;some college;2
+standard;none;male;group B;some high school;5
+free/reduced;none;male;group C;associate's degree;4
+standard;completed;female;group D;bachelor's degree;4
+free/reduced;completed;male;group E;associate's degree;5
+standard;completed;male;group A;some high school;4
+standard;none;male;group A;bachelor's degree;4
+standard;completed;female;group B;associate's degree;3
+standard;none;male;group D;bachelor's degree;3
+standard;none;male;group D;some high school;4
+standard;completed;female;group C;some college;4
+free/reduced;completed;female;group E;high school;4
+free/reduced;none;male;group B;some college;3
+standard;completed;female;group B;associate's degree;4
+free/reduced;none;male;group D;associate's degree;4
+free/reduced;completed;male;group B;associate's degree;5
+free/reduced;completed;female;group E;some college;4
+free/reduced;none;male;group B;master's degree;3
+standard;none;male;group C;high school;3
+standard;none;female;group E;master's degree;5
+standard;completed;female;group C;bachelor's degree;5
+free/reduced;completed;male;group C;high school;3
+free/reduced;completed;female;group B;master's degree;3
+standard;completed;female;group B;high school;4
+free/reduced;completed;female;group C;some college;4
+standard;completed;male;group A;high school;4
+standard;none;male;group E;some high school;5
+standard;none;female;group D;some college;4
+standard;none;female;group C;associate's degree;4
+free/reduced;completed;female;group C;bachelor's degree;3
+standard;completed;female;group C;master's degree;5
+free/reduced;completed;female;group B;high school;3
+standard;completed;female;group C;associate's degree;4
+free/reduced;completed;female;group B;master's degree;3
+standard;completed;female;group D;some high school;5
+free/reduced;completed;male;group C;master's degree;4
+free/reduced;none;female;group C;some college;3
+standard;none;female;group E;high school;3
+standard;none;female;group D;associate's degree;4
+free/reduced;completed;male;group C;some high school;3
+free/reduced;completed;male;group C;associate's degree;4
+standard;none;male;group E;high school;4
+standard;completed;male;group D;some high school;4
+free/reduced;none;male;group B;some high school;3
+standard;none;female;group C;bachelor's degree;4
+standard;none;female;group E;associate's degree;4
+standard;completed;male;group D;some college;4
+standard;none;female;group B;some high school;4
+standard;completed;male;group D;some college;4
+standard;completed;female;group C;master's degree;4
+standard;none;male;group D;associate's degree;4
+free/reduced;completed;male;group C;some high school;3
+free/reduced;none;male;group E;high school;3
+free/reduced;none;female;group B;some college;3
+free/reduced;none;female;group B;bachelor's degree;4
+standard;completed;female;group C;associate's degree;4
+free/reduced;none;female;group D;some college;4
+standard;none;male;group C;associate's degree;4
+standard;none;female;group B;associate's degree;3
+standard;none;male;group C;some college;3
+standard;completed;male;group D;some high school;4
+standard;none;male;group E;bachelor's degree;5
+standard;completed;male;group E;high school;5
+free/reduced;none;female;group B;some college;4
+free/reduced;none;female;group B;some college;3
+free/reduced;completed;male;group D;some high school;4
+free/reduced;none;male;group C;some college;2
+free/reduced;none;female;group C;high school;3
+free/reduced;completed;male;group C;associate's degree;3
+standard;completed;male;group E;high school;5
+standard;completed;male;group B;some high school;5
+free/reduced;completed;female;group E;associate's degree;5
+free/reduced;none;female;group C;high school;2
+free/reduced;none;male;group B;high school;4
+standard;completed;male;group B;some high school;4
+standard;completed;female;group D;high school;3
+standard;none;male;group B;associate's degree;5
+free/reduced;none;female;group C;some high school;3
+standard;none;male;group D;some high school;5
+standard;completed;female;group B;associate's degree;3
+free/reduced;none;female;group E;master's degree;3
+standard;none;female;group C;some college;4
+standard;none;male;group D;high school;3
+free/reduced;none;male;group A;some high school;4
+standard;completed;female;group C;some college;5
+standard;none;male;group D;some college;4
+standard;none;male;group C;associate's degree;3
+standard;none;female;group B;bachelor's degree;4
+standard;none;male;group E;some high school;5
+standard;completed;male;group C;bachelor's degree;5
+standard;none;male;group D;associate's degree;4
+free/reduced;none;male;group D;bachelor's degree;4
+standard;completed;female;group D;some high school;4
+standard;none;male;group B;some college;3
+standard;none;male;group C;associate's degree;5
+free/reduced;completed;male;group D;high school;4
+standard;none;female;group E;bachelor's degree;4
+standard;none;female;group D;high school;3
+standard;none;male;group E;some college;3
+standard;none;male;group D;some high school;4
+standard;none;male;group C;associate's degree;5
+standard;none;male;group E;associate's degree;5
+standard;completed;female;group B;high school;3
+standard;none;female;group B;high school;4
+standard;none;male;group C;high school;4
+standard;completed;male;group A;some high school;3
+free/reduced;none;female;group D;some college;4
+standard;completed;female;group B;some high school;3
+standard;none;male;group D;master's degree;4
+standard;none;male;group D;high school;3
+standard;none;female;group E;some college;4
+free/reduced;none;female;group C;associate's degree;4
+standard;completed;male;group C;associate's degree;4
+standard;none;female;group B;some college;4
+free/reduced;completed;female;group C;master's degree;4
+free/reduced;completed;female;group C;some high school;4
+standard;completed;male;group C;some college;4
+free/reduced;none;female;group C;some high school;3
+standard;none;female;group E;high school;5
+standard;none;male;group D;high school;4
+free/reduced;none;male;group D;some high school;3
+standard;none;female;group C;bachelor's degree;4
+standard;none;female;group D;high school;4
+standard;completed;female;group D;associate's degree;5
+free/reduced;none;female;group E;some college;4
+standard;none;male;group C;bachelor's degree;4
+standard;none;male;group C;some college;3
+free/reduced;none;female;group D;associate's degree;3
+standard;none;female;group D;some college;4
+standard;completed;male;group B;some college;5
+standard;none;male;group C;bachelor's degree;5
+standard;completed;female;group C;some high school;5
+standard;completed;female;group E;high school;3
+free/reduced;none;female;group C;some high school;4
+free/reduced;none;male;group B;bachelor's degree;4
+standard;none;male;group D;high school;3
+standard;none;male;group D;high school;3
+free/reduced;none;female;group D;bachelor's degree;4
+free/reduced;completed;female;group D;some college;4
+standard;none;female;group B;some high school;2
+standard;completed;male;group B;associate's degree;5
+standard;completed;male;group E;associate's degree;5
+standard;none;female;group B;some high school;4
+free/reduced;none;male;group B;bachelor's degree;5
+standard;completed;male;group E;some high school;4
+standard;none;male;group C;associate's degree;4
+standard;none;male;group D;some high school;5
+standard;completed;male;group C;some high school;4
+standard;none;female;group E;bachelor's degree;4
+free/reduced;completed;male;group D;high school;4
+free/reduced;none;male;group B;associate's degree;4
+standard;completed;male;group A;some high school;3
+standard;completed;male;group E;associate's degree;4
+free/reduced;completed;male;group C;high school;2
+free/reduced;none;male;group D;associate's degree;5
+free/reduced;completed;male;group A;some college;5
+free/reduced;none;male;group D;some high school;3
+standard;completed;female;group C;associate's degree;4
+standard;none;male;group B;associate's degree;4
+standard;completed;female;group C;associate's degree;4
+standard;none;male;group A;some college;4
+standard;completed;male;group E;some college;5
+standard;none;male;group C;some high school;3
+free/reduced;none;female;group B;associate's degree;3
+free/reduced;none;female;group D;high school;3
+standard;none;female;group B;associate's degree;4
+standard;none;male;group B;bachelor's degree;4
+standard;completed;male;group D;bachelor's degree;4
+free/reduced;completed;female;group C;associate's degree;4
+standard;completed;female;group C;bachelor's degree;3
+standard;none;male;group C;high school;4
+standard;completed;female;group D;master's degree;4
+standard;none;male;group C;associate's degree;5
+standard;none;male;group B;bachelor's degree;4
+free/reduced;none;female;group D;associate's degree;3
+free/reduced;completed;female;group C;high school;4
+standard;none;female;group E;high school;4
+standard;none;female;group C;some college;4
+free/reduced;none;female;group C;some high school;3
+free/reduced;none;female;group C;high school;3
+standard;none;female;group C;some college;5
+standard;none;male;group C;some college;4
+free/reduced;none;male;group A;some college;2
+standard;completed;male;group C;associate's degree;5
+standard;none;female;group B;some high school;3
+standard;none;male;group C;high school;4
+standard;none;male;group C;associate's degree;3
+standard;completed;male;group E;associate's degree;4
+standard;none;male;group B;associate's degree;5
+standard;none;female;group C;bachelor's degree;5
+free/reduced;none;female;group B;some college;4
+standard;completed;male;group D;some high school;4
+standard;none;male;group C;associate's degree;3
+free/reduced;none;female;group B;some high school;2
+free/reduced;completed;female;group D;some high school;2
+free/reduced;none;male;group C;high school;3
+standard;none;female;group C;high school;4
+standard;completed;female;group B;high school;4
+standard;completed;male;group D;associate's degree;4
+standard;none;male;group D;some college;4
+standard;none;female;group C;high school;4
+standard;none;male;group B;some college;4
+standard;completed;female;group C;bachelor's degree;4
+free/reduced;none;male;group D;high school;4
+standard;none;male;group E;associate's degree;5
+standard;none;female;group B;bachelor's degree;3
+standard;none;male;group E;some college;4
+standard;completed;female;group C;some college;4
+standard;none;female;group C;associate's degree;3
+standard;none;female;group C;some college;3
+standard;none;female;group B;bachelor's degree;4
+standard;none;male;group A;associate's degree;4
+free/reduced;completed;female;group C;some college;3
+free/reduced;none;male;group D;some college;3
+standard;none;female;group D;some college;4
+standard;none;female;group B;high school;3
+standard;completed;male;group B;some high school;5
+standard;none;female;group C;some college;3
+free/reduced;none;female;group D;some high school;2
+standard;none;male;group C;some college;3
+free/reduced;completed;male;group A;bachelor's degree;3
+standard;completed;male;group C;high school;4
+free/reduced;none;male;group C;bachelor's degree;4
+free/reduced;none;female;group A;some high school;3
+standard;none;female;group D;some high school;4
+standard;none;male;group E;some college;5
+free/reduced;completed;female;group C;some college;3
+standard;none;male;group D;some high school;4
+standard;completed;female;group D;some college;5
+standard;none;female;group D;bachelor's degree;3
+free/reduced;none;male;group E;associate's degree;3
+standard;none;female;group D;some high school;4
+free/reduced;completed;female;group D;master's degree;5
+standard;none;female;group A;some high school;4
+standard;none;male;group A;bachelor's degree;4
+standard;none;female;group B;associate's degree;4
+standard;completed;male;group C;associate's degree;5
+free/reduced;none;male;group C;master's degree;4
+free/reduced;none;female;group E;some high school;2
+free/reduced;none;female;group A;some high school;2
+standard;none;female;group E;some college;4
+standard;none;female;group E;bachelor's degree;4
+free/reduced;none;female;group C;associate's degree;3
+standard;none;female;group D;high school;4
+standard;none;male;group D;master's degree;4
+free/reduced;completed;male;group E;some high school;4
+standard;none;female;group D;some college;4
+standard;none;male;group E;some college;4
+standard;completed;male;group C;associate's degree;3
+standard;completed;female;group C;some high school;4
+free/reduced;none;male;group A;high school;3
+free/reduced;none;female;group B;high school;3
+standard;none;female;group C;associate's degree;5
+standard;none;male;group B;some high school;4
+standard;none;male;group D;some high school;3
+standard;completed;female;group C;some high school;3
+standard;none;male;group A;some college;3
+free/reduced;none;female;group A;some college;3
+standard;completed;female;group D;high school;5
+standard;none;female;group C;high school;3
+standard;none;female;group C;some high school;4
+standard;completed;male;group B;associate's degree;4
+standard;none;female;group B;associate's degree;5
+free/reduced;completed;female;group D;high school;3
+standard;completed;male;group D;associate's degree;5
+standard;completed;female;group D;master's degree;4
+standard;completed;male;group E;some college;5
+standard;none;male;group D;associate's degree;4
+standard;completed;male;group B;some high school;4
+free/reduced;completed;female;group C;bachelor's degree;3
+standard;none;male;group E;high school;5
+standard;completed;male;group C;bachelor's degree;4
+standard;none;male;group C;associate's degree;4
+standard;none;male;group D;some college;4
+free/reduced;completed;male;group E;high school;3
+free/reduced;completed;female;group C;associate's degree;5
+standard;completed;female;group D;high school;3
+free/reduced;completed;female;group D;master's degree;3
+standard;completed;female;group A;some high school;3
+free/reduced;none;male;group B;some college;3
+free/reduced;none;female;group C;some college;4
+standard;none;male;group C;bachelor's degree;5
+free/reduced;none;male;group C;some high school;4
+free/reduced;none;male;group A;some high school;4
+free/reduced;none;male;group C;some high school;4
+free/reduced;none;male;group C;associate's degree;4
+standard;none;female;group C;high school;4
+standard;none;male;group C;high school;4
+free/reduced;none;female;group A;some high school;3
+standard;none;male;group C;some high school;4
+free/reduced;completed;male;group C;some college;3
+standard;none;male;group D;associate's degree;4
+free/reduced;none;male;group D;associate's degree;4
+standard;none;male;group C;high school;4
+standard;completed;male;group D;some high school;5
+standard;completed;female;group C;some college;4
+standard;none;female;group D;high school;4
+free/reduced;none;female;group A;some high school;3
+standard;none;female;group B;associate's degree;4
+free/reduced;none;male;group A;some high school;4
+standard;completed;female;group C;some high school;4
+free/reduced;none;male;group D;some college;4
+standard;completed;male;group C;high school;5
+standard;none;male;group B;high school;3
+standard;none;male;group B;associate's degree;5
+free/reduced;completed;female;group C;some college;4
+standard;none;female;group E;some college;5
+free/reduced;none;female;group C;associate's degree;4
+free/reduced;none;male;group C;some college;4
+free/reduced;none;female;group C;associate's degree;3
+free/reduced;none;male;group C;bachelor's degree;2
+standard;none;female;group D;bachelor's degree;4
+free/reduced;none;male;group D;associate's degree;3
+standard;none;female;group E;bachelor's degree;5
+standard;completed;male;group B;high school;4
+free/reduced;none;male;group C;bachelor's degree;3
+free/reduced;none;male;group B;some college;3
+standard;none;female;group E;some college;4
+free/reduced;none;female;group C;some college;4
+standard;completed;male;group A;bachelor's degree;4
+standard;none;female;group C;some college;5
+free/reduced;none;female;group D;associate's degree;2
+free/reduced;completed;male;group A;high school;4
+free/reduced;completed;female;group A;high school;4
+standard;none;male;group C;some college;5
+standard;completed;female;group C;associate's degree;5
+standard;none;female;group C;high school;4
+standard;completed;female;group C;associate's degree;4
+standard;none;female;group D;some high school;3
+standard;completed;female;group B;associate's degree;5
+standard;completed;female;group D;bachelor's degree;4
+standard;completed;male;group E;bachelor's degree;4
+standard;none;male;group D;associate's degree;4
+standard;none;female;group D;master's degree;3
+standard;none;male;group E;associate's degree;4
+standard;completed;male;group B;high school;4
+free/reduced;none;female;group D;associate's degree;3
+free/reduced;none;male;group C;some college;4
+standard;none;male;group A;high school;3
+standard;none;female;group B;associate's degree;3
+standard;none;male;group C;high school;4
+free/reduced;none;male;group D;some college;4
+free/reduced;none;female;group C;associate's degree;3
+standard;completed;male;group B;some high school;4
+free/reduced;completed;male;group A;associate's degree;4
+free/reduced;none;female;group A;associate's degree;4
+standard;none;female;group C;associate's degree;4
+standard;none;female;group C;some college;5
+standard;none;female;group C;bachelor's degree;5
+standard;none;female;group B;high school;3
+standard;completed;male;group D;high school;4
+standard;none;female;group C;some college;3
+free/reduced;completed;female;group D;some college;3
+standard;none;female;group B;some high school;4
+standard;none;male;group E;some college;4
+standard;none;female;group D;master's degree;4
+standard;completed;female;group B;associate's degree;5
+free/reduced;none;male;group C;some college;4
+standard;completed;female;group E;associate's degree;5
+free/reduced;none;female;group D;master's degree;2
+standard;none;female;group B;some high school;5
+standard;none;male;group A;high school;4
+free/reduced;none;male;group B;bachelor's degree;3
+standard;none;male;group C;master's degree;4
+standard;none;female;group C;bachelor's degree;5
+standard;none;male;group D;some college;4
+standard;none;male;group A;some high school;4
+free/reduced;none;male;group D;some high school;4
+standard;completed;female;group B;some high school;3
+free/reduced;completed;female;group B;master's degree;4
+standard;completed;female;group C;some high school;4
+standard;none;female;group D;some college;4
+standard;completed;female;group E;some college;4
+standard;completed;female;group D;some high school;4
+free/reduced;completed;female;group B;high school;4
+standard;none;male;group D;some college;4
+standard;none;female;group C;associate's degree;5
+standard;none;male;group D;bachelor's degree;4
+free/reduced;none;male;group C;master's degree;3
+standard;completed;male;group C;high school;3
+standard;none;male;group E;some college;4
+free/reduced;completed;male;group C;some high school;3
+free/reduced;none;female;group C;high school;2
+free/reduced;none;female;group D;bachelor's degree;2
+standard;none;female;group C;associate's degree;4
+standard;completed;female;group C;associate's degree;4
+standard;none;female;group C;some high school;3
+standard;completed;male;group E;associate's degree;4
+standard;completed;female;group E;associate's degree;4
+standard;completed;male;group B;high school;4
+free/reduced;completed;female;group C;bachelor's degree;4
+standard;completed;male;group C;associate's degree;3
+standard;none;female;group D;high school;3
+standard;completed;male;group E;bachelor's degree;5
+standard;completed;male;group A;associate's degree;5
+standard;completed;male;group C;high school;4
+free/reduced;completed;male;group D;associate's degree;4
+standard;none;female;group C;associate's degree;5
+standard;none;female;group D;associate's degree;5
+standard;none;female;group D;master's degree;4
+free/reduced;completed;male;group E;some high school;4
+standard;completed;female;group A;some high school;5
+standard;completed;male;group C;high school;4
+free/reduced;none;female;group C;high school;4
+standard;none;male;group C;master's degree;4
+free/reduced;none;male;group C;some high school;4
+free/reduced;completed;male;group B;bachelor's degree;5
+standard;none;female;group B;associate's degree;2
+free/reduced;none;male;group D;some college;4
+standard;none;male;group E;associate's degree;3
+free/reduced;none;female;group C;some college;2
+standard;completed;female;group C;associate's degree;3
+free/reduced;none;male;group C;master's degree;4
+free/reduced;none;female;group B;associate's degree;3
+standard;none;male;group D;some high school;4
+standard;completed;female;group D;some college;4
+standard;none;female;group C;some college;4
+standard;completed;male;group C;bachelor's degree;5
+free/reduced;completed;female;group D;some college;4
+free/reduced;none;male;group B;bachelor's degree;3
+standard;none;male;group B;associate's degree;3
+free/reduced;completed;female;group E;bachelor's degree;5
+free/reduced;completed;female;group D;master's degree;4
+free/reduced;none;male;group B;high school;4
+free/reduced;none;male;group D;bachelor's degree;4
+standard;completed;male;group B;some college;4
+standard;none;male;group A;bachelor's degree;5
+standard;none;female;group C;some college;3
+free/reduced;completed;female;group C;high school;3
+standard;none;female;group E;high school;4
+free/reduced;completed;male;group A;associate's degree;2
+standard;completed;male;group A;some college;4
+standard;none;female;group B;high school;5
+free/reduced;completed;female;group B;some college;3
+standard;none;female;group D;master's degree;3
+standard;none;female;group D;some high school;5
+standard;none;female;group E;some high school;4
+free/reduced;none;female;group D;bachelor's degree;4
+standard;completed;female;group D;associate's degree;4
+standard;none;female;group D;some college;4
+standard;none;female;group C;associate's degree;4
+standard;none;female;group A;high school;3
+free/reduced;none;female;group C;bachelor's degree;3
+standard;none;female;group C;some college;3
+standard;none;female;group A;some high school;3
+free/reduced;none;male;group C;some college;3
+standard;none;male;group A;some high school;4
+standard;none;male;group E;bachelor's degree;4
+standard;none;female;group E;high school;4
+standard;completed;female;group C;bachelor's degree;5
+standard;completed;female;group C;bachelor's degree;3
+free/reduced;none;male;group B;high school;2
+standard;none;male;group A;some high school;3
+standard;none;female;group D;high school;4
+standard;none;female;group D;some high school;4
+standard;none;female;group D;master's degree;3
+standard;none;female;group C;high school;2
+standard;none;female;group E;some college;4
+free/reduced;none;male;group D;high school;3
+free/reduced;completed;male;group D;master's degree;5
+standard;none;male;group C;some high school;4
+standard;none;female;group C;associate's degree;5
+free/reduced;none;female;group C;master's degree;2
+standard;none;female;group E;some college;4
+standard;none;female;group B;associate's degree;3
+free/reduced;completed;male;group D;some college;4
+standard;none;female;group C;some college;3
+standard;completed;male;group C;bachelor's degree;5
+standard;none;female;group C;associate's degree;4
+standard;none;female;group A;associate's degree;5
+standard;none;female;group C;high school;3
+standard;none;female;group E;bachelor's degree;2
+standard;none;male;group D;bachelor's degree;5
+standard;none;male;group D;master's degree;5
+free/reduced;completed;male;group C;associate's degree;4
+free/reduced;none;female;group C;high school;2
+free/reduced;none;male;group B;bachelor's degree;4
+free/reduced;completed;male;group C;high school;3
+standard;completed;male;group A;some college;5
+free/reduced;none;female;group E;bachelor's degree;4
+standard;completed;male;group D;some college;5
+free/reduced;completed;male;group B;associate's degree;4
+standard;none;male;group D;associate's degree;4
+free/reduced;none;male;group D;some college;3
+standard;completed;female;group C;some high school;3
+standard;none;male;group D;some college;4
+standard;none;male;group B;high school;4
+standard;completed;female;group B;bachelor's degree;4
+standard;none;female;group C;high school;4
+standard;none;male;group D;some high school;5
+standard;none;male;group A;high school;4
+free/reduced;completed;female;group B;high school;4
+standard;completed;female;group D;some high school;4
+standard;none;male;group E;some college;5
+standard;none;female;group D;associate's degree;4
+standard;none;male;group D;high school;3
+free/reduced;completed;female;group D;associate's degree;4
+free/reduced;none;female;group B;some high school;4
+standard;completed;female;group E;high school;4
+standard;none;male;group B;high school;4
+standard;completed;female;group B;bachelor's degree;4
+standard;none;female;group D;associate's degree;3
+free/reduced;none;female;group E;high school;4
+standard;none;female;group B;high school;3
+standard;completed;female;group D;some college;4
+free/reduced;completed;male;group C;some high school;3
+standard;completed;female;group A;high school;4
+standard;completed;female;group D;some college;5
+standard;completed;female;group A;associate's degree;4
+standard;none;female;group B;some high school;4
+standard;none;female;group B;some college;4
+free/reduced;none;male;group C;associate's degree;4
+standard;none;male;group D;some high school;4
+free/reduced;none;female;group D;associate's degree;3
+standard;none;male;group D;associate's degree;5
+free/reduced;none;male;group C;some college;4
+standard;none;male;group C;some high school;4
+free/reduced;none;female;group D;some college;3
+standard;none;female;group C;high school;4
+standard;none;male;group D;associate's degree;4
+free/reduced;completed;female;group C;some high school;3
+free/reduced;completed;female;group C;some college;4
+free/reduced;none;female;group B;bachelor's degree;4
+standard;none;male;group C;some college;4
+standard;completed;male;group D;associate's degree;5
+free/reduced;none;female;group C;high school;4
+free/reduced;none;male;group D;associate's degree;3
+standard;none;female;group C;some college;4
+standard;completed;female;group C;associate's degree;4
+standard;completed;female;group D;high school;4
+standard;completed;female;group B;some college;3
+standard;completed;female;group E;some college;4
+standard;completed;female;group C;some high school;4
+free/reduced;none;male;group D;associate's degree;5
+free/reduced;none;male;group D;some college;4
+standard;none;female;group D;high school;4
+standard;none;male;group B;high school;3
+standard;none;male;group B;high school;4
+free/reduced;completed;female;group C;some high school;2
+standard;completed;male;group B;some college;4
+standard;completed;female;group E;master's degree;5
+standard;completed;male;group E;some college;5
+free/reduced;none;male;group D;associate's degree;4
+free/reduced;none;male;group A;high school;3
+free/reduced;none;male;group E;some college;5
+standard;none;female;group C;associate's degree;3
+free/reduced;none;female;group E;associate's degree;4
+free/reduced;completed;female;group C;bachelor's degree;4
+standard;none;female;group D;associate's degree;4
+standard;none;female;group C;some high school;3
+free/reduced;none;female;group D;some college;4
+standard;completed;female;group C;associate's degree;4
+standard;none;female;group A;bachelor's degree;3
+standard;completed;female;group D;associate's degree;3
+free/reduced;none;male;group C;high school;4
+standard;completed;female;group E;bachelor's degree;4
+standard;none;female;group B;some high school;3
+standard;completed;male;group A;bachelor's degree;5
+standard;none;female;group D;some college;4
+free/reduced;completed;female;group B;some high school;3
+free/reduced;none;male;group A;bachelor's degree;4
+standard;none;male;group D;high school;3
+standard;none;male;group C;some college;4
+standard;none;male;group D;high school;5
+free/reduced;completed;female;group D;associate's degree;3
+standard;completed;male;group C;some college;5
+standard;completed;female;group E;some high school;4
+standard;none;female;group D;some college;5
+standard;none;male;group D;master's degree;5
+standard;completed;female;group B;some high school;3
+free/reduced;completed;female;group B;associate's degree;4
+standard;completed;male;group C;associate's degree;4
+standard;completed;female;group C;associate's degree;5
+standard;none;female;group C;high school;4
+free/reduced;completed;male;group E;associate's degree;5
+free/reduced;none;female;group C;some college;4
+free/reduced;completed;male;group D;some high school;3
+free/reduced;completed;female;group B;some high school;4
+standard;none;male;group C;high school;3
+standard;none;male;group B;some college;3
+standard;completed;male;group E;some college;5
+standard;completed;female;group E;associate's degree;4
+standard;completed;male;group E;some high school;4
+free/reduced;none;female;group D;high school;4
+standard;none;male;group C;some college;3
+free/reduced;completed;female;group B;associate's degree;4
+free/reduced;none;male;group A;some high school;3
+standard;completed;female;group C;some college;5
+standard;none;male;group D;some high school;3
+free/reduced;none;female;group E;some college;3
+standard;none;male;group C;master's degree;4
+standard;none;male;group C;associate's degree;5
+free/reduced;completed;female;group B;some college;3
+standard;none;male;group D;associate's degree;5
+free/reduced;none;male;group C;high school;4
+standard;none;male;group D;bachelor's degree;4
+free/reduced;none;female;group A;associate's degree;2
+standard;none;female;group C;high school;5
+standard;completed;female;group C;associate's degree;3
+free/reduced;none;male;group B;some college;3
+standard;none;male;group D;associate's degree;4
+standard;none;male;group D;high school;4
+standard;none;male;group C;some college;4
+free/reduced;none;female;group C;bachelor's degree;3
+standard;completed;male;group B;some college;5
+standard;completed;male;group D;some high school;4
+standard;none;male;group E;some college;4
+free/reduced;completed;male;group C;master's degree;4
+standard;completed;female;group C;some high school;4
+free/reduced;none;male;group C;associate's degree;3
+standard;none;female;group E;associate's degree;5
+standard;none;male;group D;some college;3
+free/reduced;completed;male;group E;bachelor's degree;4
+free/reduced;completed;female;group D;some college;3
+standard;completed;male;group B;some college;4
+free/reduced;none;female;group C;high school;3
+standard;none;female;group D;some high school;3
+standard;completed;male;group D;some high school;4
+standard;none;female;group B;high school;4
+standard;none;male;group D;some college;3
+standard;none;female;group B;high school;4
+standard;completed;female;group C;high school;3
+standard;completed;male;group B;high school;4
+standard;none;female;group D;some high school;4
+free/reduced;none;male;group A;some college;3
+standard;none;male;group B;high school;3
+standard;none;male;group D;bachelor's degree;4
+free/reduced;completed;female;group B;some high school;3
+free/reduced;none;female;group C;bachelor's degree;4
+standard;none;male;group B;some college;4
+free/reduced;none;female;group B;some high school;3
+standard;none;female;group B;high school;4
+free/reduced;none;female;group C;some college;2
+standard;completed;female;group A;some college;4
+standard;completed;male;group E;associate's degree;5
+free/reduced;none;female;group D;associate's degree;3
+standard;none;female;group B;master's degree;4
+free/reduced;completed;female;group B;high school;4
+standard;completed;female;group C;associate's degree;3
+standard;completed;male;group C;bachelor's degree;5
+standard;completed;female;group B;some high school;2
+free/reduced;none;female;group E;some high school;4
+standard;none;female;group B;some college;1
+free/reduced;none;male;group C;associate's degree;4
+free/reduced;none;female;group C;master's degree;3
+standard;none;female;group B;high school;3
+free/reduced;none;female;group D;some college;3
+free/reduced;none;male;group D;high school;4
+standard;completed;male;group E;some high school;5
+standard;none;female;group B;high school;3
+free/reduced;completed;female;group E;associate's degree;3
+standard;none;male;group D;high school;4
+free/reduced;none;female;group E;associate's degree;4
+standard;none;male;group E;some college;4
+standard;none;female;group C;associate's degree;3
+standard;completed;male;group C;some high school;4
+standard;completed;male;group C;some high school;4
+standard;none;female;group E;associate's degree;5
+standard;none;female;group B;some college;5
+standard;none;female;group C;some college;4
+free/reduced;none;male;group A;some college;4
+free/reduced;none;female;group D;some college;4
+free/reduced;none;female;group E;high school;3
+standard;none;male;group C;high school;5
+standard;none;male;group B;bachelor's degree;3
+standard;none;male;group A;some high school;3
+free/reduced;none;male;group A;high school;3
+standard;completed;female;group C;master's degree;3
+standard;completed;male;group E;some high school;5
+standard;none;female;group C;high school;4
+standard;completed;male;group B;some high school;5
+standard;none;female;group A;bachelor's degree;3
+free/reduced;completed;male;group D;bachelor's degree;4
+free/reduced;none;female;group B;high school;3
+standard;none;female;group C;some high school;4
+standard;completed;female;group A;some high school;5
+free/reduced;none;female;group D;bachelor's degree;4
+free/reduced;completed;male;group E;some college;3
+free/reduced;none;female;group B;high school;4
+free/reduced;none;female;group C;some high school;3
+standard;none;male;group C;high school;4
+free/reduced;completed;female;group C;associate's degree;3
+standard;none;female;group C;some high school;4
+free/reduced;completed;female;group D;some high school;4
+standard;none;male;group B;some high school;4
+free/reduced;none;female;group A;some college;4
+free/reduced;completed;female;group C;bachelor's degree;4
+standard;none;male;group A;bachelor's degree;4
+standard;completed;female;group B;high school;4
+standard;none;male;group B;some college;3
+standard;completed;female;group C;high school;3
+standard;none;male;group E;high school;4
+standard;completed;female;group A;high school;4
+free/reduced;completed;male;group B;associate's degree;3
+standard;none;female;group C;associate's degree;4
+free/reduced;none;female;group D;high school;2
+standard;none;male;group C;some high school;4
+free/reduced;completed;female;group B;high school;2
+free/reduced;completed;male;group B;some college;4
+free/reduced;completed;female;group D;some high school;2
+standard;none;male;group E;master's degree;5
+standard;completed;male;group C;master's degree;5
+standard;none;male;group D;high school;4
+standard;none;female;group C;high school;3
+standard;none;male;group D;associate's degree;4
+standard;none;male;group C;master's degree;4
+standard;none;female;group A;high school;4
+standard;none;female;group E;some college;5
+standard;none;male;group E;some high school;5
+standard;none;male;group C;some high school;4
+standard;none;female;group B;bachelor's degree;5
+free/reduced;none;male;group B;some college;4
+standard;none;female;group C;bachelor's degree;4
+standard;completed;male;group B;high school;3
+free/reduced;none;male;group C;associate's degree;5
+standard;none;female;group C;associate's degree;3
+free/reduced;none;female;group E;master's degree;5
+free/reduced;completed;male;group D;bachelor's degree;2
+standard;completed;female;group C;some college;4
+standard;none;male;group C;associate's degree;5
+standard;completed;male;group D;some college;5
+free/reduced;none;male;group C;high school;3
+standard;none;male;group B;associate's degree;4
+free/reduced;completed;male;group E;associate's degree;4
+free/reduced;none;male;group C;associate's degree;3
+standard;none;male;group B;high school;3
+standard;completed;female;group C;some college;4
+standard;completed;male;group B;associate's degree;5
+free/reduced;none;male;group E;associate's degree;5
+free/reduced;none;female;group C;bachelor's degree;3
+free/reduced;none;male;group C;some college;4
+standard;none;male;group D;some college;5
+standard;none;male;group C;some high school;3
+standard;none;female;group D;some high school;3
+standard;none;female;group D;associate's degree;4
+standard;completed;male;group C;bachelor's degree;4
+standard;completed;female;group E;bachelor's degree;4
+free/reduced;none;female;group B;high school;4
+free/reduced;none;male;group D;bachelor's degree;3
+standard;none;female;group E;associate's degree;3
+standard;completed;female;group C;associate's degree;4
+standard;completed;female;group E;associate's degree;5
+free/reduced;none;male;group C;high school;3
+free/reduced;none;female;group D;some college;4
+free/reduced;none;male;group D;high school;3
+standard;completed;female;group E;some college;5
+standard;none;female;group E;associate's degree;5
+free/reduced;none;female;group A;master's degree;3
+standard;completed;male;group D;some high school;5
+standard;none;female;group E;associate's degree;3
+free/reduced;none;female;group E;some high school;2
+free/reduced;none;male;group B;high school;2
+free/reduced;completed;female;group B;some high school;4
+standard;completed;male;group D;associate's degree;4
+standard;completed;female;group D;some high school;4
+standard;none;male;group D;master's degree;5
+standard;none;female;group C;master's degree;4
+free/reduced;completed;female;group A;high school;2
+free/reduced;completed;female;group D;bachelor's degree;5
+free/reduced;none;female;group D;some high school;4
+standard;none;male;group D;some college;5
+standard;none;male;group B;high school;3
+standard;completed;female;group D;some college;4
+free/reduced;none;female;group C;bachelor's degree;4
+standard;completed;male;group E;bachelor's degree;4
+free/reduced;none;male;group D;bachelor's degree;3
+standard;none;female;group A;some college;4
+standard;completed;female;group C;bachelor's degree;3
+free/reduced;completed;female;group C;bachelor's degree;3
+free/reduced;none;female;group B;associate's degree;3
+standard;none;female;group E;some college;4
+standard;completed;male;group E;bachelor's degree;5
+standard;none;female;group C;high school;3
+standard;completed;female;group C;associate's degree;3
+standard;completed;male;group B;some college;5
+free/reduced;none;male;group D;high school;4
+free/reduced;none;female;group C;high school;2
+standard;none;male;group D;high school;4
+free/reduced;none;female;group B;associate's degree;3
+free/reduced;none;male;group D;high school;4
+standard;completed;male;group E;some high school;4
+free/reduced;none;male;group E;associate's degree;4
+free/reduced;completed;female;group D;high school;4
+free/reduced;completed;male;group E;associate's degree;3
+free/reduced;none;female;group C;some high school;3
+free/reduced;completed;male;group C;some college;4
+free/reduced;none;male;group D;some college;4
+free/reduced;completed;male;group D;associate's degree;4
+free/reduced;completed;male;group C;bachelor's degree;4
+standard;completed;male;group C;associate's degree;5
+free/reduced;none;male;group D;some college;4
+standard;none;male;group A;associate's degree;4
+free/reduced;none;female;group E;high school;3
+standard;completed;male;group D;some college;5
+standard;completed;male;group D;some high school;4
+free/reduced;completed;male;group C;master's degree;4
+standard;none;female;group D;master's degree;4
+standard;none;male;group C;high school;5
+free/reduced;completed;male;group A;some high school;4
+standard;none;female;group B;high school;3
+standard;none;female;group C;associate's degree;3
+standard;none;male;group B;high school;5
+free/reduced;none;female;group D;some college;3
+free/reduced;completed;male;group B;some high school;3
+free/reduced;completed;female;group E;high school;3
+standard;none;male;group E;high school;5
+standard;completed;female;group D;some college;4
+free/reduced;none;female;group E;some high school;4
+standard;completed;male;group C;high school;3
+standard;none;female;group C;some college;4
+standard;none;male;group E;associate's degree;4
+standard;none;male;group C;some college;5
+standard;none;female;group D;master's degree;5
+standard;none;female;group D;high school;3
+standard;none;male;group C;high school;4
+standard;none;female;group A;some college;3
+free/reduced;none;female;group D;some high school;3
+standard;none;female;group E;associate's degree;5
+free/reduced;completed;female;group C;some high school;4
+standard;none;male;group D;some college;4
+standard;none;female;group D;some college;4
+standard;completed;male;group A;some high school;4
+standard;none;male;group C;some college;4
+standard;none;female;group E;associate's degree;4
+standard;none;female;group B;bachelor's degree;4
+standard;none;female;group D;bachelor's degree;5
+standard;completed;male;group C;some high school;4
+free/reduced;completed;female;group A;high school;3
+free/reduced;none;female;group D;some college;3
+standard;none;female;group A;some college;3
+standard;completed;female;group C;some college;4
+free/reduced;completed;male;group B;some college;3
+standard;none;male;group C;associate's degree;4
+standard;completed;male;group D;high school;3
+standard;none;female;group C;associate's degree;5
+free/reduced;none;female;group B;high school;1
+standard;none;male;group D;some high school;5
+standard;completed;male;group B;some high school;4
+standard;completed;female;group A;some college;4
+standard;none;female;group C;some high school;4
+standard;none;male;group A;high school;3
+standard;none;female;group C;associate's degree;2
+standard;completed;male;group E;some high school;5
+free/reduced;none;female;group A;some high school;3
+free/reduced;completed;female;group D;some college;4
+free/reduced;completed;male;group E;high school;5
+standard;completed;female;group B;some high school;4
+free/reduced;none;female;group D;associate's degree;3
+free/reduced;none;female;group D;bachelor's degree;4
+standard;none;male;group A;high school;4
+standard;completed;female;group E;master's degree;5
+free/reduced;none;male;group C;high school;4
+free/reduced;completed;female;group C;high school;3
+standard;completed;female;group D;some college;4
+free/reduced;none;female;group D;some college;4
