@@ -1,9 +1,13 @@
-import numpy as np
-import pandas as pd
-from src.backend.DataPreperation.DataPrepperCommandFactory import DataPrepperCommandFactory
 from typing import List, Set, Dict
 
+import numpy as np
+import pandas as pd
+
+from src.backend.DataPreperation.DataPrepperCommandFactory import DataPrepperCommandFactory
+
+
 class DataPrepper:
+
     def __init__(self) -> None:
         self.data_prepper_command_factory = DataPrepperCommandFactory()
 

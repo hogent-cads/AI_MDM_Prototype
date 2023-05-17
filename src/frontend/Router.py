@@ -1,20 +1,22 @@
 import streamlit as st
+
 from src.frontend.RuleLearner.RuleLearnerSuggestionsPage import RuleLearnerSuggestionsPage
-
 from src.frontend.RuleLearner.RuleLearnerInitPage import RuleLearnerInitPage
-from src.frontend.RuleLearner.RuleLearnerSummaryRulesPage import RuleLearnerSummaryRulesPage
-
+from src.frontend.RuleLearner.RuleLearnerSummaryRulesPage import (
+    RuleLearnerSummaryRulesPage)
 from src.frontend.Handler.IHandler import IHandler
 from src.frontend.Cleaner.CleanerInitPage import CleanerInitPage
 from src.frontend.Deduplication.InitPage import InitPage
-from src.frontend.Deduplication.ClusterPage import ZinggClusterRedirectPage, ZinggClusterPage
+from src.frontend.Deduplication.ClusterPage import (
+    ZinggClusterRedirectPage, ZinggClusterPage)
 from src.frontend.Profiler.ProfilerInitPage import ProfilerInitPage
 from src.frontend.Extractor.DataExtractorInitPage import DataExtractorInitPage
 from src.frontend.Deduplication.LabelPage import ZinggLabelPage
-
 from src.frontend.enums.VarEnum import VarEnum
 
+
 class Router:
+
     def __init__(self, handler:IHandler) -> None:
         self.handler = handler
 

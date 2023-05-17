@@ -1,28 +1,23 @@
-import pandas as pd
-import streamlit as st
+import json
+import asyncio
+import time
 import uuid
 import hashlib
-import uuid
+
+import pandas as pd
+import streamlit as st
+import streamlit.components.v1 as components
 # KEEP NESTED LAYOUT!
-import streamlit_nested_layout
+import streamlit_nested_layout # pylint: disable=unused-import
+import websockets
+
 from src.frontend.Handler.LocalHandler import LocalHandler
 from src.frontend.Handler.RemoteHandler import RemoteHandler
 from src.frontend.Router import Router
 from src.frontend.StateManager import StateManager
-from streamlit_javascript import st_javascript
-import json
-import config as cfg
-
-import asyncio
-import time
-
-import streamlit.components.v1 as components
-import websockets
-import config as cfg
-
 from src.frontend.enums.DialogEnum import DialogEnum as d
 from src.frontend.enums.VarEnum import VarEnum as v
-
+import config as cfg
 
 def getOrCreateUID():
     if st.session_state[v.gb_SESSION_ID] is None:

@@ -1,10 +1,10 @@
+from typing import Sequence
+
 import pandas as pd
 import numpy as np
-import config as cfg
 
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
-
-from typing import Sequence
+import config as cfg
 
 
 class SuggestionFinder:

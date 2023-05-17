@@ -1,12 +1,11 @@
 import streamlit as st
 import extra_streamlit_components as stx
 
-from src.frontend.Deduplication.Enums.DeDupeTypesEnum import DeDupeTypesEnum
 from src.frontend.Deduplication.Enums.ZinggTypesEnum import ZinggTypesEnum
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
-
 from src.frontend.enums.VarEnum import VarEnum
 from src.frontend.enums.DialogEnum import DialogEnum as d
+
 
 class InitPage:
     def __init__(self, canvas, handler) -> None:

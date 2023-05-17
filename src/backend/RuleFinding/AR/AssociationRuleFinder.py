@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
+from mlxtend.frequent_patterns import fpgrowth
 
 import config as cfg
-from mlxtend.frequent_patterns import fpgrowth
 
 
 class AssociationRuleFinder:

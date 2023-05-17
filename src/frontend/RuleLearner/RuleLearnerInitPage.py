@@ -1,17 +1,14 @@
 import streamlit as st
-from st_aggrid import GridOptionsBuilder, AgGrid
-from src.frontend.Handler.IHandler import IHandler
-from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
-
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
 import extra_streamlit_components as stx
 
+from src.frontend.Handler.IHandler import IHandler
 from src.shared.Enums.FiltererEnum import FiltererEnum
 from src.shared.Enums.BinningEnum import BinningEnum
 from src.shared.Enums.DroppingEnum import DroppingEnum
-
 from src.frontend.enums.VarEnum import VarEnum
-from src.frontend.enums.DialogEnum import DialogEnum as d
+from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
+from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+    DatasetDisplayerComponent)
 
 
 class RuleLearnerInitPage:

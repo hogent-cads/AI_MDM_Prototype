@@ -1,10 +1,7 @@
-# from dataprep.clean import clean_df
-import pandas as pd
-import math
-import json
 """
 Clean a DataFrame column containing text data.
 """
+import math
 import re
 import string
 from functools import partial, update_wrapper
@@ -12,6 +9,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Union
 from unicodedata import normalize
 
 import dask.dataframe as dd
+import pandas as pd
 import numpy as np
 
 english_stopwords = {

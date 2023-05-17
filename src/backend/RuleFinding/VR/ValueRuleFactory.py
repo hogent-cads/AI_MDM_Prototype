@@ -1,8 +1,9 @@
+from typing import Dict, Set, List
+
 import pandas as pd
 
 from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 from src.backend.RuleFinding.VR.ValueRule import ValueRule
-from typing import Dict, Set, List
 
 
 class ValueRuleFactory:

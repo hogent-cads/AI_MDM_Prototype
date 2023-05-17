@@ -1,16 +1,17 @@
+import os
+
 import streamlit as st
 from streamlit_pandas_profiling import st_profile_report
-from dataprep.eda import create_report
-from src.frontend.Handler.IHandler import IHandler
-from ydata_profiling import ProfileReport
-import hashlib
-import os
-import config as cfg
 import extra_streamlit_components as stx
+from dataprep.eda import create_report
+from ydata_profiling import ProfileReport
 
+from src.frontend.Handler.IHandler import IHandler
 from src.frontend.enums.VarEnum import VarEnum as v
 from src.frontend.enums.DialogEnum import DialogEnum as d
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
+from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+    DatasetDisplayerComponent)
+import config as cfg
 
 
 class ProfilerInitPage:

@@ -1,7 +1,6 @@
-import pandas as pd
-import config as cfg
-
 from typing import Dict
+
+import pandas as pd
 
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter
 from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
@@ -14,6 +13,7 @@ from src.shared.Enums.FiltererEnum import FiltererEnum
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter_ZScore
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter_Entropy
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilterCMetric
+import config as cfg
 
 
 class RuleMediator:

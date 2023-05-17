@@ -1,9 +1,8 @@
 import math
+from typing import Sequence, Dict
 
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter
-
-from typing import Sequence, Dict
 
 
 class ColumnRuleRepo:

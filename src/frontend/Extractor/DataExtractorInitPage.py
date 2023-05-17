@@ -1,16 +1,10 @@
 import streamlit as st
-import pandas as pd
-from datetime import datetime
-from streamlit_autorefresh import st_autorefresh
-
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
-from sklearn.feature_extraction.text import TfidfVectorizer 
+import extra_streamlit_components as stx
 from sklearn.cluster import KMeans
 
-from src.frontend.enums.DialogEnum import DialogEnum
 from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
 
-import extra_streamlit_components as stx
 
 class DataExtractorInitPage:
     def __init__(self, canvas, handler):

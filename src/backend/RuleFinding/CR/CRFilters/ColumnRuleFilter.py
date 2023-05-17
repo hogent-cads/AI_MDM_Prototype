@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
+from typing import Sequence, Dict
+import math
 
 import pandas as pd
 import numpy as np
-import config as cfg
-import math
 
-from typing import Sequence, Dict
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
+import config as cfg
 
 
 class ColumnRuleFilter(ABC):

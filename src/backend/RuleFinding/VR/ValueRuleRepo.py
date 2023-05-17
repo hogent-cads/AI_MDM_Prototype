@@ -1,11 +1,11 @@
-import numpy as np
-import config as cfg
-
 from typing import Dict, Set, List, FrozenSet
+
+import numpy as np
 
 from src.backend.RuleFinding.VR.ValueRule import ValueRule
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
 from src.backend.HelperFunctions import HelperFunctions
+import config as cfg
 
 
 class ValueRuleRepo:

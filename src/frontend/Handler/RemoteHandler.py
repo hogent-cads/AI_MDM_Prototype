@@ -1,11 +1,13 @@
-from src.frontend.Handler.IHandler import IHandler
 import json
-from src.shared.Views.ColumnRuleView import ColumnRuleView
 from typing import List
 import requests
+
 import streamlit as st
 
+from src.frontend.Handler.IHandler import IHandler
+from src.shared.Views.ColumnRuleView import ColumnRuleView
 from src.frontend.enums.VarEnum import VarEnum
+
 
 class RemoteHandler(IHandler):
 

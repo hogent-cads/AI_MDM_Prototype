@@ -1,8 +1,7 @@
 import streamlit as st
-import pandas as pd
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode
-from src.frontend.enums.VarEnum import VarEnum
 
+from src.frontend.enums.VarEnum import VarEnum
 
 
 class DatasetDisplayerComponent: 

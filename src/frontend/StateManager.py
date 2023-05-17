@@ -1,14 +1,15 @@
-import streamlit as st
 import json
+
+import streamlit as st
+
 from src.shared.Views.ColumnRuleView import ColumnRuleView
 from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
-
-from src.frontend.enums.DialogEnum import DialogEnum
 from src.frontend.enums.VarEnum import VarEnum
-
 from src.frontend.Handler.IHandler import IHandler
 
+
 class StateManager:
+
     def __init__(self) -> None:
         pass
 

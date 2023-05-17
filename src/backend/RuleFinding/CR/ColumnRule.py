@@ -1,11 +1,13 @@
-import pandas as pd
-import numpy as np
-import config as cfg
 import math
 import pprint
 import json
 from typing import List
+
+import pandas as pd
+import numpy as np
+
 from src.shared.Views.ColumnRuleView import ColumnRuleView
+import config as cfg
 
 
 class ColumnRule:

@@ -1,6 +1,6 @@
-from src.backend.DomainController import DomainController
 from flask import Flask
 
+from src.backend.DomainController import DomainController
 
 
 def main():

@@ -1,6 +1,7 @@
-from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 from typing import List, FrozenSet
 import math
+
+from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 
 
 class ValueRule:

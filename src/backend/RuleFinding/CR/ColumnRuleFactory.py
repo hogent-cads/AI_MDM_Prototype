@@ -1,7 +1,8 @@
+from typing import Sequence, Dict
 import math
+
 import config as cfg
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
-from typing import Sequence, Dict
 
 
 class ColumnRuleFactory:

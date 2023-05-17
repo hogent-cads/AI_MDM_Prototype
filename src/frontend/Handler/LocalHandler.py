@@ -1,8 +1,10 @@
+import json
+from typing import List
+
 from src.frontend.Handler.IHandler import IHandler
 from src.backend.DomainController import DomainController
-import json
 from src.shared.Views.ColumnRuleView import ColumnRuleView
-from typing import List
+
 
 class LocalHandler(IHandler):
 

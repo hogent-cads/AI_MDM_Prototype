@@ -1,12 +1,14 @@
+import hashlib
+
 import pandas as pd
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
+
 from src.frontend.StateManager import StateManager
 from src.frontend.Handler.IHandler import IHandler
-import config as cfg
-import hashlib
-
 from src.frontend.enums.VarEnum import VarEnum
+import config as cfg
+
 
 class RuleLearnerSuggestionsPage:
 

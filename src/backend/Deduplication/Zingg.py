@@ -1,11 +1,13 @@
-import pandas as pd
 import os
 from pathlib import Path
 import hashlib
 from subprocess import Popen, PIPE, STDOUT
 import platform
 import shutil
+
+import pandas as pd
 import pyarrow.parquet as pq
+
 import config as cfg
 
 

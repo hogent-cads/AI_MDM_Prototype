@@ -1,22 +1,23 @@
-import pandas as pd
 import hashlib
 import glob
 import os
-import config as cfg
-
-from src.backend.HelperFunctions import HelperFunctions
 from datetime import datetime
+
+import pandas as pd
+from flask import json, request
+from flask_classful import FlaskView, route
 
 from src.backend.RuleFinding.RuleMediator import RuleMediator
 from src.backend.Suggestions.SuggestionFinder import SuggestionFinder
 from src.backend.DataPreperation.DataPrepper import DataPrepper
 from src.backend.DataCleaning.DataFrameCleaner import DataFrameCleaner
 from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
-from flask import json, request
-from flask_classful import FlaskView, route
 from src.backend.DataCleaning.FuzzyMatcher import FuzzyMatcher
 from src.backend.DataCleaning.StructureDetector import StructureDetector
 from src.backend.Deduplication.Zingg import Zingg
+from src.backend.HelperFunctions import HelperFunctions
+import config as cfg
+
 
 
 class DomainController(FlaskView):

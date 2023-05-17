@@ -1,16 +1,15 @@
-import streamlit as st
-import pandas as pd
-from src.frontend.Handler.IHandler import IHandler
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode
-import re
-import extra_streamlit_components as stx
-import config as cfg
+from copy import deepcopy
 
+import pandas as pd
+import streamlit as st
+from st_aggrid import GridOptionsBuilder, AgGrid
+import extra_streamlit_components as stx
+
+from src.frontend.Handler.IHandler import IHandler
 from src.frontend.enums.VarEnum import VarEnum
 from src.frontend.enums.DialogEnum import DialogEnum as d
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
-
-from copy import deepcopy
+import config as cfg
 
 
 class CleanerInitPage:

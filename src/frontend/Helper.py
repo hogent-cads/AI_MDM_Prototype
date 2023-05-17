@@ -1,10 +1,9 @@
+import re
 from cmath import nan
+
 import pandas as pd
 import streamlit as st
-import re
-
 from sklearn.cluster import KMeans
-
 
 
 # HELP FUNCTIONS

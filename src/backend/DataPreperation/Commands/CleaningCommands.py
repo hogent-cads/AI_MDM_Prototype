@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-import pandas as pd
 import re
+
+import pandas as pd
 
 
 class CleaningCommand(ABC):

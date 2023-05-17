@@ -1,12 +1,12 @@
-import numpy as np
-import pandas as pd
-import streamlit as st
-from st_aggrid import GridOptionsBuilder, AgGrid, ColumnsAutoSizeMode
-from src.frontend.StateManager import StateManager
-from src.frontend.Handler.IHandler import IHandler
 import json
 import math
 
+import pandas as pd
+import streamlit as st
+from st_aggrid import GridOptionsBuilder, AgGrid, ColumnsAutoSizeMode
+
+from src.frontend.StateManager import StateManager
+from src.frontend.Handler.IHandler import IHandler
 from src.frontend.enums.VarEnum import VarEnum
 
 
