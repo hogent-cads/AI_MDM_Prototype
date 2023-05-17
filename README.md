@@ -4,6 +4,7 @@
 
 ### Prerequisites:
 
+- Install Oracle Virtual Box on your machine. 
 - Install Vagrant from https://developer.hashicorp.com/vagrant/downloads (choose your platform)
 - Make sure you know your github login and password. 
 - Make sure you have git including gitbash installed. If not install git+gitbash from https://git-scm.com/downloads 
