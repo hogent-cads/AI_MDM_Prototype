@@ -4,10 +4,10 @@
 
 ### Prerequisites:
 
-- Install Oracle Virtual Box on your machine. 
+- Install Oracle Virtual Box on your machine.
 - Install Vagrant from https://developer.hashicorp.com/vagrant/downloads (choose your platform)
-- Make sure you know your github login and password. 
-- Make sure you have git including gitbash installed. If not install git+gitbash from https://git-scm.com/downloads 
+- Make sure you know your github login and password.
+- Make sure you have git including gitbash installed. If not install git+gitbash from https://git-scm.com/downloads
 - Free disk space: 5 GB
 
 ### Installation of the tool AI-MDM
@@ -15,12 +15,12 @@
 1. Create a directory for the tool.
 1. Download Vagrant file from https://github.com/hogent-cads/AI_MDM_Prototype as "Vagrantfile" (not Vagrant.txt!)
 2. Download install-aimdm.sh from https://github.com/hogent-cads/AI_MDM_Prototype as "install-aimdm.sh"
-3. Open Git Bash from the directory were you saved both files. 
+3. Open Git Bash from the directory were you saved both files.
 4. Type the following commands in the bash shell:
    1. vagrant up
-   2. vagrant ssh. You now get a prompt like "[vagrant@localhost ~]". 
+   2. vagrant ssh. You now get a prompt like "[vagrant@localhost ~]".
    3. cp /vagrant/install-aimdm.sh .
-   4. ls -l. Check if you find both downloaded files. 
+   4. ls -l. Check if you find both downloaded files.
    5. sudo dnf install dos2unix
    6. dos2unix install-aimdm.sh
    7. ./install-aimdm.sh
@@ -28,7 +28,7 @@
    9. ./start-aimdm.sh
 5.  Minimize bash window
 6.  Start web browser.
-7.  Surf to localhost:80/aimdmtool and start using the tool. 
+7.  Surf to localhost:80/aimdmtool and start using the tool.
 
 ## Docker
 

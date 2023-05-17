@@ -35,7 +35,7 @@ class ProfilerInitPage:
 
         if chosen_tab == "3":
             self._show_dataprep_profiling()
-        
+
 
     def _show_pandas_profiling(self):
         if st.session_state[v.dp_PANDAS_PROFILE] is None:

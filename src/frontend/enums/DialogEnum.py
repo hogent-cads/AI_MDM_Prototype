@@ -1,6 +1,6 @@
 # importing enum for enumerations
 import enum
- 
+
 # creating enumerations using class
 class DialogEnum(str, enum.Enum):
 

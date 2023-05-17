@@ -76,7 +76,7 @@ class ZinggLabelPage:
 
         if finish:
             # Moet nog een nagegaan worden of model gemaakt is, of er een error is opgetreden door te weinig gelaabelde data => check op bestaan van folder 'model'
-            response = self.handler.run_zingg_phase("train").json()        
+            response = self.handler.run_zingg_phase("train").json()
             if response == "200":
                 st.session_state[VarEnum.gb_CURRENT_STATE] = VarEnum.st_DD_REDIRECT_Clustering
                 st.experimental_rerun()
@@ -85,10 +85,10 @@ class ZinggLabelPage:
                     st.error(d.dd_DEDUPLICATION_MODEL_FAIL_MESSAGE.value)
 
         self._clear_js_containers()
-        
+
 
     def _create_zingg_label_card(self, grouped_df, z_cluster_id, idx, min_height=50, max_height=500, row_height=50):
-        
+
         fields = st.session_state[VarEnum.dd_TYPE_DICT].keys()
 
         cont_card = st.container()
@@ -106,7 +106,7 @@ class ZinggLabelPage:
                 }
                 _ = AgGrid(grouped_df[[c for c in grouped_df.columns if c in fields]], gridOptions=gridOptions | extra_grid_options, height=min(min_height + len(grouped_df[[c for c in grouped_df.columns if c in fields]]) * row_height, max_height), key="grid_"+z_cluster_id)
 
-            with colRight: 
+            with colRight:
                 if grouped_df['z_prediction'].mean() > 0:
                     colAA, colBB = st.columns([1,1])
                     with colAA:
@@ -147,7 +147,7 @@ class ZinggLabelPage:
             </script>
             '''
         st.components.v1.html(js)
-    
+
 
     def _give_custom_css_to_container(self):
         customSpan = rf"""

@@ -42,18 +42,18 @@ class ZinggClusterPage:
 
     TEXT_DEDUP_FALSE = "kept, but non-primary key values will be changed to:"
     TEXT_DEDUP_TRUE = "deleted and replaced with one record:"
-    
+
     def __init__(self, canvas, handler) -> None:
         self.canvas = canvas
         self.handler = handler
-        
+
     def _createPaginering(self, key, colstoUse, N):
         # filter colstoUse based on length of the records in records_df
         colstoUse = [x for x in colstoUse if len(x.records_df) > 1]
         # A variable to keep track of which product we are currently displaying
         if key not in st.session_state:
             st.session_state[key] = 0
-        
+
         last_page = len(colstoUse) // N
 
         # Add a next button and a previous button
@@ -70,19 +70,19 @@ class ZinggClusterPage:
                 st.session_state[key] = last_page
             else:
                 st.session_state[key] -= 1
-        
+
         with tussen:
             st.write( str(st.session_state[key] +1) + "/"+ str(last_page +1) +" (" + str(len(colstoUse)) +" resultaten)")
 
         # Get start and end indices of the next page of the dataframe
-        start_idx = st.session_state[key] * N 
-        end_idx = (1 + st.session_state[key]) * N 
+        start_idx = st.session_state[key] * N
+        end_idx = (1 + st.session_state[key]) * N
 
         # Index into the sub dataframe
         return colstoUse[start_idx:end_idx]
 
-    def show(self): 
-        with self.canvas.container(): 
+    def show(self):
+        with self.canvas.container():
             st.title("Found Clusters")
             # Give which columns are primary keys
             pks = st.multiselect("Select the columns that form primary key, they well be left alone during merging of records", st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
@@ -126,7 +126,7 @@ class ZinggClusterPage:
                 self._merge_clusters(st.session_state["list_of_cluster_view"], pks)
                 st.experimental_rerun()
             self._clear_js_containers()
-                
+
     def _merge_clusters(self, list_of_cluster_view, pks):
 
         fast_rows = []
@@ -188,7 +188,7 @@ class ZinggClusterPage:
         MIN_HEIGHT = 90
         MAX_HEIGHT = 500
         ROW_HEIGHT = 25
-        
+
         cont_card = st.container()
         with cont_card:
             st.session_state[f'merge_{cv.cluster_id}'] = st.checkbox('Apply changes!',value=st.session_state[f'merge_{cv.cluster_id}'], key=f'key_merge_{cv.cluster_id}')
@@ -197,7 +197,7 @@ class ZinggClusterPage:
                 st.write(f"Confidence of this cluster: {cv.cluster_confidence}")
             with col1:
                 st.write(f"Lowest similarity in this cluster: {cv.cluster_low}")
-            
+
             with col2:
                 st.write(f"Highest similarity in this cluster: {cv.cluster_high}")
 
@@ -207,7 +207,7 @@ class ZinggClusterPage:
                         "pagination": True,
                         "paginationPageSize": len(cv.records_df),
                     }
-                 
+
             gb1 = GridOptionsBuilder.from_dataframe(cv.records_df)
             gb1.configure_side_bar()
             gb1.configure_selection('multiple',use_checkbox=True, groupSelectsChildren=True, groupSelectsFiltered=True, pre_select_all_rows=True, header_checkbox=True)
@@ -224,20 +224,20 @@ class ZinggClusterPage:
 
             cv.selected_rows = pd.DataFrame(tmpList)
             dedupe_check = st.radio('The selected records will be... ',(self.TEXT_DEDUP_FALSE, self.TEXT_DEDUP_TRUE), key=f'dedup_{cv.cluster_id}', horizontal = True)
-            
+
 
             extra_grid_options_2 = {
                         "alwaysShowHorizontalScroll": True,
                         "pagination": True,
                     }
-            
+
             # AGGRID die wel editeerbaar is, met als suggestie de eerste van de selected_rows van hierboven
             gb2 = GridOptionsBuilder.from_dataframe(cv.new_row.drop(pks, axis=1) if dedupe_check == self.TEXT_DEDUP_FALSE else cv.new_row )
             gb2.configure_side_bar()
             gb2.configure_default_column(groupable=False, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
             gridOptions2 = gb2.build() | extra_grid_options_2
             grid = AgGrid(cv.new_row.drop(pks, axis=1) if dedupe_check == self.TEXT_DEDUP_FALSE else cv.new_row ,update_mode="VALUE_CHANGED", gridOptions=gridOptions2, enable_enterprise_modules=False, height=min(MIN_HEIGHT + ROW_HEIGHT, MAX_HEIGHT))
-            
+
             cv.set_new_row(grid["data"])
 
             customSpan = rf"""
@@ -251,7 +251,7 @@ class ZinggClusterPage:
             </script>
             '''
             st.components.v1.html(js)
-            
+
     def _clear_js_containers(self):
         js = f'''<script>
             iframes = window.parent.document.getElementsByTagName("iframe")
@@ -260,7 +260,7 @@ class ZinggClusterPage:
             </script>
             '''
         st.components.v1.html(js)
-        
+
 
     def _give_custom_css_to_container(self):
         customSpan = rf"""
@@ -302,4 +302,4 @@ class ZinggClusterView:
             if 'z_cluster' in new_row.columns:
                 del new_row['z_cluster']
             self.new_row = new_row
-        
+

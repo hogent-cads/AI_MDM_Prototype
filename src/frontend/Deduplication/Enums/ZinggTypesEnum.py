@@ -1,6 +1,6 @@
 # importing enum for enumerations
 import enum
- 
+
 # creating enumerations using class
 class ZinggTypesEnum(str, enum.Enum):
     DONT_USE= 'Appears in the output but no computation is done on these. Helpful for fields like ids that are required in the output.'

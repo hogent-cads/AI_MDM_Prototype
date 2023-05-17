@@ -34,7 +34,7 @@ class ValueRule:
         s = ",".join(sorted([str(a) for a in self.antecedents]))
         s += " || "
         s += str(self.consequent)
-        s += " || "    
+        s += " || "
         s += str(self.support)
         s += " || "
         s += str(self.lift)

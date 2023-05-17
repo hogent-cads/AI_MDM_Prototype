@@ -41,7 +41,7 @@ class DomainController(FlaskView):
         finally:
             _ = Zingg(dedupe_type_dict, dedupe_data, unique_storage_id)
             return ""
-        
+
     @route('/zingg_clear', methods=['POST'])
     def zingg_clear(self) -> json:
         unique_storage_id = "Local"
@@ -50,7 +50,7 @@ class DomainController(FlaskView):
         finally:
             _ = Zingg.clear_marked_pairs(unique_storage_id)
             return ""
-        
+
     @route('/run_zingg_phase', methods=['POST'])
     def run_zingg_phase(self, phase="") -> json:
         unique_storage_id = "Local"
@@ -60,7 +60,7 @@ class DomainController(FlaskView):
             phase = data_to_use["phase"]
         finally:
             return json.dumps(Zingg.run_zingg_phase(phase, unique_storage_id))
-        
+
     @route('/zingg_unmarked_pairs', methods=['GET'])
     def zingg_unmarked_pairs(self) -> json:
         cfg.logger.debug("Calling zingg_unmarked_pairs")
@@ -69,7 +69,7 @@ class DomainController(FlaskView):
             unique_storage_id = request.cookies.get("session_flask")
         finally:
             return Zingg.get_unmarked_pairs(unique_storage_id).to_json(orient="records")
-        
+
     @route('/zingg_mark_pairs', methods=['POST'])
     def zingg_mark_pairs(self, marked_df="") -> json:
         unique_storage_id = "Local"
@@ -80,7 +80,7 @@ class DomainController(FlaskView):
         finally:
             Zingg.mark_pairs(unique_storage_id, pd.read_json(marked_df))
             return ""
-        
+
     @route('/zingg_get_stats', methods=['GET'])
     def zingg_get_stats(self) -> json:
         unique_storage_id = "Local"
@@ -88,7 +88,7 @@ class DomainController(FlaskView):
             unique_storage_id = request.cookies.get("session_flask")
         finally:
             return json.dumps(Zingg.get_stats(unique_storage_id))
-        
+
     @route('/zingg_get_clusters', methods=['GET'])
     def zingg_get_clusters(self) -> json:
         unique_storage_id = "Local"
@@ -96,7 +96,7 @@ class DomainController(FlaskView):
             unique_storage_id = request.cookies.get("session_flask")
         finally:
             return Zingg.get_clusters(unique_storage_id).to_json(orient="records")
-    
+
     # FETCHING OF FILES FOR GUI STATE:
     @route('/fetch_file_from_filepath', methods=['POST'])
     def fetch_file_from_filepath(self, filepath:str=""):
@@ -133,8 +133,8 @@ class DomainController(FlaskView):
                         True)
                 return to_return["result"]
 
-        return None 
-    
+        return None
+
     # METHODS FOR SESSION_MAP
     @route('/get_session_map', methods=['GET', 'POST'])
     def get_session_map(self, dataframe_in_json=""):
@@ -144,7 +144,7 @@ class DomainController(FlaskView):
             data_to_use = json.loads(request.data)
             unique_storage_id = request.cookies.get("session_flask")
             dataframe_in_json = data_to_use["dataframe_in_json"]
-        
+
         path = f"storage/{unique_storage_id}/{hashlib.md5(dataframe_in_json.encode('utf-8')).hexdigest()}"
         path_with_file = f"{path}/session_map.json"
         if not os.path.exists(path):
@@ -190,14 +190,14 @@ class DomainController(FlaskView):
         cfg.logger.debug(f"Writing to file {path}")
         with open(path, "w+") as json_file:
             json_file.write(json.dumps(content))
-        
-            
+
+
     # DATA PERPARATION
     @route('/clean_dataframe', methods=['GET','POST'])
     def clean_dataframe(self,df, json_string):
         return self.data_prepper.clean_data_frame(df, json_string)
 
-    # DATACLEANING      
+    # DATACLEANING
     # TODO REPLACE
     @route('/clean_dataframe_dataprep', methods=['POST'])
     def clean_dataframe_dataprep(self, dataframe_in_json="", custom_pipeline="") -> json:
@@ -336,7 +336,7 @@ class DomainController(FlaskView):
             save_dump = json.dumps(
                 {"result": result,
                  "params": {"rule_finding_config_in_json": rule_finding_config_in_json}})
-            
+
             # SAVE RESULTS
             parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
             file_name = f"Rule-learning_rules_{parsed_date_time}_{hashlib.md5(rule_finding_config_in_json.encode('utf-8')).hexdigest()}"
@@ -370,7 +370,7 @@ class DomainController(FlaskView):
         df = pd.read_json(dataframe_in_json)
         df_to_use = df.astype(str)
         df_OHE = self.data_prepper.transform_data_frame_to_OHE(df_to_use, drop_nan=False)
-        
+
         self.rule_mediator = RuleMediator(original_df=df_to_use, df_OHE=df_OHE)
         return self.rule_mediator.get_column_rule_from_string(rule_string=rule_string).parse_self_to_view().to_json()
 
@@ -449,11 +449,11 @@ class DomainController(FlaskView):
             is_in_local=False)
 
         return ""
-        
+
     # SUGGESTIONS
     @route('/get_suggestions_given_dataframe_and_column_rules', methods=['POST'])
     def get_suggestions_given_dataframe_and_column_rules(self, dataframe_in_json="", list_of_rule_string_in_json="", seq="") -> json:
-        
+
         # LOAD PARAMS
         unique_storage_id = "Local"
         if dataframe_in_json == "" and list_of_rule_string_in_json=="":
@@ -494,7 +494,7 @@ class DomainController(FlaskView):
         file_path = f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
         HelperFunctions.save_results_to(unique_id=unique_storage_id, md5_hash= hashlib.md5(dataframe_in_json.encode('utf-8')).hexdigest()
                                         ,json_string=save_dump, file_name=file_name)
-        self._write_to_session_map(unique_storage_id,md5_of_dataframe,"suggestions",seq,file_path, False)                                
+        self._write_to_session_map(unique_storage_id,md5_of_dataframe,"suggestions",seq,file_path, False)
 
         # RETURN RESULTS
         return json.dumps(result)

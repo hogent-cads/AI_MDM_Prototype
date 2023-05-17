@@ -22,7 +22,7 @@ class Router:
 
     def route_data_extraction(self):
         canvas = st.empty()
-                
+
         if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
             DataExtractorInitPage(canvas=canvas, handler=self.handler).show()
 
@@ -40,7 +40,7 @@ class Router:
 
     def route_rule_learning(self):
         canvas = st.empty()
-                
+
         if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
             RuleLearnerInitPage(canvas=canvas, handler=self.handler).show()
 
@@ -52,7 +52,7 @@ class Router:
 
     def route_dedupe(self):
         canvas = st.empty()
-                
+
         if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
             InitPage(canvas=canvas, handler=self.handler).show()
 

@@ -71,7 +71,7 @@ class RemoteHandler(IHandler):
             f"{self.connection_string}/recalculate_column_rules",
             cookies={"session_flask": st.session_state[VarEnum.gb_SESSION_ID]},
             data=json.dumps(data))
-        
+
 
     # DEDUPE
     def create_deduper_object(self, dedupe_type_dict, dedupe_data) -> json:
@@ -82,7 +82,7 @@ class RemoteHandler(IHandler):
 
     def dedupe_next_pair(self) -> json:
         return requests.get(f"{self.connection_string}/dedupe_next_pair", cookies={"session_flask" : st.session_state[VarEnum.gb_SESSION_ID]}).json()
-    
+
     def dedupe_mark_pair(self, labeled_pair) -> json:
         data = {}
         data["labeled_pair"] = labeled_pair
@@ -98,7 +98,7 @@ class RemoteHandler(IHandler):
 
     def dedupe_get_clusters(self):
         return requests.get(f"{self.connection_string}/dedupe_get_clusters", cookies={"session_flask" : st.session_state[VarEnum.gb_SESSION_ID]}).json()
-    
+
     # ZINGG
     def prepare_zingg(self, dedupe_type_dict, dedupe_data) -> json:
         data = {}
@@ -110,13 +110,13 @@ class RemoteHandler(IHandler):
         data = {}
         data["phase"] = phase
         return requests.post(f"{self.connection_string}/run_zingg_phase", cookies={"session_flask" : f"{st.session_state[VarEnum.gb_SESSION_ID]}-{st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH]}"}, data=json.dumps(data))
-    
+
     def zingg_clear(self) -> json:
         return requests.post(f"{self.connection_string}/zingg_clear", cookies={"session_flask" : f"{st.session_state[VarEnum.gb_SESSION_ID]}-{st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH]}"})
 
     def zingg_unmarked_pairs(self) -> json:
         return requests.get(f"{self.connection_string}/zingg_unmarked_pairs", cookies={"session_flask" : f"{st.session_state[VarEnum.gb_SESSION_ID]}-{st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH]}"}).json()
-    
+
     def zingg_mark_pairs(self, marked_df) -> json:
         data = {}
         data["marked_df"] = marked_df
@@ -124,17 +124,17 @@ class RemoteHandler(IHandler):
 
     def zingg_get_stats(self) -> json:
         return requests.get(f"{self.connection_string}/zingg_get_stats", cookies={"session_flask" : f"{st.session_state[VarEnum.gb_SESSION_ID]}-{st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH]}"}).json()
-    
+
     def zingg_get_clusters(self) -> json:
         return requests.get(f"{self.connection_string}/zingg_get_clusters", cookies={"session_flask" : f"{st.session_state[VarEnum.gb_SESSION_ID]}-{st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH]}"}).json()
-    
+
     # DATA CLEANING
     def clean_dataframe_dataprep(self,dataframe_in_json, custom_pipeline) -> json:
         data = {}
         data["dataframe_in_json"] = dataframe_in_json
         data["custom_pipeline"] = custom_pipeline
         return requests.post(f"{self.connection_string}/clean_dataframe_dataprep", data=json.dumps(data)).json()
-        
+
     def fuzzy_match_dataprep(self,dataframe_in_json, col, cluster_method, df_name, ngram, radius, block_size) -> json:
         data = {}
         data["dataframe_in_json"] = dataframe_in_json
@@ -145,7 +145,7 @@ class RemoteHandler(IHandler):
         data["radius"] = radius
         data["block_size"] = block_size
         return requests.post(f"{self.connection_string}/fuzzy_match_dataprep", data=json.dumps(data)).json()
-        
+
     def structure_detection(self,series_in_json, exception_chars, compress) -> json:
         data = {}
         data["series_in_json"] = series_in_json

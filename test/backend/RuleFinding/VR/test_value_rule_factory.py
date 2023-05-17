@@ -7,7 +7,7 @@ import src.backend.RuleFinding.VR.ValueRule as vr
 def test_value_rule_factory():
     """
     Very simple test to check is ValueRules can be obtained from a dataframe,
-    such as a dataframe that is returned by the fpgrowth algorithm.    
+    such as a dataframe that is returned by the fpgrowth algorithm.
     """
     antecedents = [frozenset([f"A_{i}"]) for i in range(3)]
     consequents = [frozenset([f"B_{i}"]) for i in range(3)]

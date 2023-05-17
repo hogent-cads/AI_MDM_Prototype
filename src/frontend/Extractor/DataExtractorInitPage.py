@@ -26,7 +26,7 @@ class DataExtractorInitPage:
     @st.cache_resource
     def _kmeans_cluster(_self, n_clusters, _tfidf_vectorizer_vectors):
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
-    
+
     def _gpt_code(self):
         df = st.session_state[VarEnum.sb_LOADED_DATAFRAME.value]["Material Description EN"]
         # st.write(type(df))
@@ -50,7 +50,7 @@ class DataExtractorInitPage:
         "records": [description_1, description_2, ...]
         }}
 
-        The material descriptions you have to use: 
+        The material descriptions you have to use:
         |||{text_to_cluster}|||
         """
         st.write(gpt_prompt)
@@ -91,7 +91,7 @@ class DataExtractorInitPage:
 #             if chosen_method == "TF-IDF":
 #                 chosen_ngram_range = st.slider("Kies een ngram range", 1, 5, (1, 5))
 
-#         tfidf_vectorizer=TfidfVectorizer(use_idf=True, analyzer = chosen_ngrams, ngram_range=chosen_ngram_range) 
+#         tfidf_vectorizer=TfidfVectorizer(use_idf=True, analyzer = chosen_ngrams, ngram_range=chosen_ngram_range)
 #         tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(st.session_state[VarEnum.sb_LOADED_DATAFRAME.value][chosen_column].to_list())
 
 #         st.write("Shape van de vector(Dus de output-shape van de TF-IDF vectorizer): " + str(tfidf_vectorizer_vectors.shape))
@@ -104,13 +104,13 @@ class DataExtractorInitPage:
 
 #         # count how many values in the vector are not 0
 #         st.write("Aantal niet nul waarden: " + str(tfidf_vectorizer_vectors[0].count_nonzero()))
-            
+
 
 #         # Cluster the vectors using K-means clustering from sklearn
-#         st.subheader("Stap 3: Cluster de vectors met behulp een clustering algoritme") 
+#         st.subheader("Stap 3: Cluster de vectors met behulp een clustering algoritme")
 #         # keuze tussen verschillende clustering algoritmes
 #         chosen_clustering_algorithm = st.selectbox("Kies een clustering algoritme", ["K-means", "DBSCAN", "Hierarchical Clustering"])
-#         if chosen_clustering_algorithm == "K-means":        
+#         if chosen_clustering_algorithm == "K-means":
 #             # aantal clusters
 #             chosen_n_clusters = st.slider("Kies het aantal clusters", 1, 500, 200)
 
@@ -118,11 +118,11 @@ class DataExtractorInitPage:
 #             kmeans = self._kmeans_cluster(chosen_n_clusters, tfidf_vectorizer_vectors)
 #             df = pd.DataFrame({'cluster': kmeans.labels_, 'value': st.session_state[VarEnum.sb_LOADED_DATAFRAME.value][chosen_column].to_list()})
 #             st.write(df)
-        
 
 
 
-        
+
+
 #         # st.write("Stap 3: Bereken de Similarity tussen de verschillende waarden; gebruik hiervoor de Jaccard Similarity of Cosine Similarity")
 #         # chosen_similarity = st.selectbox("Kies een similarity", ["Jaccard Similarity", "Cosine Similarity"])
 
@@ -139,7 +139,7 @@ class DataExtractorInitPage:
 #         s1 = set(list1)
 #         s2 = set(list2)
 #         return float(len(s1.intersection(s2)) / len(s1.union(s2)))
-    
+
 # def _code_kobe():
 #     pd.read_csv("XXXXX.csv", delimiter=';')
 #     chosen_column = "Material Description EN"
@@ -150,7 +150,7 @@ class DataExtractorInitPage:
 
 #     chosen_n_clusters = 200
 
-#     tfidf_vectorizer=TfidfVectorizer(use_idf=True, analyzer = chosen_ngrams, ngram_range=chosen_ngram_range) 
+#     tfidf_vectorizer=TfidfVectorizer(use_idf=True, analyzer = chosen_ngrams, ngram_range=chosen_ngram_range)
 #     tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(st.session_state[VarEnum.sb_LOADED_DATAFRAME.value][chosen_column].to_list())
 
 #     print("Shape van de vector(Dus de output-shape van de TF-IDF vectorizer): " + str(tfidf_vectorizer_vectors.shape))
@@ -166,7 +166,7 @@ class DataExtractorInitPage:
 #     df.to_csv("kobe.csv")
 
 
-        
+
 
 
 

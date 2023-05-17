@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 def independent_column(size, num_choices, probs=None, rng=None):
-    """ 
+    """
     Generate an 'independent' data column.
 
     size: length of the Series
@@ -11,7 +11,7 @@ def independent_column(size, num_choices, probs=None, rng=None):
     """
     if rng is None:
         rng = np.random.default_rng()
-    
+
     return pd.Series(rng.choice(num_choices, size=size, replace=True, p=probs))
 
 
@@ -26,7 +26,7 @@ def add_columns(cols, mod=None):
     result = cols[0].copy()
     for col in cols[1:]:
         result += col
-    
+
     if mod is not None:
         result %= mod
 
@@ -41,14 +41,14 @@ def invert_column(col):
 
 def add_noise(col, error_prob):
     """
-    Add noise to a column by selecting a random other value from the column 
+    Add noise to a column by selecting a random other value from the column
     with probability error_prob
     """
     rng = np.random.default_rng()
     values = col.unique()
     indices_to_change = (rng.uniform(size=col.shape[0]) < error_prob).nonzero()
     new_data = col.values.copy()
-    for index in np.nditer(indices_to_change):    
+    for index in np.nditer(indices_to_change):
         old_data = new_data[index]
         new_elem = rng.choice(values)
         while new_elem == old_data:
@@ -59,7 +59,7 @@ def add_noise(col, error_prob):
 
 
     return new_data
-    
+
 
 
 
@@ -278,4 +278,4 @@ if __name__ == "__main__":
 
 
 
-   
+

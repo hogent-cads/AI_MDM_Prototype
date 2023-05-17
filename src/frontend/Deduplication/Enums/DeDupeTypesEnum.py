@@ -1,6 +1,6 @@
 # importing enum for enumerations
 import enum
- 
+
 # creating enumerations using class
 class DeDupeTypesEnum(str, enum.Enum):
     # String= 'String types are compared using string edit distance, specifically affine gap string distance. This is a good metric for measuring fields that might have typos in them, such as “John” vs “Jon”.'

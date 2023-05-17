@@ -100,7 +100,7 @@ class WebsocketClient:
         cfg.logger.debug(f"Going to set {key} with {val} in local storage")
         result = self.sendCommand(json.dumps({ 'cmd': 'localStorage_set_key', 'key': key, 'val': val }))
         return result
-    
+
 
 def _remove_speciale_chars_from_columns(df:pd.DataFrame):
     df.columns = df.columns.str.replace('[^a-zA-Z0-9]', '')
@@ -110,19 +110,19 @@ def _hash_dataframe(df):
     return f"{hashlib.md5(df.to_json().encode('utf-8')).hexdigest()}"
 
 def _reload_dataframe(uploaded_file, handler):
-    
+
     sess_id = st.session_state[v.gb_SESSION_ID]
     separator = st.session_state[v.sb_LOADED_DATAFRAME_separator]
-    
+
     current_funct = st.session_state[v.sb_CURRENT_FUNCTIONALITY]
     current_profiling = st.session_state[v.sb_CURRENT_PROFILING]
     skip_file_reading = st.session_state[v.ddc_FORCE_RELOAD_CACHE]
-    
+
     if skip_file_reading == True:
         loaded_dataframe = st.session_state[v.sb_LOADED_DATAFRAME]
         loaded_dataframe_name = st.session_state[v.sb_LOADED_DATAFRAME_NAME]
         loaded_dataframe_id = st.session_state[v.sb_LOADED_DATAFRAME_ID]
-        
+
     else:
         # Buffer is gone when pd.read_csv is called, so we need to reset the buffer
         uploaded_file.seek(0)
@@ -135,22 +135,22 @@ def _reload_dataframe(uploaded_file, handler):
         st.session_state[v.sb_LOADED_DATAFRAME_NAME] = loaded_dataframe_name
         st.session_state[v.sb_LOADED_DATAFRAME_ID] = loaded_dataframe_id
     else:
-        st.session_state[v.sb_LOADED_DATAFRAME] = _remove_speciale_chars_from_columns(pd.read_csv(uploaded_file, delimiter= separator if separator else ','))        
+        st.session_state[v.sb_LOADED_DATAFRAME] = _remove_speciale_chars_from_columns(pd.read_csv(uploaded_file, delimiter= separator if separator else ','))
         st.session_state[v.sb_LOADED_DATAFRAME_NAME] = uploaded_file.name
         st.session_state[v.sb_LOADED_DATAFRAME_ID] = uploaded_file.id
 
     st.session_state[v.sb_LOADED_DATAFRAME_separator] = separator
     st.session_state[v.sb_LOADED_DATAFRAME_HASH] = _hash_dataframe(st.session_state[v.sb_LOADED_DATAFRAME])
 
-    st.session_state[v.gb_SESSION_ID] = sess_id 
+    st.session_state[v.gb_SESSION_ID] = sess_id
     st.session_state[v.sb_CURRENT_FUNCTIONALITY] = current_funct
     st.session_state[v.sb_CURRENT_PROFILING] = current_profiling
-    
+
     StateManager.initStateManagement(handler)
 
 def main():
     # Page Style:
-    st.set_page_config(page_title=d.gb_PAGE_TITLE.value, layout = "wide") 
+    st.set_page_config(page_title=d.gb_PAGE_TITLE.value, layout = "wide")
     with open("src/frontend/Resources/css/style.css") as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
@@ -164,14 +164,14 @@ def main():
     StateManager.initStateManagement(handler)
     if st.session_state[v.gb_CURRENT_STATE] is not None:
         st.sidebar.button(d.sb_PREVIOUS_STATE_button, on_click=StateManager.go_back_to_previous_in_flow)
-    
+
     # Cookie Management
     if st.session_state[v.sb_LOADED_DATAFRAME] is None and (st.session_state[v.sb_LOADED_DATAFRAME_HASH] is None):
         if st.session_state[v.gb_SESSION_ID] is None:
             url = cfg.configuration[v.cfg_WEBSOCKET_SERVER_URL]
             conn = injectWebsocketCode(hostPort=url, uid=getOrCreateUID())
             ret = conn.getLocalStorageVal(key="st_mdm_uid")
-            if not ret:               
+            if not ret:
                 _ = conn.setLocalStorageVal(key="st_mdm_uid", val=st.session_state[v.gb_SESSION_ID])
             else:
                 st.session_state[v.gb_SESSION_ID] = ret
@@ -209,7 +209,7 @@ def main():
                 flag_reload = st.button(d.sb_RELOAD_BUTTON, key="_reload_button")
                 if flag_reload:
                     _reload_dataframe(uploaded_file,handler)
-        
+
         if (st.session_state[v.sb_LOADED_DATAFRAME_ID] != uploaded_file.id) or st.session_state[v.ddc_FORCE_RELOAD_CACHE] == True:
             _reload_dataframe(uploaded_file, handler)
 
@@ -217,19 +217,19 @@ def main():
         # if v.gb_CURRENT_SEQUENCE_NUMBER not in st.session_state:
         #     st.session_state[v.gb_CURRENT_SEQUENCE_NUMBER] = str(max([int(x) for x in st.session_state[v.gb_SESSION_MAP].keys()], default=0)+1)
 
-        # CREATE BUTTONS FROM SESSION_MAP 
+        # CREATE BUTTONS FROM SESSION_MAP
         button_container =  st.sidebar.expander(label=d.sb_PREVIOUS_RESULTS, expanded=False)
         if st.session_state[v.gb_SESSION_MAP] is not None:
             for seq,method_dict in st.session_state[v.gb_SESSION_MAP].items():
                 button_container.write(seq)
                 for method, file_name in method_dict.items():
                     button_container.write(method)
-                    button_container.button("⏪ " + seq + file_name.split("/")[-1],  # file_name.split("\\")[1], 
+                    button_container.button("⏪ " + seq + file_name.split("/")[-1],  # file_name.split("\\")[1],
                                             on_click=StateManager.restore_state,
                                             kwargs={"handler": handler,
                                                     "file_path": file_name,
                                                     "chosen_seq": seq})
-            
+
         # Toevoegen van download knop:
         # st.sidebar.button('Download huidige dataset')
         st.sidebar.download_button(

@@ -18,14 +18,14 @@ class ColumnRuleFactory:
         index_mod = len(cr_rule_strings) // 10 + 1
 
         for index, rule in enumerate(cr_rule_strings):
-  
+
             # Log progress
             if index % index_mod == 0:
                 cfg.logger.info(f" {index} / {len(cr_rule_strings)}")
 
             rule_list.append(self.expand_single_column_rule(rule))
 
-        return self.transform_list_of_column_rules_to_dict_of_column_rules(rule_list)   
+        return self.transform_list_of_column_rules_to_dict_of_column_rules(rule_list)
 
     def transform_list_of_column_rules_to_dict_of_column_rules(self, column_rules : Sequence[ColumnRule]) -> Dict[str, Sequence[ColumnRule]]:
         """
@@ -33,7 +33,7 @@ class ColumnRuleFactory:
         and B => A that both have a confidence of one.
 
         column_rules: the ColumnRule to check
-        returns: dictionary containing two keys: 'Definitions' and 'NoDefinitions' each mapping to 
+        returns: dictionary containing two keys: 'Definitions' and 'NoDefinitions' each mapping to
         a sequence of rules
         """
 
@@ -62,11 +62,11 @@ class ColumnRuleFactory:
                 # result["NoDefinitions"].append(column_rule)
                 result["NoDefinitions"][column_rule.rule_string] = column_rule
 
-        # Add all remaining rules in `rules_with_confidence_one` to the NoDefitions list  
+        # Add all remaining rules in `rules_with_confidence_one` to the NoDefitions list
         for k,v in  rules_with_confidence_one.items():
             result["NoDefinitions"][k] = v
         # result["NoDefinitions"].extend(rules_with_confidence_one.values())
-            
+
         cfg.logger.info(f"Number of definitions found: {len(result['Definitions'])}")
         cfg.logger.debug(f"Definitions are: {';'.join(str(cr) for cr in result['Definitions'])}")
 
@@ -76,7 +76,7 @@ class ColumnRuleFactory:
         # Voeg ook de columnRules toe met een lege antecedent (Als ze aan de voorwaarde voldoen), Zijn trouwens sowieso geen definities
         # Stijn verwijder oproep naar _get_dict_of_columnrules_with_empty_antecedent
         #result["NoDefinitions"] = {**result["NoDefinitions"], **self._get_dict_of_columnrules_with_empty_antecedent(cols_to_use=self.original_df.columns, df=self.original_df)}
-        # result["NoDefinitions"].extend(self._get_list_of_columnrules_with_empty_antecedent(cols_to_use=self.original_df.columns, df=self.original_df)) 
+        # result["NoDefinitions"].extend(self._get_list_of_columnrules_with_empty_antecedent(cols_to_use=self.original_df.columns, df=self.original_df))
         return result
 
     def expand_single_column_rule(self, rule_string: str) -> ColumnRule:

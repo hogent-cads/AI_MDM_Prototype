@@ -29,7 +29,7 @@ class AssociationRuleFinder:
             returns: pandas DataFrame with columns "antecedents" and "consequents" that
             store itemsets, plus the scoring metric columns: "antecedent support",
             "consequent support", "support", "confidence", "lift", "leverage",
-            "conviction" of all rules for which 
+            "conviction" of all rules for which
             lift(rule) >= min_lift and  confidence(rule) >= min_confidence.
         """
         cfg.logger.debug(f"Shape of df in get_association_rules: {self.df_dummy.shape}")

@@ -25,11 +25,11 @@ class ColumnRuleFilter(ABC):
     def _filter_reverse_rules_with_lower_confidence(self, rules: Sequence[ColumnRule]) -> Dict[str, Sequence[ColumnRule]]:
         """
         Reduce the number of rules by applying the following logic: if both "A => B" and "B => A"
-        are present, only keep the rule that has the highest confidence of the two. In case of a tie, 
+        are present, only keep the rule that has the highest confidence of the two. In case of a tie,
         keep both.
 
         rules: sequence of rules that need to be filtered
-        returns: dictionary with two keys: "ToKeep" and "ToDiscard". Each of these keys point 
+        returns: dictionary with two keys: "ToKeep" and "ToDiscard". Each of these keys point
         to a list of relevant column rules
         """
         result = {
@@ -38,7 +38,7 @@ class ColumnRuleFilter(ABC):
         }
 
         # Cache of rules that we have seen so far
-        seen: Dict[str, ColumnRule] = {} 
+        seen: Dict[str, ColumnRule] = {}
 
         for column_rule in rules:
             cfg.logger.debug(f"Considering column_rule {column_rule}")
@@ -95,15 +95,15 @@ class ColumnRuleFilter_Entropy(ColumnRuleFilter):
         percentage_correct = correct_instances / total_instances
         if math.isclose(1,percentage_correct):
             entropy = 0
-        
+
         else:
             if math.isclose(0,percentage_correct):
                 percentage_correct = 0.0001
             entropy = (-1*percentage_correct) * math.log(percentage_correct, 2) + (-1*(1-percentage_correct) * math.log(1-percentage_correct, 2))
-        
+
         return entropy
-        
- 
+
+
     def execute(self, rules) -> Dict[str, ColumnRule]:
 
         # When the rules are empty, we can return immediately
@@ -113,7 +113,7 @@ class ColumnRuleFilter_Entropy(ColumnRuleFilter):
         interesting_rules: Dict[str, ColumnRule] = {}
 
         # Bvb: 1 -> ["a->b", "b->c", "X->Y"]
-        dict_ante_size_to_list_of_rules = {}         
+        dict_ante_size_to_list_of_rules = {}
         dict_entropy = {}
 
         for _, column_rule in enumerate(sorted(rules.values(), key=lambda r : len(r.antecedent_set))):
@@ -134,7 +134,7 @@ class ColumnRuleFilter_Entropy(ColumnRuleFilter):
                 for r in listOfRules:
                     print(f"Regel Toegevoegd: {r.rule_string}, met entropy: {dict_entropy[r.rule_string]}")
                     interesting_rules[r.rule_string] = r
-                        
+
             else:
                 for r in listOfRules:
                     listOfPrevLengthRules = [i for i in dict_ante_size_to_list_of_rules[str(int(anteLength)-1)] if i.consequent_set == r.consequent_set and i.antecedent_set.issubset(r.antecedent_set)]
@@ -147,7 +147,7 @@ class ColumnRuleFilter_Entropy(ColumnRuleFilter):
                                 print(e.rule_string)
                                 if e.rule_string in interesting_rules:
                                     del interesting_rules[e.rule_string]
-                            
+
                     else:
                         print(f"Regel Toegevoegd: {r.rule_string}, met entropy: {dict_entropy[r.rule_string]}")
                         interesting_rules[r.rule_string] = r
@@ -159,20 +159,20 @@ class ColumnRuleFilter_ZScore(ColumnRuleFilter):
 
     def __init__(self) -> None:
         pass
-        
- 
+
+
     def execute(self, rules) -> Dict[str, ColumnRule]:
         """
-            Only keep 'interesting' rules. An 'interesting' rule r is one whose confidence 
-            is such that there is no rule whose antecedent set is a subset of the 
+            Only keep 'interesting' rules. An 'interesting' rule r is one whose confidence
+            is such that there is no rule whose antecedent set is a subset of the
             antecedent set of r and that has a strictly higher confidence and the same consequent.
 
-            XXX: we need to punish 'long rules' so that they become less interesting. 
+            XXX: we need to punish 'long rules' so that they become less interesting.
             XXX: Think about a less crude way to do this
 
             rules: the column rules that need to be filtered
             returns: Dictionary mapping rule strings to their corresponding interesting
-                ColumnRule            
+                ColumnRule
         """
 
         cfg.logger.info(f"Starting with {len(rules.values())} rules")
@@ -207,7 +207,7 @@ class ColumnRuleFilter_ZScore(ColumnRuleFilter):
                 # Lengte 0, Automatisch toevoegen als 'interesting rule', aangezien reeds gefiltered is op confidence
                 for r in listOfRules:
                     interesting_rules[r.rule_string] = r
-                        
+
             else:
                 # Lengte N:
                 # Bekijk elke regel die tot lengte = N behoort, Kijk naar hun consequent en kijk voor welke regels uit (N-1) deze een uitbereiding vormt.
@@ -221,7 +221,7 @@ class ColumnRuleFilter_ZScore(ColumnRuleFilter):
                         l_old_rule = [p for p in listOfPrevLengthRules]
                         l_rule = [r for _ in listOfPrevLengthRules]
 
-                        lemma_to_append_df = pd.DataFrame({"Increased":l_increased, "Old Rule":l_old_rule, "Rule":l_rule})                    
+                        lemma_to_append_df = pd.DataFrame({"Increased":l_increased, "Old Rule":l_old_rule, "Rule":l_rule})
                         lemma_df = pd.concat([lemma_df, lemma_to_append_df])
                     else:
                         # By definition an interesting rule
@@ -247,7 +247,7 @@ class ColumnRuleFilter_ZScore(ColumnRuleFilter):
                 interesting_rules[e.rule_string] = e
 
             filteredIncreases_df["RuleString"] = filteredIncreases_df["Rule"].apply(lambda x: x.rule_string)
-        
+
         return interesting_rules
 
 

@@ -248,7 +248,7 @@ class DataFrameCleaner:
         df_size = df.memory_usage(deep=True).sum()
         npartitions = math.ceil(df_size / 128 / 1024 / 1024)  # 128 MB partition size
         return dd.from_pandas(df, npartitions=npartitions)
-    
+
     def clean_text(self,
         df: Union[pd.DataFrame, dd.DataFrame],
         column: str,
@@ -456,7 +456,7 @@ class DataFrameCleaner:
         """
         if pd.isna(text):
             return text
-        
+
         try:
             brackets = eval(brackets)
         except Exception as e:
@@ -470,7 +470,7 @@ class DataFrameCleaner:
                 # replace all content between brackets from the text, including the brackets
                 l_bracket = list(bracket)
                 text = re.sub(rf'\{l_bracket[0]}.*?\{l_bracket[1]}', '', text)
-                
+
 
 
         else:
@@ -534,7 +534,7 @@ class DataFrameCleaner:
         Remove extra spaces along with tabs and newlines.
         """
         return re.sub(REGEX_WHITESPACE, " ", str(text)).strip() if pd.notna(text) else text
-    
+
     def _replace_bracketed(
         text: Any, brackets: Union[str, Set[str]], value: str, inclusive: bool = True
     ) -> Any:
@@ -645,7 +645,7 @@ class DataFrameCleaner:
         return re.sub(REGEX_URL, value, str(text)) if pd.notna(text) else text
 
 
-    def _wrapped_partial( self, 
+    def _wrapped_partial( self,
         func: Callable[..., Callable[..., Any]], params: Dict[str, Any]
     ) -> Callable[..., Callable[..., Any]]:
         """

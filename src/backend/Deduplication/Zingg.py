@@ -25,8 +25,8 @@ class Zingg:
         different_phases = ["findTrainingData", "label", "train"]
         for phase in different_phases:
             self._create_python_files_from_phase(phase)
-        Zingg.run_zingg_phase("findTrainingData", self.modelID) 
-        
+        Zingg.run_zingg_phase("findTrainingData", self.modelID)
+
 
     @staticmethod
     def run_zingg_phase(phase, modelID):
@@ -44,7 +44,7 @@ class Zingg:
                 shutil.rmtree(f"storage/{modelID}/output_dir")
 
         system = platform.system()
-        if system == "Windows":           
+        if system == "Windows":
             cmd = (["C:\\Users\\mstr845\\AppData\\Local\\Programs\\Git\\git-bash.exe"] + ["./external/zingg-0.3.4/scripts/zingg.sh"] + ["--run"] +
                    [f"./storage/{modelID}/scripts/{phase}/generated_zingg_script.py"] + ['>./logginBlabla.txt 2>&1'])
             process = Popen(cmd, stdout=PIPE, stderr=STDOUT)
@@ -107,7 +107,7 @@ class Zingg:
 
 
     @staticmethod
-    def mark_pairs(modelID, dataframe):        
+    def mark_pairs(modelID, dataframe):
         dir = f"storage/{modelID}/models/{modelID}/trainingData/marked"
         Path(dir).mkdir(parents=True, exist_ok=True)
 
@@ -125,7 +125,7 @@ class Zingg:
             z_cluster_df["z_prediction"] = z_cluster_df["z_prediction"].astype("double")
             z_cluster_df["z_score"] = z_cluster_df["z_score"].astype("double")
             z_cluster_df["z_isMatch"] = z_cluster_df["z_isMatch"].astype("int32")
-            # z_cluster_df["z_score"] = z_cluster_df["z_score"].astype("string")           
+            # z_cluster_df["z_score"] = z_cluster_df["z_score"].astype("string")
 
             # save to parquet file
             z_cluster_df.to_parquet(f"{dir}/{label}{z_cluster_id}.parquet", index=False, )
@@ -162,7 +162,7 @@ class Zingg:
         for key, value in self.dedupe_type_dict.items():
             first_string_to_concat += f"{key} = FieldDefinition(\"{key}\", \"string\", MatchType.{value})"
             first_string_to_concat += "\n"
-        
+
         second_string_to_concat = str(list(self.dedupe_type_dict.keys())).replace('\'', '')
 
         third_string_to_concat = ""
@@ -180,7 +180,7 @@ class Zingg:
             fourth_string_to_concat = "options = ClientOptions([ClientOptions.PHASE,\"label\"])"
         else:
             raise ValueError("Phase not supported")
-        
+
         Path(f"storage/{self.modelID}/scripts/{phase}/").mkdir(parents=True, exist_ok=True)
 
         # write to output file
@@ -191,7 +191,7 @@ from zingg.pipes import *
 
 #build the arguments for zingg
 args = Arguments()
-#set field definitions: 
+#set field definitions:
 {first_string_to_concat}
 
 fieldDefs = {second_string_to_concat}

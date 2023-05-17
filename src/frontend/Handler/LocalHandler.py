@@ -37,11 +37,11 @@ class LocalHandler(IHandler):
             new_df_in_json=new_df_in_json,
             rule_finding_config_in_json=rule_finding_config_in_json,
             affected_columns=json.dumps(affected_columns))
-        
+
     # ZINGG
     def prepare_zingg(self, dedupe_type_dict, dedupe_data) -> json:
         return self.dc.prepare_zingg(dedupe_type_dict, dedupe_data)
-    
+
     def zingg_clear(self) -> json:
         return self.dc.zingg_clear()
 
@@ -59,13 +59,13 @@ class LocalHandler(IHandler):
 
     def zingg_get_clusters(self) -> json:
         return self.dc.zingg_get_clusters()
-    
+
     # DATA CLEANING
     def clean_dataframe_dataprep(self,dataframe_in_json, custom_pipeline ) -> json:
         return self.dc.clean_dataframe_dataprep(dataframe_in_json=dataframe_in_json, custom_pipeline=custom_pipeline)
-        
+
     def fuzzy_match_dataprep(self,dataframe_in_json, col, cluster_method, df_name, ngram, radius, block_size) -> json:
         return self.dc.fuzzy_match_dataprep(dataframe_in_json=dataframe_in_json, col=col, df_name=df_name, ngram=ngram, radius=radius, block_size=block_size)
-        
+
     def structure_detection(self,series_in_json, exception_chars, compress) -> json:
         return self.dc.structure_detection(series_in_json=series_in_json, exception_chars=exception_chars, compress=compress)

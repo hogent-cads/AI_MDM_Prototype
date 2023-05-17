@@ -12,9 +12,9 @@ class InitPage:
         self.canvas = canvas
         self.handler = handler
 
-    def show(self):      
+    def show(self):
 
-        with self.canvas.container(): 
+        with self.canvas.container():
 
             chosen_tab = stx.tab_bar(data=[
             stx.TabBarItemData(id=1, title="Dataset", description=""),
@@ -44,7 +44,7 @@ class InitPage:
                     st.write("")
                     st.write(eval(f"ZinggTypesEnum.{selected_type}"))
 
-            
+
             # FOR DEBUG ON RESTOS.CSV PRE-DEFINED FIELDS:
             if (VarEnum.dd_TYPE_DICT not in st.session_state ) or (st.session_state[VarEnum.dd_TYPE_DICT] == {} ):
                 st.session_state[VarEnum.dd_TYPE_DICT] = {k: "FUZZY" for k in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns}
@@ -55,7 +55,7 @@ class InitPage:
                 add_btn = st.button(d.dd_DEDUPLICATION_CHANGE_TYPE_btn.value)
                 if add_btn:
                     st.session_state[VarEnum.dd_TYPE_DICT][selected_col] = selected_type
-            
+
             with col_3:
                 if len(st.session_state[VarEnum.dd_TYPE_DICT].values()) > 0:
                     start_training_btn = st.button(d.dd_DEDUPLICATION_START_btn.value)

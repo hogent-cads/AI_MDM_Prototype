@@ -52,7 +52,7 @@ div [data-testid="stJson"]{
     overflow-y: scroll !important;
     max-height: 20rem !important;
     /* overflow-x: scroll; */
-    
+
 }
 
 .materialcardFuzzy > div{

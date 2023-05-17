@@ -16,8 +16,8 @@ def tagDuplicate(col):
     if(len(col.unique()) != 1):
         return ['color: red' for c in col]
     else:
-        return ['color: green' for c in col] 
-    
+        return ['color: green' for c in col]
+
 
 def extractNumber(s):
     lst = re.findall(r"[-+]?\d*\.\d+|\d+", str(s))
@@ -37,7 +37,7 @@ def transformColumnToNumberCluster(df, col, n, type):
 
         cluster_labelsTemp = [int(x) for x in model.cluster_centers_]
         cluster_labelsTemp.sort()
-        
+
         cutOffMap = {}
         cutOffMap[-1] = "Niet ingevuld"
 
@@ -51,9 +51,9 @@ def transformColumnToNumberCluster(df, col, n, type):
         for idx, label in enumerate(new_cluster_labelsTemp):
 
             if label == new_cluster_labelsTemp[0]:
-                cutOffMap[idx] = "Tot " + str(label) 
+                cutOffMap[idx] = "Tot " + str(label)
                 nextLabel = new_cluster_labelsTemp[idx+1]
-                cutOffMap[idx+1] = "[ " + str(label) + " - " + str(nextLabel) + " ]" 
+                cutOffMap[idx+1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
             else:
                 if label == new_cluster_labelsTemp[-1]:
                     cutOffMap[idx+1] = "Vanaf " + str(label)
@@ -62,7 +62,7 @@ def transformColumnToNumberCluster(df, col, n, type):
                     cutOffMap[idx+1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
 
 
-        
+
 
 
         df["Grouped " + str(col)] = " "
@@ -79,7 +79,7 @@ def convert_df(df):
 
 # def transformColumnToSemanticCluster(df, col, n):
 #     nlp = spacy.load('en_core_web_lg')
-    
+
 #     uniqueVals = df[col][df[col].notnull()].unique()
 
 #     l = len(uniqueVals)
@@ -91,7 +91,7 @@ def convert_df(df):
 #         for _, record2 in enumerate(uniqueVals):
 #             columnSim.append(nlp(record1).similarity(nlp(record2)))
 #         similarityMap[record1] = columnSim
-    
+
 #     simDF = pd.DataFrame(similarityMap)
 #     model = KMeans(n_clusters=n)
 #     cluster_labels = model.fit_predict(simDF)
@@ -100,17 +100,17 @@ def convert_df(df):
 
 #     mapToReturn = simDF.groupby(['class'])['Name'].apply(lambda grp: list(grp.value_counts().index)).to_dict()
 
-#     df["Grouped " + str(col)] = "Niet ingevuld"  
+#     df["Grouped " + str(col)] = "Niet ingevuld"
 #     for key, value in mapToReturn.items():
 #         df["Grouped " + str(col)][df[col].isin(value)]= "Groep " + str(key)
 
 #     return df, mapToReturn
 
-    
 
 
 
-            
+
+
 
 
 
@@ -118,7 +118,7 @@ def convert_df(df):
 # Toevoegen van Name parameter zorgt dat cache wordt weggegooid bij inladen van nieuwe file (want deze zal dezelfde key hebben)
 # @st.cache(allow_output_mutation=True)
 # def createDataFrameFromDataset(key, name):
-#     return pd.read_csv(st.session_state[key]) 
+#     return pd.read_csv(st.session_state[key])
 
 def createDataFrameFromDataset(uploaded):
     # return pd.read_csv(uploaded)
@@ -130,7 +130,7 @@ def createPaginering(key, colstoUse, N):
     # A variable to keep track of which product we are currently displaying
     if key not in st.session_state:
         st.session_state[key] = 0
-    
+
 
     last_page = len(colstoUse) // N
 
@@ -148,13 +148,13 @@ def createPaginering(key, colstoUse, N):
             st.session_state[key] = last_page
         else:
             st.session_state[key] -= 1
-    
+
     with tussen:
         st.write( str(st.session_state[key] +1) + "/"+ str(last_page +1) +" (" + str(len(colstoUse)) +" resultaten)")
 
     # Get start and end indices of the next page of the dataframe
-    start_idx = st.session_state[key] * N 
-    end_idx = (1 + st.session_state[key]) * N 
+    start_idx = st.session_state[key] * N
+    end_idx = (1 + st.session_state[key]) * N
 
     # Index into the sub dataframe
     return colstoUse[start_idx:end_idx]

@@ -4,7 +4,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode
 from src.frontend.enums.VarEnum import VarEnum
 
 
-class DatasetDisplayerComponent: 
+class DatasetDisplayerComponent:
 
     def __init__(self) -> None:
         pass
@@ -16,16 +16,16 @@ class DatasetDisplayerComponent:
         gb.configure_side_bar()
         gb.configure_default_column(editable=True)
         standard_grid_options = gb.build()
-        
+
         extra_grid_options = {
             "alwaysShowHorizontalScroll": True,
             "alwaysShowVerticalScroll": True,
             "pagination": True,
             "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
                     }
-        
-        grid_options = standard_grid_options | extra_grid_options 
-        grid_response  = AgGrid(st.session_state[VarEnum.sb_LOADED_DATAFRAME], update_mode=GridUpdateMode.GRID_CHANGED, gridOptions=grid_options, enable_enterprise_modules=True, height=min(min_height + len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]) * row_height, max_height))     
+
+        grid_options = standard_grid_options | extra_grid_options
+        grid_response  = AgGrid(st.session_state[VarEnum.sb_LOADED_DATAFRAME], update_mode=GridUpdateMode.GRID_CHANGED, gridOptions=grid_options, enable_enterprise_modules=True, height=min(min_height + len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]) * row_height, max_height))
         # Check if data is changed
         if st.session_state[VarEnum.sb_LOADED_DATAFRAME] is not grid_response["data"]:
             st.session_state[VarEnum.sb_LOADED_DATAFRAME] = grid_response["data"]

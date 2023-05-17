@@ -35,7 +35,7 @@ class ValueRuleFactory:
             row,
             value_rules_dict: Dict[str, Set[ValueRule]]) -> None:
         """
-        row: numpy array of five elements: antecedents, consequents, support, confidence 
+        row: numpy array of five elements: antecedents, consequents, support, confidence
                 and lift of a value rule
         value_rules_dict : dictionary
 

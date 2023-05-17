@@ -1,6 +1,6 @@
 # importing enum for enumerations
 import enum
- 
+
 # creating enumerations using class
 class VarEnum(str, enum.Enum):
 
@@ -22,7 +22,7 @@ class VarEnum(str, enum.Enum):
     gb_CURRENT_SEQUENCE_NUMBER = "current_seq"
 
     # Sidebar
-    sb_LOADED_DATAFRAME = "dataframe"    
+    sb_LOADED_DATAFRAME = "dataframe"
     sb_LOADED_DATAFRAME_NAME = "dataframe_name"
     sb_LOADED_DATAFRAME_separator = "dataframe_separator"
     sb_LOADED_DATAFRAME_HASH = "dataframe_hash"
@@ -33,12 +33,12 @@ class VarEnum(str, enum.Enum):
 
     # Data Display Component
     ddc_FORCE_RELOAD_CACHE = "force_reload_cache"
-    
+
     # Data Cleaning
     dc_PIPELINE = "pipeline"
     dc_CLEANED_COLUMN = "cleaned_column_from_pipeline"
 
-    
+
 
     # Data Profiling
     dp_PANDAS_PROFILE = "generated_pandas_profile"
@@ -55,7 +55,7 @@ class VarEnum(str, enum.Enum):
     dd_LABEL_STATS = "zingg_stats"
 
     dd_CLUSTER_DF = "zingg_cluster_df"
-    
+
 
 
     # Rule-Learning

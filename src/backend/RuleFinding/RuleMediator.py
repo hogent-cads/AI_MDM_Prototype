@@ -63,9 +63,9 @@ class RuleMediator:
             filterer=self._parse_filterer_string(filterer_string),
             confidence_bound=min_confidence)
 
-    def get_column_rule_from_string(self, rule_string: str):        
+    def get_column_rule_from_string(self, rule_string: str):
         return self.column_rule_factory.expand_single_column_rule(rule_string)
-        
+
     # Waarschijnlijk alle onderstaande methoden niet nodig
     def get_all_column_rules(self):
         return {**self.get_cr_definitions_dict(),**self.get_cr_with_100_confidence_dict(), **self.get_cr_without_100_confidence_dict()}

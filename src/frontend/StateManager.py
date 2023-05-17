@@ -51,15 +51,15 @@ class StateManager:
                     binning_option=t_dict["binning_option"]
                     )
                 st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
-                
+
             if part_to_check_state == 'suggestions':
-                # Zoek de rules-file die hieraan gelinkt is, om zo ook de 
+                # Zoek de rules-file die hieraan gelinkt is, om zo ook de
                 st.session_state["suggesties_df"] = json.dumps(past_result_content_dict["result"])
                 # FETCH PATH OF OTHER FILE FROM SESSION_MAP
                 StateManager.restore_state(**{"handler" : kwargs["handler"], "file_path": st.session_state[VarEnum.gb_SESSION_MAP][kwargs["chosen_seq"]]["rules"], "chosen_seq": kwargs["chosen_seq"]})
                 st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkSuggesties"
             return
-        return       
+        return
 
     @staticmethod
     def go_back_to_previous_in_flow() -> None:
@@ -72,23 +72,23 @@ class StateManager:
             st.session_state["validate_own_rule_btn"] = False
             st.session_state["calculate_entropy_btn"] = False
             st.session_state["add_own_rule_btn"]  = False
-            
+
             return
         if current_state == "BekijkSuggesties":
             st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
-            return   
-        
+            return
+
         # ZINGG
         if current_state == VarEnum.st_DD_Labeling:
             st.session_state[VarEnum.gb_CURRENT_STATE] = None
             return
-        
+
         if current_state == VarEnum.st_DD_Clustering:
             st.session_state[VarEnum.gb_CURRENT_STATE] = VarEnum.st_DD_Labeling
             return
 
     @staticmethod
-    def initStateManagement(handler : IHandler):           
+    def initStateManagement(handler : IHandler):
 
         # LOADED DATAFRAME
         if VarEnum.sb_LOADED_DATAFRAME not in st.session_state:
@@ -106,8 +106,8 @@ class StateManager:
         # DATASET DISPLAYER COMPONENT
         if VarEnum.ddc_FORCE_RELOAD_CACHE not in st.session_state:
             st.session_state[VarEnum.ddc_FORCE_RELOAD_CACHE] = False
-            
-            
+
+
         # SESSION
         if VarEnum.gb_SESSION_MAP not in st.session_state:
             if st.session_state[VarEnum.sb_LOADED_DATAFRAME] is not None:
@@ -125,7 +125,7 @@ class StateManager:
 
         if VarEnum.dp_DATAPREP_PROFILE not in st.session_state:
             st.session_state[VarEnum.dp_DATAPREP_PROFILE] = None
-            
+
         if VarEnum.gb_CURRENT_STATE not in st.session_state:
             st.session_state[VarEnum.gb_CURRENT_STATE] = None
 
@@ -164,13 +164,13 @@ class StateManager:
 
         if "select_all_rules_btn" not in st.session_state:
             st.session_state["select_all_rules_btn"] = False
-            
+
         if "select_all_suggestions_btn" not in st.session_state:
             st.session_state["select_all_suggestions_btn"] = False
 
         if "calculate_entropy_btn" not in st.session_state:
             st.session_state["calculate_entropy_btn"] = False
-        
+
         if "use_previous_label_btn" not in st.session_state:
             st.session_state["use_previous_label_btn"] = False
 
@@ -200,7 +200,7 @@ class StateManager:
 
         if "list_of_fuzzy_cluster_view" not in st.session_state:
             st.session_state["list_of_fuzzy_cluster_view"] = []
-        
+
 
     @staticmethod
     def reset_all_buttons():

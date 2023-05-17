@@ -22,19 +22,19 @@ class HelperFunctions:
         """
             fullset: an iterable of items
             returns: a list of all non-empty subsets of the given iterable
-            
+
             Find all subsets consisting of elements from the given iterable.
         """
         listrep = list(fullset)
         n = len(listrep)
         toReturn = [set([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
-        
+
         return toReturn
-    
+
     @staticmethod
     def subsets_minus_one( s : Set[Any]) -> List[Set[Any]]:
         """
-            Return a list of sets. All sets in this list are subsets of s and contain 
+            Return a list of sets. All sets in this list are subsets of s and contain
             one fewer element.
 
             s : Set
@@ -49,7 +49,7 @@ class HelperFunctions:
         os.makedirs(dir_path, exist_ok=True)
 
         with open(f"{dir_path}/{file_name}.json", 'w') as outfile:
-            outfile.write(json_string)       
+            outfile.write(json_string)
 
     # @staticmethod
     # def mac_from_ip(ip):

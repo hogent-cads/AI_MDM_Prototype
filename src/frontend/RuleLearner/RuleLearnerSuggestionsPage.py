@@ -24,7 +24,7 @@ class RuleLearnerSuggestionsPage:
                 "pagination": True,
                 "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
                     }
-            
+
             st.title("Rule Learning")
             df_with_predictions = pd.read_json(eval(st.session_state["suggesties_df"]))
 
@@ -33,7 +33,7 @@ class RuleLearnerSuggestionsPage:
                 st.markdown("**There are no more suggestions**")
                 return
 
-            st.header("Suggestions for the selected rules:")     
+            st.header("Suggestions for the selected rules:")
             df_with_predictions = df_with_predictions[
                 df_with_predictions.columns.drop(
                     list(df_with_predictions.filter(
@@ -55,7 +55,7 @@ class RuleLearnerSuggestionsPage:
                 pre_select_all_rows=False,
                 use_checkbox=True,
                 groupSelectsChildren=True,
-                groupSelectsFiltered=True, 
+                groupSelectsFiltered=True,
                 header_checkbox=True)
             response_selection_suggestion_finder = AgGrid(
                 df_with_predictions,
@@ -122,7 +122,7 @@ class RuleLearnerSuggestionsPage:
 
 
             with colb1:
-                submitted = st.button("Recalculate rules")                
+                submitted = st.button("Recalculate rules")
                 if submitted:
                     # Get the rule_finding_config from the session_state
                     rule_finding_config = st.session_state["rule_finding_config"]
@@ -138,7 +138,7 @@ class RuleLearnerSuggestionsPage:
                         old_df_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
                         new_df_in_json=st.session_state["temp_dataframe"].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
-                        affected_columns=st.session_state["columns_affected_by_suggestion_application"])                  
+                        affected_columns=st.session_state["columns_affected_by_suggestion_application"])
                     # Reset columns_affected_by_suggestion_application
                     del st.session_state["columns_affected_by_suggestion_application"]
 
@@ -151,7 +151,7 @@ class RuleLearnerSuggestionsPage:
                         **{"handler": self.handler,
                            "file_path": st.session_state[VarEnum.gb_SESSION_MAP]["1"]["rules"],
                            "chosen_seq": "1"})
-                    
+
                     # Nieuwe dataframe, betekent sowieso dat current_session gelijk zal zijn aan 1:
                     st.session_state[VarEnum.sb_LOADED_DATAFRAME] = st.session_state['temp_dataframe'].copy()
                     st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER] = 1

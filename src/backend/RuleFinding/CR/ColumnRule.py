@@ -332,7 +332,7 @@ def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
         for y in rhs_values.index:
             cy = rhs_values.loc[y]
             # Start from 1, k = 0 yields zero
-            for k in range(max(1, cx+cy - n), min(cx, cy) + 1):  
+            for k in range(max(1, cx+cy - n), min(cx, cy) + 1):
                 p0 = math.comb(cy, k) * math.comb(n - cy, cx - k) / math.comb(n, cx)
                 m_zero += p0 * k * np.log2(k * n / (cx * cy))
 

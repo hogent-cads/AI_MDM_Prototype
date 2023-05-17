@@ -21,7 +21,7 @@ class CleaningCommand_Trim(CleaningCommand):
 
 
 class CleaningCommand_StringToFloat(CleaningCommand):
-    """ Gets the "last" floating point number from a string. 
+    """ Gets the "last" floating point number from a string.
     """
 
     def __init__(self, series: pd.Series) -> None:

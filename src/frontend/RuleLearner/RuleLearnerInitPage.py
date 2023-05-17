@@ -110,7 +110,7 @@ class RuleLearnerInitPage:
                 #     [e.value for e in FiltererEnum],
                 #     index=[e.value for e in FiltererEnum].index(default_filtering_string))
                 st.session_state["filtering_string"] = default_filtering_string
-                
+
                 if st.button("Analyse Data"):
                     rule_finding_config = RuleFindingConfig(
                         rule_length=st.session_state["rule_length"],
@@ -135,7 +135,7 @@ class RuleLearnerInitPage:
                         seq=st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER])
                     st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
                     st.experimental_rerun()
-                
+
 
             if chosen_tab == "3":
                 colA, colB, _, colC = st.columns([3, 4, 1, 8])
@@ -225,7 +225,7 @@ class RuleLearnerInitPage:
 
                     default_binning_option = st.selectbox(
                         'Binning method:',
-                        [e.value for e in BinningEnum], key="kolom_default_binning")                    
+                        [e.value for e in BinningEnum], key="kolom_default_binning")
                     use_default_binning = st.checkbox(
                         'Use the default condition',
                         value=False,

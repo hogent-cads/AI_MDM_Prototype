@@ -11,7 +11,7 @@ class ColumnRuleView:
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__)
-    
+
     @staticmethod
     def parse_from_json(json_string):
         data = json.loads(json_string)

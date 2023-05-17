@@ -37,7 +37,7 @@ class ValueRuleRepo:
         #              on the maximum potential confidence.
 
         return potential_conf_dict.keys()
-        # Stijn: do not do any of the following ? 
+        # Stijn: do not do any of the following ?
         # dict_of_antecedents_to_list_of_column_rules = self._create_dict_of_column_rules_with_potential_confidence_from_value_rules(potential_conf_dict)
         # cfg.logger.debug(f"dict_of_antecedents_to_list_of_column_rules: has type {type(dict_of_antecedents_to_list_of_column_rules)}")
         # cfg.logger.debug(f"The keys have type {type(list(dict_of_antecedents_to_list_of_column_rules.keys())[0])}")
@@ -46,7 +46,7 @@ class ValueRuleRepo:
 
         # cfg.logger.debug(f"list_of_kept_rules_after_potential_conf_filter: has type {type(list_of_kept_rules_after_potential_conf_filter)}")
         # return list_of_kept_rules_after_potential_conf_filter
-        
+
 
 
     def _filter_on_potential_conf_of_rules(self,potential_conf_dict, dict_of_antecedents_to_list_of_column_rules, dict_of_kept_rules_to_be_filtered  ):
@@ -60,12 +60,12 @@ class ValueRuleRepo:
                 cfg.logger.info(f"Progressie LemmaRule Maken en Filteren:  {counter}/{len(potential_conf_dict)}")
 
             cr = ColumnRule(rs, confidence = max_confidence)
-            if len(cr.antecedent_set) > 1:           
+            if len(cr.antecedent_set) > 1:
                 for s in [frozenset(_) for _ in HelperFunctions.subsets_minus_one(cr.antecedent_set)]:
                     if s in dict_of_antecedents_to_list_of_column_rules:
                         innerListToCheck : List[ColumnRule]= dict_of_antecedents_to_list_of_column_rules[s] # consequents of this rule
                         for e in innerListToCheck:
-                            # When a 'smaller' rule exists that has the same consequent, but a smaller antecedent 
+                            # When a 'smaller' rule exists that has the same consequent, but a smaller antecedent
                             # and the smaller rule has a higher confidence then we drop the larger rule
 
                             # TODO: maybe change >= into > or math.isclose()

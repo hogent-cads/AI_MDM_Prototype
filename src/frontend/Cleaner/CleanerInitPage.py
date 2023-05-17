@@ -23,7 +23,7 @@ class CleanerInitPage:
         unique_characters = set()
         series = series.astype(str)
         series.apply(lambda x: list(map(lambda y: unique_characters.add(y), x)))
-        
+
         value_counts = {}
         series.apply(lambda x: list(map(lambda y: value_counts.update({y: value_counts.get(y, 0) + 1}) if y not in value_counts else None, x)))
         unique_characters_df = pd.DataFrame(value_counts.items(), columns=["character", "value_counts"]).sort_values(by="value_counts", ascending=False)
@@ -84,8 +84,8 @@ class CleanerInitPage:
                 except Exception as e:
                     return None
         except Exception as e:
-            return None         
-            
+            return None
+
     def _show_cleaning_pipelines_tab(self):
         st.header('Cleaning Pipelines:')
 
@@ -148,18 +148,18 @@ class CleanerInitPage:
                                 value = v["value"]
                                 if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
                                         value = self._determine_fill_na_value_based_on_type_and_column(value, chosen_column)
-                                
+
                                 # replace "MEAN", "MODE" or "MEDIAN" with the actual value
                                 item[k]["value"] = value
 
                 st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_frame().to_json(), 
+                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
                             custom_pipeline=copied_pipeline))
                 st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
                 st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column] = st.session_state[VarEnum.dc_CLEANED_COLUMN][chosen_column]
                 st.write("Column successfully cleaned.")
 
-                
+
 
         with colG_2:
             cleaning_methods_list = [d.dc_CLEANING_method_LOWERCASE.value,
@@ -174,7 +174,7 @@ class CleanerInitPage:
                                      d.dc_CLEANING_method_REMOVE_WHITESPACE.value,
                                      d.dc_CLEANING_method_REMOVE_BRACKETED.value,
                                      d.dc_CLEANING_method_REMOVE_PREFIXED.value]
-            
+
             special_methods = [ d.dc_CLEANING_method_FILLNA.value,
                                 d.dc_CLEANING_method_REMOVE_STOPWORDS.value,
                                 d.dc_CLEANING_method_REMOVE_BRACKETED.value,
@@ -182,7 +182,7 @@ class CleanerInitPage:
 
             cleaning_method = st.selectbox(
                 d.dc_CLEANING_method_selection.value, cleaning_methods_list)
-            
+
             colH_1, colH_2 = st.columns([1, 1])
             with colH_1:
                 st.write(cleaning_method_descriptions[cleaning_method])
@@ -192,7 +192,7 @@ class CleanerInitPage:
                         value = str(set(st.multiselect(d.dc_CLEANING_SELECT_BRACKET, ['()', '[]', '{}', '<>'])))
                     else:
                         value = st.text_input("Optional parameter", "")
-            
+
         with colI4:
             st.write("")
             st.write("")
@@ -208,17 +208,17 @@ class CleanerInitPage:
                                     value = v["value"]
                                     if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
                                             value = self._determine_fill_na_value_based_on_type_and_column(value, e)
-                                    
+
                                     # replace "MEAN", "MODE" or "MEDIAN" with the actual value
                                     item[k]["value"] = value
-                    
+
                         st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                                dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][e].to_frame().to_json(), 
+                                dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][e].to_frame().to_json(),
                                 custom_pipeline=copied_pipeline))
                     st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
                     st.session_state[VarEnum.sb_LOADED_DATAFRAME][e] = st.session_state[VarEnum.dc_CLEANED_COLUMN][e]
                 st.write(d.dc_CLEANING_CHANGES_APPLIED.value)
-        
+
 
         with colG_3:
             st.write("")
@@ -232,15 +232,15 @@ class CleanerInitPage:
                 if cleaning_method not in special_methods:
                     to_append = {'operator': cleaning_method_translations[cleaning_method]}
                 if cleaning_method == d.dc_CLEANING_method_FILLNA.value:
-                    to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'value': str(value)}} 
+                    to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'value': str(value)}}
                 if cleaning_method == d.dc_CLEANING_method_REMOVE_BRACKETED.value:
                     to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'brackets': value}}
                 if cleaning_method == d.dc_CLEANING_method_REMOVE_PREFIXED.value:
                     to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'prefix': value}}
                 st.session_state[VarEnum.dc_PIPELINE]['text'].append(to_append)
-                    
 
-            
+
+
             if st.button(d.dc_CLEANING_CLEAR_PIPELINE.value):
                 st.session_state[VarEnum.dc_PIPELINE] = {}
 
@@ -248,9 +248,9 @@ class CleanerInitPage:
             st.subheader(d.dc_CLEANING_CURRENT_PIPELINE.value)
             st.write(st.session_state[VarEnum.dc_PIPELINE])
 
-    def _apply_pipeline(self, col):       
+    def _apply_pipeline(self, col):
         st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][col].to_frame().to_json(), 
+                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][col].to_frame().to_json(),
                             custom_pipeline=st.session_state[VarEnum.dc_PIPELINE]))
         st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
         st.session_state[VarEnum.sb_LOADED_DATAFRAME][col] = st.session_state[VarEnum.dc_CLEANED_COLUMN][col]
@@ -276,7 +276,7 @@ class CleanerInitPage:
             self.handler.structure_detection(
                 st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_json(),
                 extra_exceptions, compress))
-    
+
 
         series_for_aggrid = (simple_repr.value_counts(normalize=True)
                                         .copy(deep=True))
@@ -315,11 +315,11 @@ class CleanerInitPage:
                 selected_pattern = (response_patterns["selected_rows"][0]["pattern"]
                                     if len(response_patterns["selected_rows"]) > 0
                                     else None)
-                
+
                 if selected_pattern is not None:
                     st.write("The records that match the selected pattern are:")
                     df_for_aggrid2 = st.session_state[VarEnum.sb_LOADED_DATAFRAME][simple_repr.values == selected_pattern]
-                    
+
                     if st.session_state["idx_of_structure_df"] is None:
                         st.session_state["idx_of_structure_df"] = list(df_for_aggrid2.index)
                     gb2 = GridOptionsBuilder.from_dataframe(df_for_aggrid2)
@@ -336,7 +336,7 @@ class CleanerInitPage:
                     }
                     grid = AgGrid(df_for_aggrid2, gridOptions=gridOptions | extra_grid_options_2,
                                   enable_enterprise_modules=True, height=300)
-                    
+
                     grid['data'].index = st.session_state["idx_of_structure_df"]
 
                     if st.button("Save Changes"):
@@ -359,10 +359,10 @@ class CleanerInitPage:
                 ["fingerprint", "phonetic-fingerprint",
                     "ngram-fingerprint", "levenshtein"])
 
-            
+
         fuzzy_matching_form = st.form(key='fuzzy_matching_form')
         with fuzzy_matching_form:
-            
+
             colD_2, colD_1, _  = st.columns([1, 3, 2])
 
             with colD_1:
@@ -385,7 +385,7 @@ class CleanerInitPage:
                         block_size = st.slider(
                             'The Block Size',
                             min_value=1, max_value=10, value=6)
-                        
+
             with colD_2:
                 st.write("")
                 fuzzy_matching_btn = st.form_submit_button(label='Cluster')
@@ -398,7 +398,7 @@ class CleanerInitPage:
             for key in list(st.session_state.keys()):
                 if key.startswith('fuzzy_merge'):
                     del st.session_state[key]
-                    
+
 
             for cluster_id, list_of_values in self.handler.fuzzy_match_dataprep(
                     dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
@@ -490,12 +490,12 @@ class CleanerInitPage:
                     # and replace it with the value in the cluster
                     st.session_state[VarEnum.sb_LOADED_DATAFRAME][column_name] = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column_name].astype(str).replace(
                         str(val_to_replace), str(cv.new_cell_value))
-        
+
 
     def _create_cluster_card(self, idx, cv, min_height:int = 100, max_height:int = 250, row_height:int = 30):
 
         cont = st.container()
-        
+
         with cont:
             col0, colA, colB, colC, _ = st.columns([2,4,2,2,4])
             with col0:
@@ -511,7 +511,7 @@ class CleanerInitPage:
                         "alwaysShowVerticalScroll": True,
                         "pagination": True,
                         "paginationPageSize": len(cv.distinct_values_in_cluster),
-                    } 
+                    }
                 gridOptionsFull = gridOptions | extra_grid_options
                 tmp = AgGrid(cv.distinct_values_in_cluster, gridOptions=gridOptionsFull, enable_enterprise_modules=False, update_mode="SELECTION_CHANGED", height=min(min_height + len(cv.distinct_values_in_cluster) * row_height, max_height))
                 cv.selected_rows = tmp['selected_rows']
@@ -544,7 +544,7 @@ class CleanerInitPage:
             </script>
             '''
         st.components.v1.html(js)
-        
+
 
     def _give_custom_css_to_container(self):
         customSpan = rf"""

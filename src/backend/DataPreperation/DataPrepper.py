@@ -14,7 +14,7 @@ class DataPrepper:
 
     def clean_data_frame(self, dirty_df: pd.DataFrame, cleaning_json_string: str) -> pd.DataFrame:
 
-        
+
         try:
             clusters_ = self._find_duplicate_columns(dirty_df)
             deduped_df = self._dedupe_dataframe_columns(clusters_, dirty_df)
@@ -28,7 +28,7 @@ class DataPrepper:
 
         # EXECUTE BINNING COMMANDS FROM JSON
         [x.execute() for x in dataframe_with_commands["binning_command"].values if x is not None]
-    
+
 
         # EXECUTE DROPPING COMMANDS FROM JSON
         try:
@@ -41,7 +41,7 @@ class DataPrepper:
 
         print(f"length of new dataframe: {len(deduped_df)} ; cols of new dataframe: {len(deduped_df.columns)}")
         return deduped_df
-        
+
 
     def transform_data_frame_to_OHE(self, non_OHE_df: pd.DataFrame, drop_nan:bool) -> pd.DataFrame:
 
@@ -73,7 +73,7 @@ class DataPrepper:
 
             df: the DataFrame to be examined. Should NOT be in one-hot-encoded form.
 
-            returns: List of Set of str, where each set represents a group of identical 
+            returns: List of Set of str, where each set represents a group of identical
             columns.
         """
         # df = df.astype(str)
@@ -92,6 +92,6 @@ class DataPrepper:
                         dup_cache.add(df.columns[i])
                     duplicates[df.columns[i]].add(df.columns[j])
                     dup_cache.add(df.columns[j])
-                
-        
+
+
         return [v for (_ , v) in duplicates.items()]

@@ -30,7 +30,7 @@ class DataPrepperCommandFactory:
         cleaning_json_object = json.loads(cleaning_json_string)
         binning_object_dict = {}
         for k,v in cleaning_json_object['binning_option'].items():
-        
+
             """Creatie Van BinningCommand"""
             binning_command_object_k, binning_command_object_v  = v
 
@@ -71,7 +71,7 @@ class DataPrepperCommandFactory:
             #         list_of_cleaning_commands.append(CleaningCommand_Trim(series=dirty_df[k]))
             #     else:
             #         raise Exception("Invalid Parsing of CleaningCommand")
-            
+
             try:
                 df_to_return.loc[len(df_to_return)] = [k, list_of_cleaning_commands, binning_object_dict[k] if k in binning_object_dict else None, list_of_dropping_commands]
             except Exception as e:

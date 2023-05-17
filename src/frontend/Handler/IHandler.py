@@ -27,44 +27,44 @@ class IHandler(ABC):
     @abstractmethod
     def recalculate_column_rules(self, old_df_in_json, new_df_in_json, rule_finding_config_in_json, affected_columns):
         raise Exception("Not implemented Exception")
-        
+
     @abstractmethod
     def prepare_zingg(self, dedupe_type_dict, dedupe_data) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def zingg_clear(self) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def run_zingg_phase(self, phase) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def zingg_unmarked_pairs(self) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def zingg_mark_pairs(self, marked_df) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def zingg_get_stats(self) -> json:
         raise Exception("Not implemented Exception")
-    
+
     @abstractmethod
     def zingg_get_clusters(self) -> json:
         raise Exception("Not implemented Exception")
-    
+
     # DATA CLEANING
     @abstractmethod
     def clean_dataframe_dataprep(self,dataframe_in_json, custom_pipeline) -> json:
         raise Exception("Not implemented Exception")
-        
+
     @abstractmethod
     def fuzzy_match_dataprep(self,dataframe_in_json, col, cluster_method, df_name, ngram, radius, block_size) -> json:
         raise Exception("Not implemented Exception")
-        
+
     @abstractmethod
     def structure_detection(self,series_in_json, exception_chars, compress) -> json:
         raise Exception("Not implemented Exception")
