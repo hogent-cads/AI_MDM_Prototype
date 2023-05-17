@@ -37,28 +37,10 @@ class LocalHandler(IHandler):
             new_df_in_json=new_df_in_json,
             rule_finding_config_in_json=rule_finding_config_in_json,
             affected_columns=json.dumps(affected_columns))
-
-    def create_deduper_object(self, dedupe_type_dict, dedupe_data) -> json:
-        self.dc.create_deduper_object(dedupe_type_dict, dedupe_data)
-
-    def dedupe_next_pair(self):
-        return self.dc.dedupe_next_pair()
-    
-    def dedupe_mark_pair(self, labeled_pair):
-        return self.dc.dedupe_mark_pair(labeled_pair)
-
-    def dedupe_get_stats(self):
-        return self.dc.dedupe_get_stats()
-
-    def dedupe_train(self):
-        return self.dc.dedupe_train()
-
-    def dedupe_get_clusters(self):
-        return self.dc.dedupe_get_clusters()
-    
+        
     # ZINGG
     def prepare_zingg(self, dedupe_type_dict, dedupe_data) -> json:
-        return self.dc.create_deduper_object(dedupe_type_dict, dedupe_data)
+        return self.dc.prepare_zingg(dedupe_type_dict, dedupe_data)
     
     def zingg_clear(self) -> json:
         return self.dc.zingg_clear()

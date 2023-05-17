@@ -27,33 +27,7 @@ class IHandler(ABC):
     @abstractmethod
     def recalculate_column_rules(self, old_df_in_json, new_df_in_json, rule_finding_config_in_json, affected_columns):
         raise Exception("Not implemented Exception")
-
-
-    # DEDUPE
-    @abstractmethod
-    def create_deduper_object(self, dedupe_type_dict, dedupe_data) -> json:
-        raise Exception("Not implemented Exception")
-
-    @abstractmethod
-    def dedupe_next_pair(self) -> json:
-        raise Exception("Not implemented Exception")
-    
-    @abstractmethod
-    def dedupe_mark_pair(self, labeled_pair) -> json:
-        raise Exception("Not implemented Exception")
-
-    @abstractmethod
-    def dedupe_get_stats(self) -> json:
-        raise Exception("Not implemented Exception")
-
-    @abstractmethod
-    def dedupe_train(self) -> json:
-        raise Exception("Not implemented Exception")
-
-    @abstractmethod
-    def dedupe_get_clusters(self) -> json:
-        raise Exception("Not implemented Exception")
-    
+        
     @abstractmethod
     def prepare_zingg(self, dedupe_type_dict, dedupe_data) -> json:
         raise Exception("Not implemented Exception")
