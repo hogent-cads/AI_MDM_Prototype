@@ -61,21 +61,27 @@ class CleanerInitPage:
             if type == d.dc_CLEANING_FILLNA_value_MEDIAN.value:
                 # calculate the median of the column
                 try:
-                    return pd.to_numeric(st.session_state[VarEnum.sb_LOADED_DATAFRAME][column], errors='coerce').median()
+                    tmp = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column][st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
+                    tmp2 = list(tmp.median())[0]
+                    return tmp2
                 except Exception as e:
                     return 0
             if type == d.dc_CLEANING_FILLNA_value_MEAN.value:
                 # calculate the median of the column
                 try:
+                    tmp = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column][st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
+                    tmp2 = list(tmp.mean())[0]
+                    return tmp2
                     return pd.to_numeric(st.session_state[VarEnum.sb_LOADED_DATAFRAME][column], errors='coerce').mean()
                 except Exception as e:
                     return 0
-            if type == d.dc_CLEANING_FILLNA_value_FREQ.value:
+            if type == d.dc_CLEANING_FILLNA_value_MODE.value:
                 try:
                 # calculate value counts of the column and pick the value that is most frequent but not None
                     value_counts = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].value_counts()
                     value_counts = value_counts[value_counts.index != "None"]
-                    return value_counts.index[0]
+                    tmp = value_counts.index[0]
+                    return tmp
                 except Exception as e:
                     return None
         except Exception as e:
@@ -145,7 +151,6 @@ class CleanerInitPage:
                                         value = self._determine_fill_na_value_based_on_type_and_column(value, chosen_column)
                                 
                                 # replace "MEAN", "MODE" or "MEDIAN" with the actual value
-                                st.write(value)
                                 item[k]["value"] = value
 
                 st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
@@ -193,24 +198,26 @@ class CleanerInitPage:
             st.write("")
             st.write("")
             if st.button(d.dc_CLEANING_APPLY_PIPELINE_ALL.value):
-            
-                # calculate value if needed
-                if cleaning_method == d.dc_CLEANING_method_FILLNA.value:
-                    # check if there is a special value in value:
-                    if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
-                        value = self._determine_fill_na_value_based_on_type_and_column(value, chosen_column)
-                else:
-
-                    # HIER VERDER DOEN
-                    value = None
 
                 for e in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns:
-                    if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
-                        correct_value = self._determine_fill_na_value_based_on_type_and_column(value, e)
-                        st.write(correct_value)
-                    # change value of parameter to correct value
-
-                    self._apply_pipeline(e)
+                    copied_pipeline = deepcopy(st.session_state[VarEnum.dc_PIPELINE])
+                    # iterate over alle value parameters in the pipeline
+                    for item in copied_pipeline["text"]:
+                        for k,v in item.items():
+                            if k == "parameters":
+                                if "value" in v:
+                                    value = v["value"]
+                                    if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
+                                            value = self._determine_fill_na_value_based_on_type_and_column(value, e)
+                                    
+                                    # replace "MEAN", "MODE" or "MEDIAN" with the actual value
+                                    item[k]["value"] = value
+                    
+                        st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
+                                dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][e].to_frame().to_json(), 
+                                custom_pipeline=copied_pipeline))
+                    st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
+                    st.session_state[VarEnum.sb_LOADED_DATAFRAME][e] = st.session_state[VarEnum.dc_CLEANED_COLUMN][e]
                 st.write(d.dc_CLEANING_CHANGES_APPLIED.value)
         
 
