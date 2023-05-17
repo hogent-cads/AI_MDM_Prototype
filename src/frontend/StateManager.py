@@ -31,7 +31,7 @@ class StateManager:
         part_to_check_state = file_string.split('_')[1]
 
         # SET CURRENT_SEQ TO CHOSEN ONE
-        st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER] = kwargs["chosen_seq"]
+        st.session_state[VarEnum.GB_CURRENT_SEQUENCE_NUMBER] = kwargs["chosen_seq"]
 
         # Grote If statement
         if part_to_check_functionality == "Rule-learning":
@@ -50,23 +50,23 @@ class StateManager:
                     dropping_options=t_dict["dropping_options"],
                     binning_option=t_dict["binning_option"]
                     )
-                st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
+                st.session_state[VarEnum.GB_CURRENT_STATE] = "BekijkRules"
 
             if part_to_check_state == 'suggestions':
                 # Zoek de rules-file die hieraan gelinkt is, om zo ook de
                 st.session_state["suggesties_df"] = json.dumps(past_result_content_dict["result"])
                 # FETCH PATH OF OTHER FILE FROM SESSION_MAP
-                StateManager.restore_state(**{"handler" : kwargs["handler"], "file_path": st.session_state[VarEnum.gb_SESSION_MAP][kwargs["chosen_seq"]]["rules"], "chosen_seq": kwargs["chosen_seq"]})
-                st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkSuggesties"
+                StateManager.restore_state(**{"handler" : kwargs["handler"], "file_path": st.session_state[VarEnum.GB_SESSION_MAP][kwargs["chosen_seq"]]["rules"], "chosen_seq": kwargs["chosen_seq"]})
+                st.session_state[VarEnum.GB_CURRENT_STATE] = "BekijkSuggesties"
             return
         return
 
     @staticmethod
     def go_back_to_previous_in_flow() -> None:
         # RULE LEARNER
-        current_state = st.session_state[VarEnum.gb_CURRENT_STATE]
+        current_state = st.session_state[VarEnum.GB_CURRENT_STATE]
         if current_state == "BekijkRules":
-            st.session_state[VarEnum.gb_CURRENT_STATE] = None
+            st.session_state[VarEnum.GB_CURRENT_STATE] = None
 
             # Verschillende knoppen vanop de pagina terug False maken
             st.session_state["validate_own_rule_btn"] = False
@@ -75,65 +75,65 @@ class StateManager:
 
             return
         if current_state == "BekijkSuggesties":
-            st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
+            st.session_state[VarEnum.GB_CURRENT_STATE] = "BekijkRules"
             return
 
         # ZINGG
-        if current_state == VarEnum.st_DD_Labeling:
-            st.session_state[VarEnum.gb_CURRENT_STATE] = None
+        if current_state == VarEnum.ST_DD_LABELING:
+            st.session_state[VarEnum.GB_CURRENT_STATE] = None
             return
 
-        if current_state == VarEnum.st_DD_Clustering:
-            st.session_state[VarEnum.gb_CURRENT_STATE] = VarEnum.st_DD_Labeling
+        if current_state == VarEnum.ST_DD_CLUSTERING:
+            st.session_state[VarEnum.GB_CURRENT_STATE] = VarEnum.ST_DD_LABELING
             return
 
     @staticmethod
     def initStateManagement(handler : IHandler):
 
         # LOADED DATAFRAME
-        if VarEnum.sb_LOADED_DATAFRAME not in st.session_state:
-            st.session_state[VarEnum.sb_LOADED_DATAFRAME] = None
+        if VarEnum.SB_LOADED_DATAFRAME not in st.session_state:
+            st.session_state[VarEnum.SB_LOADED_DATAFRAME] = None
 
-        if VarEnum.sb_LOADED_DATAFRAME_HASH not in st.session_state:
-            st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH] = None
+        if VarEnum.SB_LOADED_DATAFRAME_HASH not in st.session_state:
+            st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH] = None
 
-        if VarEnum.sb_LOADED_DATAFRAME_separator not in st.session_state:
-            st.session_state[VarEnum.sb_LOADED_DATAFRAME_separator] = None
+        if VarEnum.SB_LOADED_DATAFRAME_SEPARATOR not in st.session_state:
+            st.session_state[VarEnum.SB_LOADED_DATAFRAME_SEPARATOR] = None
 
-        if VarEnum.sb_LOADED_DATAFRAME_NAME not in st.session_state:
-            st.session_state[VarEnum.sb_LOADED_DATAFRAME_NAME] = None
+        if VarEnum.SB_LOADED_DATAFRAME_NAME not in st.session_state:
+            st.session_state[VarEnum.SB_LOADED_DATAFRAME_NAME] = None
 
         # DATASET DISPLAYER COMPONENT
-        if VarEnum.ddc_FORCE_RELOAD_CACHE not in st.session_state:
-            st.session_state[VarEnum.ddc_FORCE_RELOAD_CACHE] = False
+        if VarEnum.DDC_FORCE_RELOAD_CACHE not in st.session_state:
+            st.session_state[VarEnum.DDC_FORCE_RELOAD_CACHE] = False
 
 
         # SESSION
-        if VarEnum.gb_SESSION_MAP not in st.session_state:
-            if st.session_state[VarEnum.sb_LOADED_DATAFRAME] is not None:
-                st.session_state[VarEnum.gb_SESSION_MAP] = handler.get_session_map(dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME].to_json())
-                st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER] = str(max([int(x) for x in st.session_state[VarEnum.gb_SESSION_MAP].keys()], default=0)+1)
+        if VarEnum.GB_SESSION_MAP not in st.session_state:
+            if st.session_state[VarEnum.SB_LOADED_DATAFRAME] is not None:
+                st.session_state[VarEnum.GB_SESSION_MAP] = handler.get_session_map(dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME].to_json())
+                st.session_state[VarEnum.GB_CURRENT_SEQUENCE_NUMBER] = str(max([int(x) for x in st.session_state[VarEnum.GB_SESSION_MAP].keys()], default=0) + 1)
             else:
-                st.session_state[VarEnum.gb_SESSION_MAP] = None
+                st.session_state[VarEnum.GB_SESSION_MAP] = None
 
-        if VarEnum.gb_SESSION_ID not in st.session_state:
-            st.session_state[VarEnum.gb_SESSION_ID] = None
+        if VarEnum.GB_SESSION_ID not in st.session_state:
+            st.session_state[VarEnum.GB_SESSION_ID] = None
 
 
-        if VarEnum.dp_PANDAS_PROFILE not in st.session_state:
-            st.session_state[VarEnum.dp_PANDAS_PROFILE] = None
+        if VarEnum.DP_PANDAS_PROFILE not in st.session_state:
+            st.session_state[VarEnum.DP_PANDAS_PROFILE] = None
 
-        if VarEnum.dp_DATAPREP_PROFILE not in st.session_state:
-            st.session_state[VarEnum.dp_DATAPREP_PROFILE] = None
+        if VarEnum.DP_DATAPREP_PROFILE not in st.session_state:
+            st.session_state[VarEnum.DP_DATAPREP_PROFILE] = None
 
-        if VarEnum.gb_CURRENT_STATE not in st.session_state:
-            st.session_state[VarEnum.gb_CURRENT_STATE] = None
+        if VarEnum.GB_CURRENT_STATE not in st.session_state:
+            st.session_state[VarEnum.GB_CURRENT_STATE] = None
 
-        if VarEnum.sb_CURRENT_FUNCTIONALITY not in st.session_state:
-            st.session_state[VarEnum.sb_CURRENT_FUNCTIONALITY] = None
+        if VarEnum.SB_CURRENT_FUNCTIONALITY not in st.session_state:
+            st.session_state[VarEnum.SB_CURRENT_FUNCTIONALITY] = None
 
-        if VarEnum.sb_CURRENT_PROFILING not in st.session_state:
-            st.session_state[VarEnum.sb_CURRENT_PROFILING] = None
+        if VarEnum.SB_CURRENT_PROFILING not in st.session_state:
+            st.session_state[VarEnum.SB_CURRENT_PROFILING] = None
 
         if 'currentRegel_LL' not in st.session_state:
             st.session_state['currentRegel_LL'] = None
@@ -189,14 +189,14 @@ class StateManager:
             st.session_state["record_pair"] = None
 
         # CLEANER
-        if VarEnum.dc_PIPELINE not in st.session_state:
-            st.session_state[VarEnum.dc_PIPELINE] = {}
+        if VarEnum.DC_PIPELINE not in st.session_state:
+            st.session_state[VarEnum.DC_PIPELINE] = {}
 
         if 'idx_of_structure_df' not in st.session_state:
             st.session_state['idx_of_structure_df'] = None
 
-        if VarEnum.dc_CLEANED_COLUMN not in st.session_state:
-            st.session_state[VarEnum.dc_CLEANED_COLUMN] = None
+        if VarEnum.DC_CLEANED_COLUMN not in st.session_state:
+            st.session_state[VarEnum.DC_CLEANED_COLUMN] = None
 
         if "list_of_fuzzy_cluster_view" not in st.session_state:
             st.session_state["list_of_fuzzy_cluster_view"] = []

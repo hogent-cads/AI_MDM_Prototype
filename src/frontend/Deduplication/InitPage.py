@@ -18,7 +18,7 @@ class InitPage:
 
             chosen_tab = stx.tab_bar(data=[
             stx.TabBarItemData(id=1, title="Dataset", description=""),
-            stx.TabBarItemData(id=2, title=d.dd_DEDUPLICATION, description=""),
+            stx.TabBarItemData(id=2, title=d.DD_DEDUPLICATION, description=""),
             ], default=1)
 
             if chosen_tab == "1":
@@ -29,11 +29,11 @@ class InitPage:
 
 
     def _show_deduplication_settings(self):
-            st.subheader(d.dd_DEDUPLICATION_COLUMN_SELECTION.value)
+            st.subheader(d.DD_DEDUPLICATION_COLUMN_SELECTION.value)
 
             colA, colB, colC = st.columns([3,3,8])
             with colA:
-                selected_col = st.selectbox('Column:', st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
+                selected_col = st.selectbox('Column:', st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns)
 
             with colB:
                 selected_type = st.selectbox('Type:', ZinggTypesEnum._member_names_)
@@ -46,23 +46,23 @@ class InitPage:
 
 
             # FOR DEBUG ON RESTOS.CSV PRE-DEFINED FIELDS:
-            if (VarEnum.dd_TYPE_DICT not in st.session_state ) or (st.session_state[VarEnum.dd_TYPE_DICT] == {} ):
-                st.session_state[VarEnum.dd_TYPE_DICT] = {k: "FUZZY" for k in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns}
+            if (VarEnum.DD_TYPE_DICT not in st.session_state) or (st.session_state[VarEnum.DD_TYPE_DICT] == {}):
+                st.session_state[VarEnum.DD_TYPE_DICT] = {k: "FUZZY" for k in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns}
 
 
             col_1, col_3,_ = st.columns([1,2,8])
             with col_1:
-                add_btn = st.button(d.dd_DEDUPLICATION_CHANGE_TYPE_btn.value)
+                add_btn = st.button(d.DD_DEDUPLICATION_CHANGE_TYPE_BTN.value)
                 if add_btn:
-                    st.session_state[VarEnum.dd_TYPE_DICT][selected_col] = selected_type
+                    st.session_state[VarEnum.DD_TYPE_DICT][selected_col] = selected_type
 
             with col_3:
-                if len(st.session_state[VarEnum.dd_TYPE_DICT].values()) > 0:
-                    start_training_btn = st.button(d.dd_DEDUPLICATION_START_btn.value)
+                if len(st.session_state[VarEnum.DD_TYPE_DICT].values()) > 0:
+                    start_training_btn = st.button(d.DD_DEDUPLICATION_START_BTN.value)
                     if start_training_btn:
-                        self.handler.prepare_zingg(st.session_state[VarEnum.dd_TYPE_DICT], st.session_state[VarEnum.sb_LOADED_DATAFRAME].to_json())
-                        st.session_state[VarEnum.gb_CURRENT_STATE] = VarEnum.st_DD_Labeling
+                        self.handler.prepare_zingg(st.session_state[VarEnum.DD_TYPE_DICT], st.session_state[VarEnum.SB_LOADED_DATAFRAME].to_json())
+                        st.session_state[VarEnum.GB_CURRENT_STATE] = VarEnum.ST_DD_LABELING
                         st.experimental_rerun()
             st.write("")
-            st.write(d.dd_DEDUPLICATION_COLUMN_SELECTION_OVERVIEW.value)
-            st.write(st.session_state[VarEnum.dd_TYPE_DICT])
+            st.write(d.DD_DEDUPLICATION_COLUMN_SELECTION_OVERVIEW.value)
+            st.write(st.session_state[VarEnum.DD_TYPE_DICT])

@@ -44,7 +44,7 @@ class RuleLearnerSummaryRulesPage:
             "alwaysShowHorizontalScroll": True,
             "alwaysShowVerticalScroll": True,
             "pagination": True,
-            "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
+            "paginationPageSize": len(st.session_state[VarEnum.SB_LOADED_DATAFRAME]),
                     }
 
         with self.canvas.container():
@@ -92,10 +92,10 @@ class RuleLearnerSummaryRulesPage:
                     if find_suggestions_btn:
                         st.session_state['suggesties_df'] = \
                             self.handler.get_suggestions_given_dataframe_and_column_rules(
-                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
+                            dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
                             list_of_rule_string_in_json=json.dumps([x['Regel'] for x in response_selection_suggestion_finder['selected_rows']]),
-                            seq=st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER])
-                        st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkSuggesties"
+                            seq=st.session_state[VarEnum.GB_CURRENT_SEQUENCE_NUMBER])
+                        st.session_state[VarEnum.GB_CURRENT_STATE] = "BekijkSuggesties"
                         StateManager.reset_all_buttons()
                         st.experimental_rerun()
                 else:
@@ -122,9 +122,9 @@ class RuleLearnerSummaryRulesPage:
                     )
 
                     st.markdown("**Rows that do not comply with the found mapping:**")
-                    gb3 = GridOptionsBuilder.from_dataframe(st.session_state[VarEnum.sb_LOADED_DATAFRAME].iloc[cr.idx_to_correct])
+                    gb3 = GridOptionsBuilder.from_dataframe(st.session_state[VarEnum.SB_LOADED_DATAFRAME].iloc[cr.idx_to_correct])
                     _ = AgGrid(
-                        st.session_state[VarEnum.sb_LOADED_DATAFRAME].iloc[cr.idx_to_correct],
+                        st.session_state[VarEnum.SB_LOADED_DATAFRAME].iloc[cr.idx_to_correct],
                         height=200,
                         editable=False,
                         gridOptions=gb3.build() | extra_grid_options,
@@ -143,13 +143,13 @@ class RuleLearnerSummaryRulesPage:
             with col_b1:
                 ant_set = st.multiselect(
                     'Choose the antecedent set',
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns
                     )
 
             with col_b2:
                 con_set = st.selectbox(
                     'Choose the consequent column',
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns)
 
             with col_b3:
                 st.write(" ")
@@ -163,7 +163,7 @@ class RuleLearnerSummaryRulesPage:
                 filtered_cols = ant_set + [con_set]
                 rule_string = ','.join(ant_set) + " => " + con_set
                 found_rule = self.handler.get_column_rule_from_string(
-                    dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][filtered_cols].to_json(),
+                    dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][filtered_cols].to_json(),
                     rule_string=rule_string)
 
                 col_bb1, col_bb2, col_bb3, col_bb4 = st.columns([1, 2, 2, 1])
@@ -191,10 +191,10 @@ class RuleLearnerSummaryRulesPage:
                     st.markdown("**Rows that do not comply with the found mapping:**")
                     # st.write(found_rule.idx_to_correct)
                     gb4 = GridOptionsBuilder.from_dataframe(
-                        st.session_state[VarEnum.sb_LOADED_DATAFRAME].iloc[found_rule.idx_to_correct])
+                        st.session_state[VarEnum.SB_LOADED_DATAFRAME].iloc[found_rule.idx_to_correct])
                     gb4.configure_grid_options(fit_columns_on_grid_load=True)
                     _ = AgGrid(
-                        st.session_state[VarEnum.sb_LOADED_DATAFRAME].iloc[found_rule.idx_to_correct],
+                        st.session_state[VarEnum.SB_LOADED_DATAFRAME].iloc[found_rule.idx_to_correct],
                         height=200,
                         editable=False,
                         gridOptions=gb4.build() | extra_grid_options,

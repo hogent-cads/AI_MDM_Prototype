@@ -23,44 +23,44 @@ class Router:
     def route_data_extraction(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
             DataExtractorInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_data_profiling(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
             ProfilerInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_data_cleaning(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
             CleanerInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_rule_learning(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
             RuleLearnerInitPage(canvas=canvas, handler=self.handler).show()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == VarEnum.st_RL_Rules:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_RL_RULES:
             RuleLearnerSummaryRulesPage(canvas=canvas, handler=self.handler).show()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == VarEnum.st_RL_Suggestions:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_RL_SUGGESTIONS:
             RuleLearnerSuggestionsPage(canvas=canvas, handler=self.handler).show()
 
     def route_dedupe(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
             InitPage(canvas=canvas, handler=self.handler).show()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == VarEnum.st_DD_Labeling:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_DD_LABELING:
             ZinggLabelPage(canvas=canvas, handler=self.handler).show()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == VarEnum.st_DD_REDIRECT_Clustering:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_DD_REDIRECT_CLUSTERING:
             ZinggClusterRedirectPage(canvas=canvas, handler=self.handler).redirect_get_clusters()
 
-        if st.session_state[VarEnum.gb_CURRENT_STATE] == VarEnum.st_DD_Clustering:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_DD_CLUSTERING:
             ZinggClusterPage(canvas=canvas, handler=self.handler).show()

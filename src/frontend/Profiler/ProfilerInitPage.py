@@ -23,8 +23,8 @@ class ProfilerInitPage:
     def show(self):
         chosen_tab = stx.tab_bar(data=[
             stx.TabBarItemData(id=1, title="Dataset", description=""),
-            stx.TabBarItemData(id=2, title=d.sb_DATA_PROFILING_option_pandas, description=""),
-            stx.TabBarItemData(id=3, title=d.sb_DATA_PROFILING_option_dataprep, description=""),
+            stx.TabBarItemData(id=2, title=d.SB_DATA_PROFILING_OPTION_PANDAS, description=""),
+            stx.TabBarItemData(id=3, title=d.SB_DATA_PROFILING_OPTION_DATAPREP, description=""),
             ], default=1)
 
         if chosen_tab == "1":
@@ -38,17 +38,17 @@ class ProfilerInitPage:
 
 
     def _show_pandas_profiling(self):
-        if st.session_state[v.dp_PANDAS_PROFILE] is None:
+        if st.session_state[v.DP_PANDAS_PROFILE] is None:
             generate_profiling = st.button("Generate Pandas Profiling Report")
             if generate_profiling:
                 st.header('The Data Profiling report is getting generated. Please wait...')
-                st.session_state[v.dp_PANDAS_PROFILE] = ProfileReport(st.session_state[v.sb_LOADED_DATAFRAME])
-                st_profile_report(st.session_state[v.dp_PANDAS_PROFILE])
+                st.session_state[v.DP_PANDAS_PROFILE] = ProfileReport(st.session_state[v.SB_LOADED_DATAFRAME])
+                st_profile_report(st.session_state[v.DP_PANDAS_PROFILE])
         else:
-            st_profile_report(st.session_state[v.dp_PANDAS_PROFILE])
+            st_profile_report(st.session_state[v.DP_PANDAS_PROFILE])
 
     def _show_dataprep_profiling(self):
-        if st.session_state[v.dp_DATAPREP_PROFILE] is None:
+        if st.session_state[v.DP_DATAPREP_PROFILE] is None:
             generate_profiling = st.button("Generate Dataprep Profiling Report")
             if generate_profiling:
                 st.header('The Data Profiling report is getting generated. Please wait...')
@@ -57,12 +57,12 @@ class ProfilerInitPage:
                 # The url starts from WWW_ROOT, so we need to go up one level
                 # in order to get rid of "aimdmtool" in the url
                 with st.spinner('Generating profile report...'):
-                    path = os.path.join(os.path.join(cfg.configuration["WWW_ROOT"], "reports"), f"{st.session_state[v.sb_LOADED_DATAFRAME_HASH]}.html")
-                    report = create_report(st.session_state[v.sb_LOADED_DATAFRAME])
+                    path = os.path.join(os.path.join(cfg.configuration["WWW_ROOT"], "reports"), f"{st.session_state[v.SB_LOADED_DATAFRAME_HASH]}.html")
+                    report = create_report(st.session_state[v.SB_LOADED_DATAFRAME])
                     report.save(path)
 
-                st.session_state[v.dp_DATAPREP_PROFILE] = os.path.join("..", "reports", f"{st.session_state[v.sb_LOADED_DATAFRAME_HASH]}.html")
-                st.markdown(f'<a href="{st.session_state[v.dp_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)
+                st.session_state[v.DP_DATAPREP_PROFILE] = os.path.join("..", "reports", f"{st.session_state[v.SB_LOADED_DATAFRAME_HASH]}.html")
+                st.markdown(f'<a href="{st.session_state[v.DP_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)
         else:
             st.header('Click on the link below to view the report')
-            st.markdown(f'<a href="{st.session_state[v.dp_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)
+            st.markdown(f'<a href="{st.session_state[v.DP_DATAPREP_PROFILE]}">Link to the report</a>', unsafe_allow_html=True)

@@ -57,27 +57,27 @@ class CleanerInitPage:
     def _determine_fill_na_value_based_on_type_and_column(self, type, column):
 
         try:
-            if type == d.dc_CLEANING_FILLNA_value_MEDIAN.value:
+            if type == d.DC_CLEANING_FILLNA_VALUE_MEDIAN.value:
                 # calculate the median of the column
                 try:
-                    tmp = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column][st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
+                    tmp = st.session_state[VarEnum.SB_LOADED_DATAFRAME][column][st.session_state[VarEnum.SB_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
                     tmp2 = list(tmp.median())[0]
                     return tmp2
                 except Exception as e:
                     return 0
-            if type == d.dc_CLEANING_FILLNA_value_MEAN.value:
+            if type == d.DC_CLEANING_FILLNA_VALUE_MEAN.value:
                 # calculate the median of the column
                 try:
-                    tmp = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column][st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
+                    tmp = st.session_state[VarEnum.SB_LOADED_DATAFRAME][column][st.session_state[VarEnum.SB_LOADED_DATAFRAME][column].notna()].astype(str).str.extract('(\d+)').astype(float)
                     tmp2 = list(tmp.mean())[0]
                     return tmp2
-                    return pd.to_numeric(st.session_state[VarEnum.sb_LOADED_DATAFRAME][column], errors='coerce').mean()
+                    return pd.to_numeric(st.session_state[VarEnum.SB_LOADED_DATAFRAME][column], errors='coerce').mean()
                 except Exception as e:
                     return 0
-            if type == d.dc_CLEANING_FILLNA_value_MODE.value:
+            if type == d.DC_CLEANING_FILLNA_VALUE_MODE.value:
                 try:
                 # calculate value counts of the column and pick the value that is most frequent but not None
-                    value_counts = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column].value_counts()
+                    value_counts = st.session_state[VarEnum.SB_LOADED_DATAFRAME][column].value_counts()
                     value_counts = value_counts[value_counts.index != "None"]
                     tmp = value_counts.index[0]
                     return tmp
@@ -91,33 +91,33 @@ class CleanerInitPage:
 
         # These are reliant on the method names of the dataprep library
         cleaning_method_translations = {
-            d.dc_CLEANING_method_FILLNA.value : "fillna",
-            d.dc_CLEANING_method_LOWERCASE.value : "lowercase",
-            d.dc_CLEANING_method_UPPERCASE.value : "uppercase",
-            d.dc_CLEANING_method_REMOVE_DIGITS.value : "remove_digits",
-            d.dc_CLEANING_method_REMOVE_HTML.value : "remove_html",
-            d.dc_CLEANING_method_REMOVE_URL.value : "remove_urls",
-            d.dc_CLEANING_method_REMOVE_PUNCTUATION.value : "remove_punctuation",
-            d.dc_CLEANING_method_REMOVE_ACCENTS.value : "remove_accents",
-            d.dc_CLEANING_method_REMOVE_STOPWORDS.value : "remove_stopwords",
-            d.dc_CLEANING_method_REMOVE_WHITESPACE.value : "remove_whitespace",
-            d.dc_CLEANING_method_REMOVE_BRACKETED.value : "remove_bracketed",
-            d.dc_CLEANING_method_REMOVE_PREFIXED.value : "remove_prefixed"
+            d.DC_CLEANING_METHOD_FILLNA.value : "fillna",
+            d.DC_CLEANING_METHOD_LOWERCASE.value : "lowercase",
+            d.DC_CLEANING_METHOD_UPPERCASE.value : "uppercase",
+            d.DC_CLEANING_METHOD_REMOVE_DIGITS.value : "remove_digits",
+            d.DC_CLEANING_METHOD_REMOVE_HTML.value : "remove_html",
+            d.DC_CLEANING_METHOD_REMOVE_URL.value : "remove_urls",
+            d.DC_CLEANING_METHOD_REMOVE_PUNCTUATION.value : "remove_punctuation",
+            d.DC_CLEANING_METHOD_REMOVE_ACCENTS.value : "remove_accents",
+            d.DC_CLEANING_METHOD_REMOVE_STOPWORDS.value : "remove_stopwords",
+            d.DC_CLEANING_METHOD_REMOVE_WHITESPACE.value : "remove_whitespace",
+            d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value : "remove_bracketed",
+            d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value : "remove_prefixed"
         }
 
         cleaning_method_descriptions = {
-            d.dc_CLEANING_method_FILLNA.value : d.dc_CLEANING_method_FILLNA_description.value,
-            d.dc_CLEANING_method_LOWERCASE.value : d.dc_CLEANING_method_LOWERCASE_description.value,
-            d.dc_CLEANING_method_UPPERCASE.value : d.dc_CLEANING_method_UPPERCASE_description.value,
-            d.dc_CLEANING_method_REMOVE_DIGITS.value : d.dc_CLEANING_method_REMOVE_DIGITS_description.value,
-            d.dc_CLEANING_method_REMOVE_HTML.value : d.dc_CLEANING_method_REMOVE_HTML_description.value,
-            d.dc_CLEANING_method_REMOVE_URL.value : d.dc_CLEANING_method_REMOVE_URL_description.value,
-            d.dc_CLEANING_method_REMOVE_PUNCTUATION.value : d.dc_CLEANING_method_REMOVE_PUNCTUATION_description.value,
-            d.dc_CLEANING_method_REMOVE_ACCENTS.value : d.dc_CLEANING_method_REMOVE_ACCENTS_description.value,
-            d.dc_CLEANING_method_REMOVE_STOPWORDS.value : d.dc_CLEANING_method_REMOVE_STOPWORDS_description.value,
-            d.dc_CLEANING_method_REMOVE_WHITESPACE.value : d.dc_CLEANING_method_REMOVE_WHITESPACE_description.value,
-            d.dc_CLEANING_method_REMOVE_BRACKETED.value : d.dc_CLEANING_method_REMOVE_BRACKETED_description.value,
-            d.dc_CLEANING_method_REMOVE_PREFIXED.value : d.dc_CLEANING_method_REMOVE_PREFIXED_description.value
+            d.DC_CLEANING_METHOD_FILLNA.value : d.DC_CLEANING_METHOD_FILLNA_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_LOWERCASE.value : d.DC_CLEANING_METHOD_LOWERCASE_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_UPPERCASE.value : d.DC_CLEANING_METHOD_UPPERCASE_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_DIGITS.value : d.DC_CLEANING_METHOD_REMOVE_DIGITS_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_HTML.value : d.DC_CLEANING_METHOD_REMOVE_HTML_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_URL.value : d.DC_CLEANING_METHOD_REMOVE_URL_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_PUNCTUATION.value : d.DC_CLEANING_METHOD_REMOVE_PUNCTUATION_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_ACCENTS.value : d.DC_CLEANING_METHOD_REMOVE_ACCENTS_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_STOPWORDS.value : d.DC_CLEANING_METHOD_REMOVE_STOPWORDS_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_WHITESPACE.value : d.DC_CLEANING_METHOD_REMOVE_WHITESPACE_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value : d.DC_CLEANING_METHOD_REMOVE_BRACKETED_DESCRIPTION.value,
+            d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value : d.DC_CLEANING_METHOD_REMOVE_PREFIXED_DESCRIPTION.value
         }
 
         colG_1, colG_2, colG_3 = st.columns([1, 1, 1])
@@ -128,17 +128,17 @@ class CleanerInitPage:
 
         with colI_1:
             chosen_column = st.selectbox(
-                d.dc_CLEANING_SELECT_COLUMN.value,
-                st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
+                d.DC_CLEANING_SELECT_COLUMN.value,
+                st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns)
 
         with colI_3:
             st.write("")
             st.write("")
-            if st.button(d.dc_CLEANING_APPLY_PIPELINE_COLUMN.value):
+            if st.button(d.DC_CLEANING_APPLY_PIPELINE_COLUMN.value):
 
                 # Make a copy of the pipeline, this is the one that will be given to the backend.
                 # The pipeline in the session state will be used to show the pipeline in the frontend
-                copied_pipeline = deepcopy(st.session_state[VarEnum.dc_PIPELINE])
+                copied_pipeline = deepcopy(st.session_state[VarEnum.DC_PIPELINE])
 
                 # iterate over alle value parameters in the pipeline
                 for item in copied_pipeline["text"]:
@@ -146,114 +146,114 @@ class CleanerInitPage:
                         if k == "parameters":
                             if "value" in v:
                                 value = v["value"]
-                                if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
+                                if value in [d.DC_CLEANING_FILLNA_VALUE_MEAN.value, d.DC_CLEANING_FILLNA_VALUE_MEDIAN.value, d.DC_CLEANING_FILLNA_VALUE_MODE.value]:
                                         value = self._determine_fill_na_value_based_on_type_and_column(value, chosen_column)
 
                                 # replace "MEAN", "MODE" or "MEDIAN" with the actual value
                                 item[k]["value"] = value
 
-                st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
+                st.session_state[VarEnum.DC_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
+                            dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
                             custom_pipeline=copied_pipeline))
-                st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
-                st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column] = st.session_state[VarEnum.dc_CLEANED_COLUMN][chosen_column]
+                st.session_state[VarEnum.DC_CLEANED_COLUMN].index = st.session_state[VarEnum.DC_CLEANED_COLUMN].index.astype(int)
+                st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column] = st.session_state[VarEnum.DC_CLEANED_COLUMN][chosen_column]
                 st.write("Column successfully cleaned.")
 
 
 
         with colG_2:
-            cleaning_methods_list = [d.dc_CLEANING_method_LOWERCASE.value,
-                                     d.dc_CLEANING_method_UPPERCASE.value,
-                                     d.dc_CLEANING_method_FILLNA.value,
-                                     d.dc_CLEANING_method_REMOVE_DIGITS.value,
-                                     d.dc_CLEANING_method_REMOVE_HTML.value,
-                                     d.dc_CLEANING_method_REMOVE_URL.value,
-                                     d.dc_CLEANING_method_REMOVE_PUNCTUATION.value,
-                                     d.dc_CLEANING_method_REMOVE_ACCENTS.value,
-                                     d.dc_CLEANING_method_REMOVE_STOPWORDS.value,
-                                     d.dc_CLEANING_method_REMOVE_WHITESPACE.value,
-                                     d.dc_CLEANING_method_REMOVE_BRACKETED.value,
-                                     d.dc_CLEANING_method_REMOVE_PREFIXED.value]
+            cleaning_methods_list = [d.DC_CLEANING_METHOD_LOWERCASE.value,
+                                     d.DC_CLEANING_METHOD_UPPERCASE.value,
+                                     d.DC_CLEANING_METHOD_FILLNA.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_DIGITS.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_HTML.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_URL.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_PUNCTUATION.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_ACCENTS.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_STOPWORDS.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_WHITESPACE.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value,
+                                     d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value]
 
-            special_methods = [ d.dc_CLEANING_method_FILLNA.value,
-                                d.dc_CLEANING_method_REMOVE_STOPWORDS.value,
-                                d.dc_CLEANING_method_REMOVE_BRACKETED.value,
-                                d.dc_CLEANING_method_REMOVE_PREFIXED.value]
+            special_methods = [d.DC_CLEANING_METHOD_FILLNA.value,
+                               d.DC_CLEANING_METHOD_REMOVE_STOPWORDS.value,
+                               d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value,
+                               d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value]
 
             cleaning_method = st.selectbox(
-                d.dc_CLEANING_method_selection.value, cleaning_methods_list)
+                d.DC_CLEANING_METHOD_SELECTION.value, cleaning_methods_list)
 
             colH_1, colH_2 = st.columns([1, 1])
             with colH_1:
                 st.write(cleaning_method_descriptions[cleaning_method])
             with colH_2:
                 if cleaning_method in special_methods:
-                    if cleaning_method == d.dc_CLEANING_method_REMOVE_BRACKETED.value:
-                        value = str(set(st.multiselect(d.dc_CLEANING_SELECT_BRACKET, ['()', '[]', '{}', '<>'])))
+                    if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value:
+                        value = str(set(st.multiselect(d.DC_CLEANING_SELECT_BRACKET, ['()', '[]', '{}', '<>'])))
                     else:
                         value = st.text_input("Optional parameter", "")
 
         with colI4:
             st.write("")
             st.write("")
-            if st.button(d.dc_CLEANING_APPLY_PIPELINE_ALL.value):
+            if st.button(d.DC_CLEANING_APPLY_PIPELINE_ALL.value):
 
-                for e in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns:
-                    copied_pipeline = deepcopy(st.session_state[VarEnum.dc_PIPELINE])
+                for e in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns:
+                    copied_pipeline = deepcopy(st.session_state[VarEnum.DC_PIPELINE])
                     # iterate over alle value parameters in the pipeline
                     for item in copied_pipeline["text"]:
                         for k,v in item.items():
                             if k == "parameters":
                                 if "value" in v:
                                     value = v["value"]
-                                    if value in [d.dc_CLEANING_FILLNA_value_MEAN.value, d.dc_CLEANING_FILLNA_value_MEDIAN.value, d.dc_CLEANING_FILLNA_value_MODE.value]:
+                                    if value in [d.DC_CLEANING_FILLNA_VALUE_MEAN.value, d.DC_CLEANING_FILLNA_VALUE_MEDIAN.value, d.DC_CLEANING_FILLNA_VALUE_MODE.value]:
                                             value = self._determine_fill_na_value_based_on_type_and_column(value, e)
 
                                     # replace "MEAN", "MODE" or "MEDIAN" with the actual value
                                     item[k]["value"] = value
 
-                        st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                                dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][e].to_frame().to_json(),
+                        st.session_state[VarEnum.DC_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
+                                dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][e].to_frame().to_json(),
                                 custom_pipeline=copied_pipeline))
-                    st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME][e] = st.session_state[VarEnum.dc_CLEANED_COLUMN][e]
-                st.write(d.dc_CLEANING_CHANGES_APPLIED.value)
+                    st.session_state[VarEnum.DC_CLEANED_COLUMN].index = st.session_state[VarEnum.DC_CLEANED_COLUMN].index.astype(int)
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME][e] = st.session_state[VarEnum.DC_CLEANED_COLUMN][e]
+                st.write(d.DC_CLEANING_CHANGES_APPLIED.value)
 
 
         with colG_3:
             st.write("")
             st.write("")
-            if st.button(d.dc_CLEANING_ADD_PIPELINE.value):
+            if st.button(d.DC_CLEANING_ADD_PIPELINE.value):
                 # check if the pipeline is empty
-                if st.session_state[VarEnum.dc_PIPELINE] == {}:
-                    st.session_state[VarEnum.dc_PIPELINE]['text'] = []
+                if st.session_state[VarEnum.DC_PIPELINE] == {}:
+                    st.session_state[VarEnum.DC_PIPELINE]['text'] = []
 
                 to_append = {}
                 if cleaning_method not in special_methods:
                     to_append = {'operator': cleaning_method_translations[cleaning_method]}
-                if cleaning_method == d.dc_CLEANING_method_FILLNA.value:
+                if cleaning_method == d.DC_CLEANING_METHOD_FILLNA.value:
                     to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'value': str(value)}}
-                if cleaning_method == d.dc_CLEANING_method_REMOVE_BRACKETED.value:
+                if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value:
                     to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'brackets': value}}
-                if cleaning_method == d.dc_CLEANING_method_REMOVE_PREFIXED.value:
+                if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value:
                     to_append = {'operator': cleaning_method_translations[cleaning_method], 'parameters' : {'prefix': value}}
-                st.session_state[VarEnum.dc_PIPELINE]['text'].append(to_append)
+                st.session_state[VarEnum.DC_PIPELINE]['text'].append(to_append)
 
 
 
-            if st.button(d.dc_CLEANING_CLEAR_PIPELINE.value):
-                st.session_state[VarEnum.dc_PIPELINE] = {}
+            if st.button(d.DC_CLEANING_CLEAR_PIPELINE.value):
+                st.session_state[VarEnum.DC_PIPELINE] = {}
 
         with colG_1:
-            st.subheader(d.dc_CLEANING_CURRENT_PIPELINE.value)
-            st.write(st.session_state[VarEnum.dc_PIPELINE])
+            st.subheader(d.DC_CLEANING_CURRENT_PIPELINE.value)
+            st.write(st.session_state[VarEnum.DC_PIPELINE])
 
     def _apply_pipeline(self, col):
-        st.session_state[VarEnum.dc_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
-                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][col].to_frame().to_json(),
-                            custom_pipeline=st.session_state[VarEnum.dc_PIPELINE]))
-        st.session_state[VarEnum.dc_CLEANED_COLUMN].index = st.session_state[VarEnum.dc_CLEANED_COLUMN].index.astype(int)
-        st.session_state[VarEnum.sb_LOADED_DATAFRAME][col] = st.session_state[VarEnum.dc_CLEANED_COLUMN][col]
+        st.session_state[VarEnum.DC_CLEANED_COLUMN] = pd.DataFrame(self.handler.clean_dataframe_dataprep(
+                            dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][col].to_frame().to_json(),
+                            custom_pipeline=st.session_state[VarEnum.DC_PIPELINE]))
+        st.session_state[VarEnum.DC_CLEANED_COLUMN].index = st.session_state[VarEnum.DC_CLEANED_COLUMN].index.astype(int)
+        st.session_state[VarEnum.SB_LOADED_DATAFRAME][col] = st.session_state[VarEnum.DC_CLEANED_COLUMN][col]
 
     def _show_structure_detection_tab(self):
         st.header('Structure Detection:')
@@ -261,12 +261,12 @@ class CleanerInitPage:
         with colA_1:
             chosen_column = st.selectbox(
                 "Select a column to detect the structure of the values",
-                st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
+                st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns)
         with colA_2:
             extra_exceptions = "".join(st.multiselect(
                 "Select the characters that you want to keep in the pattern",
                 self._show_unique_values(
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column])["character"].tolist()))
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column])["character"].tolist()))
         with colA_3:
             st.write("")
             st.write("")
@@ -274,7 +274,7 @@ class CleanerInitPage:
 
         simple_repr = pd.Series(
             self.handler.structure_detection(
-                st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_json(),
+                st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column].to_json(),
                 extra_exceptions, compress))
 
 
@@ -318,7 +318,7 @@ class CleanerInitPage:
 
                 if selected_pattern is not None:
                     st.write("The records that match the selected pattern are:")
-                    df_for_aggrid2 = st.session_state[VarEnum.sb_LOADED_DATAFRAME][simple_repr.values == selected_pattern]
+                    df_for_aggrid2 = st.session_state[VarEnum.SB_LOADED_DATAFRAME][simple_repr.values == selected_pattern]
 
                     if st.session_state["idx_of_structure_df"] is None:
                         st.session_state["idx_of_structure_df"] = list(df_for_aggrid2.index)
@@ -332,7 +332,7 @@ class CleanerInitPage:
                         "alwaysShowHorizontalScroll": True,
                         "alwaysShowVerticalScroll": True,
                         "pagination": True,
-                        "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
+                        "paginationPageSize": len(st.session_state[VarEnum.SB_LOADED_DATAFRAME]),
                     }
                     grid = AgGrid(df_for_aggrid2, gridOptions=gridOptions | extra_grid_options_2,
                                   enable_enterprise_modules=True, height=300)
@@ -341,7 +341,7 @@ class CleanerInitPage:
 
                     if st.button("Save Changes"):
                         # Replace values in the dataframe with the (possibly) new values
-                        st.session_state[VarEnum.sb_LOADED_DATAFRAME].loc[grid['data'].index] = grid['data']
+                        st.session_state[VarEnum.SB_LOADED_DATAFRAME].loc[grid['data'].index] = grid['data']
                         st.experimental_rerun()
             else:
                 st.session_state["idx_of_structure_df"] = None
@@ -352,7 +352,7 @@ class CleanerInitPage:
         with colC_1:
             chosen_column = st.selectbox(
                 "Select the column that you want to cluster:",
-                st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns)
+                st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns)
         with colC_2:
             cluster_method = st.selectbox(
                 "Select the cluster method",
@@ -401,8 +401,8 @@ class CleanerInitPage:
 
 
             for cluster_id, list_of_values in self.handler.fuzzy_match_dataprep(
-                    dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
-                    df_name=st.session_state[VarEnum.sb_LOADED_DATAFRAME_NAME],
+                    dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column].to_frame().to_json(),
+                    df_name=st.session_state[VarEnum.SB_LOADED_DATAFRAME_NAME],
                     col=chosen_column,
                     cluster_method=cluster_method,
                     ngram=n_gram,
@@ -413,7 +413,7 @@ class CleanerInitPage:
                 # Create a view for each cluster
                 list_of_fuzzy_clusters.append(FuzzyClusterView(
                     cluster_id, list_of_values,
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME][chosen_column]))
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME][chosen_column]))
             st.session_state["list_of_fuzzy_cluster_view"] = list_of_fuzzy_clusters
 
         if st.session_state["list_of_fuzzy_cluster_view"] != []:
@@ -438,7 +438,7 @@ class CleanerInitPage:
                 self._create_cluster_card(idx, cv)
             if st.button("Bevestig clusters"):
                 self._merge_clusters(st.session_state["list_of_fuzzy_cluster_view"],chosen_column)
-                st.session_state[VarEnum.gb_CURRENT_STATE] = None
+                st.session_state[VarEnum.GB_CURRENT_STATE] = None
                 st.session_state["list_of_fuzzy_cluster_view"] = []
                 st.experimental_rerun()
         else:
@@ -488,7 +488,7 @@ class CleanerInitPage:
                 for val_to_replace in cv.selected_values:
                     # Look for value e in the dataframe in column column_name
                     # and replace it with the value in the cluster
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME][column_name] = st.session_state[VarEnum.sb_LOADED_DATAFRAME][column_name].astype(str).replace(
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME][column_name] = st.session_state[VarEnum.SB_LOADED_DATAFRAME][column_name].astype(str).replace(
                         str(val_to_replace), str(cv.new_cell_value))
 
 

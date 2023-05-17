@@ -78,8 +78,8 @@ class RuleLearnerInitPage:
             if chosen_tab == "2":
                 st.session_state["colsToUse"] = st.multiselect(
                     label="Columns that you want to use for rule learning:",
-                    options=st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns,
-                    default=st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns.tolist()
+                    options=st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns,
+                    default=st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns.tolist()
                 )
 
                 st.session_state["rule_length"] = st.number_input(
@@ -130,10 +130,10 @@ class RuleLearnerInitPage:
 
                     # Set session_state attributes
                     st.session_state['gevonden_rules_dict'] = self.handler.get_column_rules(
-                        dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
+                        dataframe_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
-                        seq=st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER])
-                    st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkRules"
+                        seq=st.session_state[VarEnum.GB_CURRENT_SEQUENCE_NUMBER])
+                    st.session_state[VarEnum.GB_CURRENT_STATE] = "BekijkRules"
                     st.experimental_rerun()
 
 
@@ -164,7 +164,7 @@ class RuleLearnerInitPage:
                     with col1:
                         kolom_specific = st.selectbox(
                             'Column:',
-                            [e for e in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns])
+                            [e for e in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns])
                     with col2:
                         vw_specific = st.selectbox(
                             'Condition:',
@@ -194,7 +194,7 @@ class RuleLearnerInitPage:
                         'Use default conditions',
                         value=True)
                     temp_dict = {key: preview_default_to_show.copy()
-                                for key in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns}
+                                 for key in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns}
                     if use_default:
                         if preview_total_to_show is None:
                             preview_total_to_show = self._create_total_dropping_dict({})
@@ -231,7 +231,7 @@ class RuleLearnerInitPage:
                         value=False,
                         key="checkbox_default_binning")
                     temp_dict_binning = {key: default_binning_option
-                                        for key in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns}
+                                         for key in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns}
 
                     if use_default_binning:
                         for k, v in temp_dict_binning.items():
@@ -248,7 +248,7 @@ class RuleLearnerInitPage:
                     with col1:
                         kolom_specific_binnig = st.selectbox(
                             'Column:',
-                            [e for e in st.session_state[VarEnum.sb_LOADED_DATAFRAME].columns],
+                            [e for e in st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns],
                             key="Kolom_Binning")
                     with col2:
                         specific_binnig = st.selectbox(

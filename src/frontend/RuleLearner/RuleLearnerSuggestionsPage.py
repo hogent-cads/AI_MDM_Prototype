@@ -22,7 +22,7 @@ class RuleLearnerSuggestionsPage:
                 "alwaysShowHorizontalScroll": True,
                 "alwaysShowVerticalScroll": True,
                 "pagination": True,
-                "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
+                "paginationPageSize": len(st.session_state[VarEnum.SB_LOADED_DATAFRAME]),
                     }
 
             st.title("Rule Learning")
@@ -79,7 +79,7 @@ class RuleLearnerSuggestionsPage:
                 # de sidebar gaan beginnen aanpassen
 
                 if apply_suggestions:
-                    st.session_state['temp_dataframe'] = st.session_state[VarEnum.sb_LOADED_DATAFRAME].copy()
+                    st.session_state['temp_dataframe'] = st.session_state[VarEnum.SB_LOADED_DATAFRAME].copy()
                     suggestions_rows_selected = response_selection_suggestion_finder['selected_rows']
                     list_of_df_idx = df_with_predictions.index
                     set_of_cols = set()
@@ -132,10 +132,10 @@ class RuleLearnerSuggestionsPage:
                     # recalculate unique storage id
                     # st.session_state[VarEnum.gb_SESSION_ID_WITH_FILE_HASH] = f"{st.session_state[VarEnum.gb_SESSION_ID]}-{hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()}"
 
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME_HASH] = hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH] = hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()
 
                     self.handler.recalculate_column_rules(
-                        old_df_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
+                        old_df_in_json=st.session_state[VarEnum.SB_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
                         new_df_in_json=st.session_state["temp_dataframe"].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
                         affected_columns=st.session_state["columns_affected_by_suggestion_application"])
@@ -145,16 +145,16 @@ class RuleLearnerSuggestionsPage:
                     cfg.logger.debug("Recalculate rules done")
 
                     # Restore state van de aangemaakte file in de session_map
-                    st.session_state[VarEnum.gb_SESSION_MAP] = self.handler.get_session_map(
+                    st.session_state[VarEnum.GB_SESSION_MAP] = self.handler.get_session_map(
                         st.session_state['temp_dataframe'].to_json())
                     StateManager.restore_state(
                         **{"handler": self.handler,
-                           "file_path": st.session_state[VarEnum.gb_SESSION_MAP]["1"]["rules"],
+                           "file_path": st.session_state[VarEnum.GB_SESSION_MAP]["1"]["rules"],
                            "chosen_seq": "1"})
 
                     # Nieuwe dataframe, betekent sowieso dat current_session gelijk zal zijn aan 1:
-                    st.session_state[VarEnum.sb_LOADED_DATAFRAME] = st.session_state['temp_dataframe'].copy()
-                    st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER] = 1
+                    st.session_state[VarEnum.SB_LOADED_DATAFRAME] = st.session_state['temp_dataframe'].copy()
+                    st.session_state[VarEnum.GB_CURRENT_SEQUENCE_NUMBER] = 1
 
                     st.experimental_rerun()
 
@@ -164,6 +164,6 @@ class RuleLearnerSuggestionsPage:
                     st.download_button(
                         label="Download modified dataset",
                         data=st.session_state["temp_dataframe"].to_csv(index=False).encode('utf-8'),
-                        file_name=f'new_{st.session_state[VarEnum.sb_LOADED_DATAFRAME_NAME]}',
+                        file_name=f'new_{st.session_state[VarEnum.SB_LOADED_DATAFRAME_NAME]}',
                         mime='text/csv',
                     )

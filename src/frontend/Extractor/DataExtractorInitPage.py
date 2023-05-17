@@ -28,7 +28,7 @@ class DataExtractorInitPage:
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
 
     def _gpt_code(self):
-        df = st.session_state[VarEnum.sb_LOADED_DATAFRAME.value]["Material Description EN"]
+        df = st.session_state[VarEnum.SB_LOADED_DATAFRAME.value]["Material Description EN"]
         # st.write(type(df))
 
         # randomize the order of the records
