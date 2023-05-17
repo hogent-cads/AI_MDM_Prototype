@@ -186,13 +186,13 @@ class ZinggClusterPage:
         st.session_state[VarEnum.gb_CURRENT_STATE] = None
 
     def _create_cluster_card(self, idx, cv, pks):
-        MIN_HEIGHT = 50
+        MIN_HEIGHT = 90
         MAX_HEIGHT = 500
-        ROW_HEIGHT = 35
+        ROW_HEIGHT = 25
         
         cont_card = st.container()
         with cont_card:
-            _ = st.checkbox('Apply changes!',value=True, key=f'merge_{cv.cluster_id}')
+            st.session_state[f'merge_{cv.cluster_id}'] = st.checkbox('Apply changes!',value=st.session_state[f'merge_{cv.cluster_id}'], key=f'key_merge_{cv.cluster_id}')
             col0, col1, col2 = st.columns([1,1,1])
             with col0:
                 st.write(f"Confidence of this cluster: {cv.cluster_confidence}")
@@ -201,13 +201,20 @@ class ZinggClusterPage:
             
             with col2:
                 st.write(f"Highest similarity in this cluster: {cv.cluster_high}")
+
+            extra_grid_options_1 = {
+                        "alwaysShowHorizontalScroll": True,
+                        "alwaysShowVerticalScroll": True,
+                        "pagination": True,
+                        "paginationPageSize": len(cv.records_df),
+                    }
                  
             gb1 = GridOptionsBuilder.from_dataframe(cv.records_df)
             gb1.configure_side_bar()
             gb1.configure_selection('multiple',use_checkbox=True, groupSelectsChildren=True, groupSelectsFiltered=True, pre_select_all_rows=True, header_checkbox=True)
-            gb1.configure_default_column(groupable=False, value=True, enableRowGroup=True, aggFunc="sum", editable=False)
-            gridOptions = gb1.build()
-            data_clustercard = AgGrid(cv.records_df, gridOptions=gridOptions, enable_enterprise_modules=False, update_mode="SELECTION_CHANGED", height=min(MIN_HEIGHT + (len(cv.records_df) * ROW_HEIGHT), MAX_HEIGHT), key=f'before_{cv.cluster_id}')
+            gb1.configure_default_column()
+            gridOptions = gb1.build() | extra_grid_options_1
+            data_clustercard = AgGrid(cv.records_df, gridOptions=gridOptions, enable_enterprise_modules=True, update_mode="SELECTION_CHANGED", height=min(MIN_HEIGHT + (len(cv.records_df) * ROW_HEIGHT), MAX_HEIGHT), key=f'before_{cv.cluster_id}')
 
             tmpList = []
             for e in data_clustercard['selected_rows']:
@@ -219,11 +226,17 @@ class ZinggClusterPage:
             cv.selected_rows = pd.DataFrame(tmpList)
             dedupe_check = st.radio('The selected records will be... ',(self.TEXT_DEDUP_FALSE, self.TEXT_DEDUP_TRUE), key=f'dedup_{cv.cluster_id}', horizontal = True)
             
+
+            extra_grid_options_2 = {
+                        "alwaysShowHorizontalScroll": True,
+                        "pagination": True,
+                    }
+            
             # AGGRID die wel editeerbaar is, met als suggestie de eerste van de selected_rows van hierboven
             gb2 = GridOptionsBuilder.from_dataframe(cv.new_row.drop(pks, axis=1) if dedupe_check == self.TEXT_DEDUP_FALSE else cv.new_row )
             gb2.configure_side_bar()
             gb2.configure_default_column(groupable=False, value=True, enableRowGroup=True, aggFunc="sum", editable=True)
-            gridOptions2 = gb2.build()
+            gridOptions2 = gb2.build() | extra_grid_options_2
             grid = AgGrid(cv.new_row.drop(pks, axis=1) if dedupe_check == self.TEXT_DEDUP_FALSE else cv.new_row ,update_mode="VALUE_CHANGED", gridOptions=gridOptions2, enable_enterprise_modules=False, height=min(MIN_HEIGHT + ROW_HEIGHT, MAX_HEIGHT))
             
             cv.set_new_row(grid["data"])

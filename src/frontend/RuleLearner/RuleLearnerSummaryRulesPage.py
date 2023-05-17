@@ -56,47 +56,50 @@ class RuleLearnerSummaryRulesPage:
 
             with col_t1:
                 # Stukje voor de selectionFinder
-                st.subheader("Choose rules to give suggestions:")
-                if "list_of_rule_string" in st.session_state:
-                    pre_selected = json.loads(st.session_state["list_of_rule_string"])
+                if st.session_state["gevonden_rules_dict"] != {}:
+                    st.subheader("Choose rules to give suggestions:")
+                    if "list_of_rule_string" in st.session_state:
+                        pre_selected = json.loads(st.session_state["list_of_rule_string"])
+                    else:
+                        pre_selected = []
+                    df_of_column_rules_for_suggestion_finder = pd.DataFrame(
+                        {"Regel": st.session_state["gevonden_rules_dict"].keys(),
+                        "Confidence": [x.confidence for x in st.session_state["gevonden_rules_dict"].values()]})
+
+                    gb1 = GridOptionsBuilder.from_dataframe(df_of_column_rules_for_suggestion_finder)
+                    gb1.configure_grid_options(fit_columns_on_grid_load=True)
+                    gb1.configure_selection(
+                        'multiple',
+                        pre_selected_rows=pre_selected,
+                        use_checkbox=True,
+                        groupSelectsChildren=True,
+                        header_checkbox=True,
+                        groupSelectsFiltered=True)
+                    response_selection_suggestion_finder = AgGrid(
+                        df_of_column_rules_for_suggestion_finder,
+                        editable=False,
+                        gridOptions=gb1.build() | extra_grid_options,
+                        data_return_mode="filtered_and_sorted",
+                        update_mode="selection_changed",
+                        fit_columns_on_grid_load=True,
+                        theme="streamlit",
+                        enable_enterprise_modules=True,
+                        height=500,
+                        columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE
+                    )
+
+                    find_suggestions_btn = st.button('Give Suggestions')
+                    if find_suggestions_btn:
+                        st.session_state['suggesties_df'] = \
+                            self.handler.get_suggestions_given_dataframe_and_column_rules(
+                            dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
+                            list_of_rule_string_in_json=json.dumps([x['Regel'] for x in response_selection_suggestion_finder['selected_rows']]),
+                            seq=st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER])
+                        st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkSuggesties"
+                        StateManager.reset_all_buttons()
+                        st.experimental_rerun()
                 else:
-                    pre_selected = []
-                df_of_column_rules_for_suggestion_finder = pd.DataFrame(
-                    {"Regel": st.session_state["gevonden_rules_dict"].keys(),
-                     "Confidence": [x.confidence for x in st.session_state["gevonden_rules_dict"].values()]})
-
-                gb1 = GridOptionsBuilder.from_dataframe(df_of_column_rules_for_suggestion_finder)
-                gb1.configure_grid_options(fit_columns_on_grid_load=True)
-                gb1.configure_selection(
-                    'multiple',
-                    pre_selected_rows=pre_selected,
-                    use_checkbox=True,
-                    groupSelectsChildren=True,
-                    header_checkbox=True,
-                    groupSelectsFiltered=True)
-                response_selection_suggestion_finder = AgGrid(
-                    df_of_column_rules_for_suggestion_finder,
-                    editable=False,
-                    gridOptions=gb1.build() | extra_grid_options,
-                    data_return_mode="filtered_and_sorted",
-                    update_mode="selection_changed",
-                    fit_columns_on_grid_load=True,
-                    theme="streamlit",
-                    enable_enterprise_modules=True,
-                    height=500,
-                    columns_auto_size_mode=ColumnsAutoSizeMode.NO_AUTOSIZE
-                )
-
-                find_suggestions_btn = st.button('Give Suggestions')
-                if find_suggestions_btn:
-                    st.session_state['suggesties_df'] = \
-                        self.handler.get_suggestions_given_dataframe_and_column_rules(
-                        dataframe_in_json=st.session_state[VarEnum.sb_LOADED_DATAFRAME][st.session_state["colsToUse"]].to_json(),
-                        list_of_rule_string_in_json=json.dumps([x['Regel'] for x in response_selection_suggestion_finder['selected_rows']]),
-                        seq=st.session_state[VarEnum.gb_CURRENT_SEQUENCE_NUMBER])
-                    st.session_state[VarEnum.gb_CURRENT_STATE] = "BekijkSuggesties"
-                    StateManager.reset_all_buttons()
-                    st.experimental_rerun()
+                    st.write("No rules found given the current settings.")
 
             with col_t2:
                 st.subheader("More info about the rule:")

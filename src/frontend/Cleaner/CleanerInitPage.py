@@ -329,7 +329,7 @@ class CleanerInitPage:
                         "paginationPageSize": len(st.session_state[VarEnum.sb_LOADED_DATAFRAME]),
                     }
                     grid = AgGrid(df_for_aggrid2, gridOptions=gridOptions | extra_grid_options_2,
-                                  enable_enterprise_modules=False, height=500)
+                                  enable_enterprise_modules=True, height=300)
                     
                     grid['data'].index = st.session_state["idx_of_structure_df"]
 
@@ -511,7 +511,7 @@ class CleanerInitPage:
                 cv.selected_rows = tmp['selected_rows']
             with colB:
                 # checkbox om te mergen, default actief
-                    st.session_state[f'fuzzy_merge_{cv.cluster_id}'] = st.checkbox('Voeg samen',value=True, key=f'key_fuzzy_merge_{cv.cluster_id}')
+                    st.session_state[f'fuzzy_merge_{cv.cluster_id}'] = st.checkbox('Voeg samen',value=st.session_state[f'fuzzy_merge_{cv.cluster_id}'], key=f'key_fuzzy_merge_{cv.cluster_id}')
 
             with colC:
                 # st.write("Verander naar")
