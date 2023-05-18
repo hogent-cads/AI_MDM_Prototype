@@ -55,7 +55,7 @@ class ColumnRuleFilter(ABC):
                 inverse_rule = seen[inverse_rule_string]
                 if math.isclose(inverse_rule.confidence, column_rule.confidence):
                     cfg.logger.debug(
-                        f"Both rules have similar confidence. Keeping both"
+                        "Both rules have similar confidence. Keeping both"
                     )
                     result["ToKeep"].append(column_rule)
                     result["ToKeep"].append(inverse_rule)
@@ -185,7 +185,7 @@ class ColumnRuleFilter_Entropy(ColumnRuleFilter):
                                 f"Regel Toegevoegd: {r.rule_string}, met entropy: {dict_entropy[r.rule_string]}"
                             )
                             interesting_rules[r.rule_string] = r
-                            print(f"Meer algemene regels zijn verwijderd:")
+                            print("Meer algemene regels zijn verwijderd:")
                             for e in listOfPrevLengthRules:
                                 print(e.rule_string)
                                 if e.rule_string in interesting_rules:

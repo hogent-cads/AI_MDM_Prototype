@@ -21,7 +21,7 @@ from src.frontend.enums.VarEnum import VarEnum as v
 import config as cfg
 
 
-def getOrCreateUID():
+def get_or_create_uid():
     if st.session_state[v.GB_SESSION_ID] is None:
         st.session_state[v.GB_SESSION_ID] = str(uuid.uuid1())
     return st.session_state[v.GB_SESSION_ID]
@@ -31,12 +31,12 @@ def getOrCreateUID():
 # server connect to ws using the same uid server sends commands like localStorage_get_key,
 # localStorage_set_key, localStorage_clear_key etc. to the WS server, which relays the
 # commands to the other connected endpoint (the frontend), and back
-def injectWebsocketCode(hostPort, uid):
+def inject_websocket_code(host_port, uid):
     code = (
         '<script>function connect() { console.log("in connect uid: ", "'
         + uid
         + '"); var ws = new WebSocket("'
-        + hostPort
+        + host_port
         + "/?uid="
         + uid
         + '");'
@@ -76,21 +76,21 @@ connect();
     )
     components.html(code, height=0)
     time.sleep(1)  # Without sleep there are problems
-    return WebsocketClient(hostPort, uid)
+    return WebsocketClient(host_port, uid)
 
 
 class WebsocketClient:
-    def __init__(self, hostPort, uid):
-        self.hostPort = hostPort
+    def __init__(self, host_port, uid):
+        self.host_port = host_port
         self.uid = uid
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
-    def sendCommand(self, value, waitForResponse=True):
+    def send_command(self, value, wait_for_response=True):
         async def query(future):
-            async with websockets.connect(self.hostPort + "/?uid=" + self.uid) as ws:
+            async with websockets.connect(self.host_port + "/?uid=" + self.uid) as ws:
                 await ws.send(value)
-                if waitForResponse:
+                if wait_for_response:
                     response = await ws.recv()
                     print("response: ", response)
                     future.set_result(response)
@@ -102,15 +102,15 @@ class WebsocketClient:
         print("future1.result: ", future1.result())
         return future1.result()
 
-    def getLocalStorageVal(self, key):
-        result = self.sendCommand(
+    def get_local_storage_val(self, key):
+        result = self.send_command(
             json.dumps({"cmd": "localStorage_get_key", "key": key})
         )
         return json.loads(result)["val"]
 
-    def setLocalStorageVal(self, key, val):
+    def set_local_storage_val(self, key, val):
         cfg.logger.debug(f"Going to set {key} with {val} in local storage")
-        result = self.sendCommand(
+        result = self.send_command(
             json.dumps({"cmd": "localStorage_set_key", "key": key, "val": val})
         )
         return result
@@ -196,10 +196,10 @@ def main():
     ):
         if st.session_state[v.GB_SESSION_ID] is None:
             url = cfg.configuration[v.CFG_WEBSOCKET_SERVER_URL]
-            conn = injectWebsocketCode(hostPort=url, uid=getOrCreateUID())
-            ret = conn.getLocalStorageVal(key="st_mdm_uid")
+            conn = inject_websocket_code(host_port=url, uid=get_or_create_uid())
+            ret = conn.get_local_storage_val(key="st_mdm_uid")
             if not ret:
-                _ = conn.setLocalStorageVal(
+                _ = conn.set_local_storage_val(
                     key="st_mdm_uid", val=st.session_state[v.GB_SESSION_ID]
                 )
             else:

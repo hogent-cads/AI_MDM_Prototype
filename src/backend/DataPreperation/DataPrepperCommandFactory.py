@@ -20,7 +20,7 @@ class DataPrepperCommandFactory:
     def __init__(self) -> None:
         pass
 
-    def parse_cleaning_options_from_JSONstring(
+    def parse_cleaning_options_from_json_string(
         self, cleaning_json_string: str, dirty_df: pd.DataFrame
     ) -> pd.DataFrame:
         df_to_return = pd.DataFrame(

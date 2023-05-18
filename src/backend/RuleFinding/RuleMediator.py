@@ -23,8 +23,8 @@ import config as cfg
 
 
 class RuleMediator:
-    def __init__(self, df_OHE, original_df):
-        self.df_OHE = df_OHE
+    def __init__(self, df_ohe, original_df):
+        self.df_ohe = df_ohe
         self.original_df = original_df
 
         self.association_rule_finder = None
@@ -33,7 +33,7 @@ class RuleMediator:
 
         self.value_rule_factory = ValueRuleFactory()
         self.column_rule_factory = ColumnRuleFactory(
-            df_dummy=df_OHE, original_df=original_df
+            df_dummy=df_ohe, original_df=original_df
         )
 
     def create_column_rules_from_clean_dataframe(
@@ -45,7 +45,7 @@ class RuleMediator:
         filterer_string: str,
     ) -> None:
         ar_df = self._find_association_rules(
-            self.df_OHE, min_support, max_len, min_lift, min_confidence
+            self.df_ohe, min_support, max_len, min_lift, min_confidence
         )
 
         cfg.logger.debug(
@@ -103,14 +103,14 @@ class RuleMediator:
 
     def _find_association_rules(
         self,
-        df_OHE: pd.DataFrame,
+        df_ohe: pd.DataFrame,
         min_support: float,
         max_len: int,
         min_lift: float,
         min_confidence: float,
     ):
         self.association_rule_finder = AssociationRuleFinder(
-            df_OHE,
+            df_ohe,
             min_support=min_support,
             max_len=max_len,
             min_lift=min_lift,

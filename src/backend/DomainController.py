@@ -336,10 +336,10 @@ class DomainController(FlaskView):
             df_after_drop_and_bin = df
 
             df_to_use = df_after_drop_and_bin.astype(str)
-            df_OHE = self.data_prepper.transform_data_frame_to_OHE(
+            df_OHE = self.data_prepper.transform_data_frame_to_ohe(
                 df_to_use, drop_nan=False
             )
-            self.rule_mediator = RuleMediator(original_df=df_to_use, df_OHE=df_OHE)
+            self.rule_mediator = RuleMediator(original_df=df_to_use, df_ohe=df_OHE)
             self.rule_mediator.create_column_rules_from_clean_dataframe(
                 min_support=rfc.min_support,
                 max_len=rfc.rule_length,
@@ -392,11 +392,11 @@ class DomainController(FlaskView):
 
         df = pd.read_json(dataframe_in_json)
         df_to_use = df.astype(str)
-        df_OHE = self.data_prepper.transform_data_frame_to_OHE(
+        df_OHE = self.data_prepper.transform_data_frame_to_ohe(
             df_to_use, drop_nan=False
         )
 
-        self.rule_mediator = RuleMediator(original_df=df_to_use, df_OHE=df_OHE)
+        self.rule_mediator = RuleMediator(original_df=df_to_use, df_ohe=df_OHE)
         return (
             self.rule_mediator.get_column_rule_from_string(rule_string=rule_string)
             .parse_self_to_view()
@@ -525,10 +525,10 @@ class DomainController(FlaskView):
         list_of_rule_string = json.loads(list_of_rule_string_in_json)
         df = pd.read_json(dataframe_in_json)
         df_to_use = df.astype(str)
-        df_OHE = self.data_prepper.transform_data_frame_to_OHE(
+        df_OHE = self.data_prepper.transform_data_frame_to_ohe(
             df_to_use, drop_nan=False
         )
-        self.rule_mediator = RuleMediator(original_df=df_to_use, df_OHE=df_OHE)
+        self.rule_mediator = RuleMediator(original_df=df_to_use, df_ohe=df_OHE)
 
         column_rules = []
         for rs in list_of_rule_string:

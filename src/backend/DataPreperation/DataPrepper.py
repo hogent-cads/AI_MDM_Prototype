@@ -22,7 +22,7 @@ class DataPrepper:
             print(e)
 
         dataframe_with_commands = (
-            self.data_prepper_command_factory.parse_cleaning_options_from_JSONstring(
+            self.data_prepper_command_factory.parse_cleaning_options_from_json_string(
                 cleaning_json_string, deduped_df
             )
         )
@@ -57,15 +57,15 @@ class DataPrepper:
         )
         return deduped_df
 
-    def transform_data_frame_to_OHE(
-        self, non_OHE_df: pd.DataFrame, drop_nan: bool
+    def transform_data_frame_to_ohe(
+        self, non_ohe_df: pd.DataFrame, drop_nan: bool
     ) -> pd.DataFrame:
         # Omvormen naar String Dataframe:
         # str_non_OHE_df  = non_OHE_df.astype(str)
-        str_non_OHE_df = non_OHE_df
+        str_non_ohe_df = non_ohe_df
 
         # Compute the one hot encoded dataframe
-        df_dummy = pd.get_dummies(str_non_OHE_df, dtype=np.bool8)
+        df_dummy = pd.get_dummies(str_non_ohe_df, dtype=np.bool8)
 
         # Dropping columns that had a NaN value
         if drop_nan:

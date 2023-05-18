@@ -7,22 +7,22 @@ from sklearn.cluster import KMeans
 
 
 # HELP FUNCTIONS
-def makeItalic(s):
+def make_italic(s):
     return "*" + str(s) + "*"
 
 
-def makeBold(s):
+def make_bold(s):
     return "**" + str(s) + "**"
 
 
-def tagDuplicate(col):
+def tag_duplicate(col):
     if len(col.unique()) != 1:
         return ["color: red" for c in col]
     else:
         return ["color: green" for c in col]
 
 
-def extractNumber(s):
+def extract_number(s):
     lst = re.findall(r"[-+]?\d*\.\d+|\d+", str(s))
     if len(lst) > 0:
         return max([float(i) for i in lst])
@@ -30,10 +30,10 @@ def extractNumber(s):
         return nan
 
 
-def transformColumnToNumberCluster(df, col, n, type):
+def transform_column_to_number_cluster(df, col, n, type):
     df["extracted"] = ""
     if type == "Ankerpunten":
-        df["extracted"] = df.apply(lambda row: extractNumber(row[col]), axis=1)
+        df["extracted"] = df.apply(lambda row: extract_number(row[col]), axis=1)
         filtered_df = df["extracted"][df["extracted"].notnull()]
         model = KMeans(n_clusters=n)
         cluster_labels = model.fit_predict(filtered_df.values.reshape(-1, 1))
@@ -117,12 +117,12 @@ def convert_df(df):
 #     return pd.read_csv(st.session_state[key])
 
 
-def createDataFrameFromDataset(uploaded):
+def create_data_frame_from_dataset(uploaded):
     # return pd.read_csv(uploaded)
     return pd.read_csv(uploaded, delimiter=",")
 
 
-def createPaginering(key, colstoUse, N):
+def create_pagination(key, colstoUse, N):
     # A variable to keep track of which product we are currently displaying
     if key not in st.session_state:
         st.session_state[key] = 0

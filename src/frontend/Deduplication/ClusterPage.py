@@ -375,7 +375,7 @@ class ZinggClusterPage:
             st.components.v1.html(js)
 
     def _clear_js_containers(self):
-        js = f"""<script>
+        js = """<script>
             iframes = window.parent.document.getElementsByTagName("iframe")
             for (var i=0, max=iframes.length; i < max; i++)
                 iframes[i].title == "st.iframe" ? iframes[i].style.display = "none" : iframes[i].style.display = "block";
@@ -384,7 +384,7 @@ class ZinggClusterPage:
         st.components.v1.html(js)
 
     def _give_custom_css_to_container(self):
-        customSpan = rf"""
+        customSpan = """
         <span id="containerDuplicateCardsFinder">
         </span>
         """

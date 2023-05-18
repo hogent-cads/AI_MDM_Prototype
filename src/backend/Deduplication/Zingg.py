@@ -16,26 +16,26 @@ class Zingg:
         self,
         dedupe_type_dict,
         dedupe_data,
-        modelID,
+        model_id,
         number_of_partitions=4,
         label_data_sample_size=0.5,
         output="/output_dir",
     ) -> None:
         self.dedupe_type_dict = dedupe_type_dict
         self.dedupe_data = pd.read_json(dedupe_data).astype(str)
-        self.modelID = modelID
+        self.model_id = model_id
         self.number_of_partitions = number_of_partitions
         self.label_data_sample_size = label_data_sample_size
-        self.location = f"storage/{self.modelID}"
-        Path(f"storage/{self.modelID}/input_dir").mkdir(parents=True, exist_ok=True)
+        self.location = f"storage/{self.model_id}"
+        Path(f"storage/{self.model_id}/input_dir").mkdir(parents=True, exist_ok=True)
         self.dedupe_data.to_csv(
-            f"storage/{self.modelID}/input_dir/input.csv", index=False
+            f"storage/{self.model_id}/input_dir/input.csv", index=False
         )
 
         different_phases = ["findTrainingData", "label", "train"]
         for phase in different_phases:
             self._create_python_files_from_phase(phase)
-        Zingg.run_zingg_phase("findTrainingData", self.modelID)
+        Zingg.run_zingg_phase("findTrainingData", self.model_id)
 
     @staticmethod
     def run_zingg_phase(phase, modelID):
@@ -232,13 +232,13 @@ class Zingg:
         else:
             raise ValueError("Phase not supported")
 
-        Path(f"storage/{self.modelID}/scripts/{phase}/").mkdir(
+        Path(f"storage/{self.model_id}/scripts/{phase}/").mkdir(
             parents=True, exist_ok=True
         )
 
         # write to output file
         with open(
-            f"storage/{self.modelID}/scripts/{phase}/generated_zingg_script.py", "w"
+            f"storage/{self.model_id}/scripts/{phase}/generated_zingg_script.py", "w"
         ) as f:
             f.write(
                 f"""from zingg.client import *
@@ -251,7 +251,7 @@ args = Arguments()
 
 fieldDefs = {second_string_to_concat}
 args.setFieldDefinition(fieldDefs)
-args.setModelId("{self.modelID}")
+args.setModelId("{self.model_id}")
 args.setZinggDir("{self.location}/models")
 args.setNumPartitions({self.number_of_partitions})
 args.setLabelDataSampleSize({self.label_data_sample_size})
