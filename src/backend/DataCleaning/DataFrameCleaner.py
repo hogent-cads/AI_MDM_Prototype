@@ -231,6 +231,7 @@ REGEX_PUNCTUATION = re.compile(rf"[{re.escape(string.punctuation)}]")
 REGEX_URL = re.compile(r"(?:https?://|www\.)\S+")
 REGEX_WHITESPACE = re.compile(r"[\n\t]|[ ]{2,}")
 
+
 class DataFrameCleaner:
     # def __init__(self, df, column, pipeline, stopwords):
     def __init__(self):
@@ -249,7 +250,8 @@ class DataFrameCleaner:
         npartitions = math.ceil(df_size / 128 / 1024 / 1024)  # 128 MB partition size
         return dd.from_pandas(df, npartitions=npartitions)
 
-    def clean_text(self,
+    def clean_text(
+        self,
         df: Union[pd.DataFrame, dd.DataFrame],
         column: str,
         pipeline: Optional[List[Dict[str, Any]]] = None,
@@ -285,7 +287,11 @@ class DataFrameCleaner:
         try:
             df = self._to_dask(df)
 
-            pipe = self._get_default_pipeline(stopwords) if not pipeline else self._get_custom_pipeline(pipeline)
+            pipe = (
+                self._get_default_pipeline(stopwords)
+                if not pipeline
+                else self._get_custom_pipeline(pipeline)
+            )
 
             for func in pipe:
                 df[column] = df[column].apply(func, meta=object)
@@ -321,7 +327,8 @@ class DataFrameCleaner:
             {"operator": "remove_whitespace"},
         ]
 
-    def _get_default_pipeline(self,
+    def _get_default_pipeline(
+        self,
         stopwords: Optional[Set[str]] = None,
     ) -> List[Callable[..., Any]]:
         """
@@ -339,7 +346,9 @@ class DataFrameCleaner:
             self._remove_whitespace,
         ]
 
-    def _get_custom_pipeline(self, pipeline: List[Dict[str, Any]]) -> List[Callable[..., Any]]:
+    def _get_custom_pipeline(
+        self, pipeline: List[Dict[str, Any]]
+    ) -> List[Callable[..., Any]]:
         """
         Return a list of functions defining a custom pipeline.
         """
@@ -357,7 +366,9 @@ class DataFrameCleaner:
             # If parameters are specified, create a partial function to lock in
             # the values and prevent them from being overwritten in subsequent loops
             if "parameters" in component:
-                custom_pipeline.append(self._wrapped_partial(operator, component["parameters"]))
+                custom_pipeline.append(
+                    self._wrapped_partial(operator, component["parameters"])
+                )
                 # custom_pipeline.append(operator)
             else:
                 custom_pipeline.append(operator)
@@ -392,7 +403,7 @@ class DataFrameCleaner:
             "replace_urls": self._replace_urls,
         }
 
-    def _fillna(self,text: Any, value: Any = np.nan) -> Any:
+    def _fillna(self, text: Any, value: Any = np.nan) -> Any:
         """
         Replace all null values with NaN (default) or the supplied value.
         """
@@ -405,31 +416,31 @@ class DataFrameCleaner:
         except Exception as e:
             return value if (text in NULL_VALUES) else text
 
-    def _lowercase(self,text: Any) -> Any:
+    def _lowercase(self, text: Any) -> Any:
         """
         Convert all characters to lowercase.
         """
         return str(text).lower() if pd.notna(text) else text
 
-    def _sentence_case(self,text: Any) -> Any:
+    def _sentence_case(self, text: Any) -> Any:
         """
         Convert first character to uppercase and remaining to lowercase.
         """
         return str(text).capitalize() if pd.notna(text) else text
 
-    def _title_case(self,text: Any) -> Any:
+    def _title_case(self, text: Any) -> Any:
         """
         Convert first character of each word to uppercase and remaining to lowercase.
         """
         return str(text).title() if pd.notna(text) else text
 
-    def _uppercase(self,text: Any) -> Any:
+    def _uppercase(self, text: Any) -> Any:
         """
         Convert all characters to uppercase.
         """
         return str(text).upper() if pd.notna(text) else text
 
-    def _remove_accents(self,text: Any) -> Any:
+    def _remove_accents(self, text: Any) -> Any:
         """
         Remove accents (diacritic marks).
         """
@@ -439,7 +450,9 @@ class DataFrameCleaner:
             else text
         )
 
-    def _remove_bracketed(self,text: Any, brackets: Union[str, Set[str]], inclusive: bool = True) -> Any:
+    def _remove_bracketed(
+        self, text: Any, brackets: Union[str, Set[str]], inclusive: bool = True
+    ) -> Any:
         """
         Remove text between brackets.
         Parameters
@@ -465,32 +478,30 @@ class DataFrameCleaner:
 
         text = str(text)
         # value = "" if inclusive else r"\g<1>\g<2>"
-        if isinstance(brackets,set):
+        if isinstance(brackets, set):
             for bracket in brackets:
                 # replace all content between brackets from the text, including the brackets
                 l_bracket = list(bracket)
-                text = re.sub(rf'\{l_bracket[0]}.*?\{l_bracket[1]}', '', text)
-
-
+                text = re.sub(rf"\{l_bracket[0]}.*?\{l_bracket[1]}", "", text)
 
         else:
             text = re.sub(REGEX_BRACKETS[brackets], "", text)
 
         return text
 
-    def _remove_digits(self,text: Any) -> Any:
+    def _remove_digits(self, text: Any) -> Any:
         """
         Remove all digits.
         """
         return re.sub(REGEX_DIGITS, "", str(text)) if pd.notna(text) else text
 
-    def _remove_html(self,text: Any) -> Any:
+    def _remove_html(self, text: Any) -> Any:
         """
         Remove HTML tags.
         """
         return re.sub(REGEX_HTML, "", str(text)) if pd.notna(text) else text
 
-    def _remove_prefixed(self,text: Any, prefix: Union[str, Set[str]]) -> Any:
+    def _remove_prefixed(self, text: Any, prefix: Union[str, Set[str]]) -> Any:
         """
         Remove substrings that start with the prefix(es).
         """
@@ -506,13 +517,13 @@ class DataFrameCleaner:
 
         return text
 
-    def _remove_punctuation(self,text: Any) -> Any:
+    def _remove_punctuation(self, text: Any) -> Any:
         """
         Remove punctuation marks.
         """
         return re.sub(REGEX_PUNCTUATION, " ", str(text)) if pd.notna(text) else text
 
-    def _remove_stopwords(self,text: Any, stopwords: Optional[Set[str]] = None) -> Any:
+    def _remove_stopwords(self, text: Any, stopwords: Optional[Set[str]] = None) -> Any:
         """
         Remove a set of words from the text.
         If `stopwords` is None (default), use NLTK's stopwords.
@@ -521,19 +532,23 @@ class DataFrameCleaner:
             return text
 
         stopwords = english_stopwords if not stopwords else stopwords
-        return " ".join(word for word in str(text).split() if word.lower() not in stopwords)
+        return " ".join(
+            word for word in str(text).split() if word.lower() not in stopwords
+        )
 
-    def _remove_urls(self,text: Any) -> Any:
+    def _remove_urls(self, text: Any) -> Any:
         """
         Remove URLS.
         """
         return re.sub(REGEX_URL, "", str(text)) if pd.notna(text) else text
 
-    def _remove_whitespace(self,text: Any) -> Any:
+    def _remove_whitespace(self, text: Any) -> Any:
         """
         Remove extra spaces along with tabs and newlines.
         """
-        return re.sub(REGEX_WHITESPACE, " ", str(text)).strip() if pd.notna(text) else text
+        return (
+            re.sub(REGEX_WHITESPACE, " ", str(text)).strip() if pd.notna(text) else text
+        )
 
     def _replace_bracketed(
         text: Any, brackets: Union[str, Set[str]], value: str, inclusive: bool = True
@@ -567,8 +582,9 @@ class DataFrameCleaner:
 
         return text
 
-
-    def _replace_digits(self, text: Any, value: str, block: Optional[bool] = True) -> Any:
+    def _replace_digits(
+        self, text: Any, value: str, block: Optional[bool] = True
+    ) -> Any:
         """
         Replace all digits with the value. If `block` is True (default),
         only replace blocks of digits.
@@ -582,8 +598,9 @@ class DataFrameCleaner:
             else re.sub(REGEX_DIGITS, value, str(text))
         )
 
-
-    def _replace_prefixed(self, text: Any, prefix: Union[str, Set[str]], value: str) -> Any:
+    def _replace_prefixed(
+        self, text: Any, prefix: Union[str, Set[str]], value: str
+    ) -> Any:
         """
         Replace all substrings starting with the prefix(es) with the value.
         """
@@ -599,15 +616,15 @@ class DataFrameCleaner:
 
         return text
 
-
     def _replace_punctuation(self, text: Any, value: str) -> Any:
         """
         Replace all punctuation marks with the value.
         """
         return re.sub(REGEX_PUNCTUATION, value, str(text)) if pd.notna(text) else text
 
-
-    def _replace_stopwords(self, text: Any, value: str, stopwords: Optional[Set[str]] = None) -> Any:
+    def _replace_stopwords(
+        self, text: Any, value: str, stopwords: Optional[Set[str]] = None
+    ) -> Any:
         """
         Replace a set of words in the text with the value.
         If `stopwords` is None (default), use NLTK's stopwords.
@@ -616,10 +633,14 @@ class DataFrameCleaner:
             return text
 
         stopwords = english_stopwords if not stopwords else stopwords
-        return " ".join(word if word.lower() not in stopwords else value for word in str(text).split())
+        return " ".join(
+            word if word.lower() not in stopwords else value
+            for word in str(text).split()
+        )
 
-
-    def _replace_text(self, text: Any, value: Dict[str, str], block: Optional[bool] = True) -> Any:
+    def _replace_text(
+        self, text: Any, value: Dict[str, str], block: Optional[bool] = True
+    ) -> Any:
         """
         Replace a sequence of characters with another according to the value mapping.
         If `block` is True (default), only replace standalone blocks of the sequence.
@@ -637,16 +658,14 @@ class DataFrameCleaner:
 
         return text
 
-
     def _replace_urls(self, text: Any, value: str) -> Any:
         """
         Replace all URLs with the value.
         """
         return re.sub(REGEX_URL, value, str(text)) if pd.notna(text) else text
 
-
-    def _wrapped_partial( self,
-        func: Callable[..., Callable[..., Any]], params: Dict[str, Any]
+    def _wrapped_partial(
+        self, func: Callable[..., Callable[..., Any]], params: Dict[str, Any]
     ) -> Callable[..., Callable[..., Any]]:
         """
         Return a partial function with a name and a doc attribute.

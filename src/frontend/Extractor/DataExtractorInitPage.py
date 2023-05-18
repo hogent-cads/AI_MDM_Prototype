@@ -3,7 +3,9 @@ import extra_streamlit_components as stx
 from sklearn.cluster import KMeans
 
 from src.frontend.enums.VarEnum import VarEnum
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import DatasetDisplayerComponent
+from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+    DatasetDisplayerComponent,
+)
 
 
 class DataExtractorInitPage:
@@ -12,23 +14,30 @@ class DataExtractorInitPage:
         self.handler = handler
 
     def show(self):
-        chosen_tab = stx.tab_bar(data=[
-            stx.TabBarItemData(id=1, title="Dataset", description=""),
-            stx.TabBarItemData(id=2, title="Data Extraction", description=""),
-            ], default=1)
+        chosen_tab = stx.tab_bar(
+            data=[
+                stx.TabBarItemData(id=1, title="Dataset", description=""),
+                stx.TabBarItemData(id=2, title="Data Extraction", description=""),
+            ],
+            default=1,
+        )
 
         if chosen_tab == "1":
             DatasetDisplayerComponent().show()
 
         if chosen_tab == "2":
-            st.info("This functionality is still under development, please use the other functionalities for now.")
+            st.info(
+                "This functionality is still under development, please use the other functionalities for now."
+            )
 
     @st.cache_resource
     def _kmeans_cluster(_self, n_clusters, _tfidf_vectorizer_vectors):
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
 
     def _gpt_code(self):
-        df = st.session_state[VarEnum.SB_LOADED_DATAFRAME.value]["Material Description EN"]
+        df = st.session_state[VarEnum.SB_LOADED_DATAFRAME.value][
+            "Material Description EN"
+        ]
         # st.write(type(df))
 
         # randomize the order of the records
@@ -36,7 +45,9 @@ class DataExtractorInitPage:
 
         # Place each record in the series in <> and join them together
         # to form a single string
-        text_to_cluster = df[:175].apply(lambda x: "<li>" + x + "<\li>").str.cat(sep=" ")
+        text_to_cluster = (
+            df[:175].apply(lambda x: "<li>" + x + "<\li>").str.cat(sep=" ")
+        )
 
         # remove all " and ' from the text"
         text_to_cluster = text_to_cluster.replace('"', "")
@@ -54,8 +65,6 @@ class DataExtractorInitPage:
         |||{text_to_cluster}|||
         """
         st.write(gpt_prompt)
-
-
 
 
 #         # CODE VOOR AUTOREFRESH, TO LATER
@@ -120,16 +129,11 @@ class DataExtractorInitPage:
 #             st.write(df)
 
 
-
-
-
 #         # st.write("Stap 3: Bereken de Similarity tussen de verschillende waarden; gebruik hiervoor de Jaccard Similarity of Cosine Similarity")
 #         # chosen_similarity = st.selectbox("Kies een similarity", ["Jaccard Similarity", "Cosine Similarity"])
 
 #         # if chosen_similarity == "Jaccard Similarity":
 #         #     pass
-
-
 
 
 #         # SIMILARITYMATRIX OPSTELLEN OP BASIS VAN TF-IDF (Jaccard SIM)
@@ -164,10 +168,3 @@ class DataExtractorInitPage:
 #     kmeans = KMeans(chosen_n_clusters).fit(tfidf_vectorizer_vectors)
 #     df = pd.DataFrame({'cluster': kmeans.labels_, 'value': st.session_state[VarEnum.sb_LOADED_DATAFRAME.value][chosen_column].to_list()})
 #     df.to_csv("kobe.csv")
-
-
-
-
-
-
-    
