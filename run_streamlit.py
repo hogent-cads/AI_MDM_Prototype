@@ -16,8 +16,7 @@ from src.frontend.Handler.LocalHandler import LocalHandler
 from src.frontend.Handler.RemoteHandler import RemoteHandler
 from src.frontend.Router import Router
 from src.frontend.StateManager import StateManager
-from src.frontend.enums.DialogEnum import DialogEnum as d
-from src.frontend.enums.VarEnum import VarEnum as v
+from src.frontend.enums import DialogEnum as d, VarEnum as v
 import config as cfg
 
 

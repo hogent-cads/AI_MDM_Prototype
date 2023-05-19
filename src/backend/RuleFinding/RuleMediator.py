@@ -9,7 +9,7 @@ from src.backend.RuleFinding.VR.ValueRuleRepo import ValueRuleRepo
 from src.backend.RuleFinding.CR.ColumnRuleFactory import ColumnRuleFactory
 from src.backend.RuleFinding.CR.ColumnRuleRepo import ColumnRuleRepo
 from src.backend.RuleFinding.AR.AssociationRuleFinder import AssociationRuleFinder
-from src.shared.Enums.FiltererEnum import FiltererEnum
+from src.shared.enums import FiltererEnum
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import (
     ColumnRuleFilter_ZScore,
 )

@@ -5,8 +5,7 @@ from src.frontend.Deduplication.Enums.ZinggTypesEnum import ZinggTypesEnum
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
     DatasetDisplayerComponent,
 )
-from src.frontend.enums.VarEnum import VarEnum
-from src.frontend.enums.DialogEnum import DialogEnum as d
+from src.frontend.enums import DialogEnum as d, VarEnum
 
 
 class InitPage:

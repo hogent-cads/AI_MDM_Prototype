@@ -3,7 +3,7 @@ from typing import List
 
 from src.frontend.Handler.IHandler import IHandler
 from src.backend.DomainController import DomainController
-from src.shared.Views.ColumnRuleView import ColumnRuleView
+from src.shared.views import ColumnRuleView
 
 
 class LocalHandler(IHandler):

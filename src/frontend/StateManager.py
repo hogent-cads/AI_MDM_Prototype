@@ -2,9 +2,9 @@ import json
 
 import streamlit as st
 
-from src.shared.Views.ColumnRuleView import ColumnRuleView
-from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
-from src.frontend.enums.VarEnum import VarEnum
+from src.shared.views import ColumnRuleView
+from src.shared.configs import RuleFindingConfig
+from src.frontend.enums import VarEnum
 from src.frontend.Handler.IHandler import IHandler
 
 

@@ -11,7 +11,7 @@ from src.backend.RuleFinding.RuleMediator import RuleMediator
 from src.backend.Suggestions.SuggestionFinder import SuggestionFinder
 from src.backend.DataPreperation.DataPrepper import DataPrepper
 from src.backend.DataCleaning.DataFrameCleaner import DataFrameCleaner
-from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
+from src.shared.configs import RuleFindingConfig
 from src.backend.DataCleaning.FuzzyMatcher import FuzzyMatcher
 from src.backend.DataCleaning.StructureDetector import StructureDetector
 from src.backend.Deduplication.Zingg import Zingg

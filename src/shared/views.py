@@ -1,5 +1,6 @@
-from typing import List
 import json
+from typing import List
+
 import pandas as pd
 
 

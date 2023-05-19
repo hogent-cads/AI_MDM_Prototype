@@ -2,8 +2,7 @@ import json
 
 import pandas as pd
 
-from src.shared.Enums.BinningEnum import BinningEnum
-from src.shared.Enums.DroppingEnum import DroppingEnum
+from src.shared.enums import BinningEnum, DroppingEnum
 from src.backend.DataPreperation.Commands.BinningCommands import (
     BinningCommand_EqualBins,
     BinningCommand_KMeans,

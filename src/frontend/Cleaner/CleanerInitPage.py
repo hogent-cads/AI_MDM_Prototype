@@ -6,8 +6,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid
 import extra_streamlit_components as stx
 
 from src.frontend.Handler.IHandler import IHandler
-from src.frontend.enums.VarEnum import VarEnum
-from src.frontend.enums.DialogEnum import DialogEnum as d
+from src.frontend.enums import DialogEnum as d, VarEnum
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
     DatasetDisplayerComponent,
 )

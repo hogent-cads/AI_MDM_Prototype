@@ -2,7 +2,7 @@ import streamlit as st
 import extra_streamlit_components as stx
 from sklearn.cluster import KMeans
 
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums import VarEnum
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
     DatasetDisplayerComponent,
 )

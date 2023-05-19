@@ -5,8 +5,8 @@ import requests
 import streamlit as st
 
 from src.frontend.Handler.IHandler import IHandler
-from src.shared.Views.ColumnRuleView import ColumnRuleView
-from src.frontend.enums.VarEnum import VarEnum
+from src.shared.views import ColumnRuleView
+from src.frontend.enums import VarEnum
 
 
 class RemoteHandler(IHandler):

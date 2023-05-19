@@ -6,7 +6,7 @@ from typing import List
 import pandas as pd
 import numpy as np
 
-from src.shared.Views.ColumnRuleView import ColumnRuleView
+from src.shared.views import ColumnRuleView
 import config as cfg
 
 

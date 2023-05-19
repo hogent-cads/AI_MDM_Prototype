@@ -12,7 +12,7 @@ from src.frontend.Deduplication.ClusterPage import (
 from src.frontend.Profiler.ProfilerInitPage import ProfilerInitPage
 from src.frontend.Extractor.DataExtractorInitPage import DataExtractorInitPage
 from src.frontend.Deduplication.LabelPage import ZinggLabelPage
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums import VarEnum
 
 
 class Router:

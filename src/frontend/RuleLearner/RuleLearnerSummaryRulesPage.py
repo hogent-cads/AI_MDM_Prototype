@@ -7,7 +7,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid, ColumnsAutoSizeMode
 
 from src.frontend.StateManager import StateManager
 from src.frontend.Handler.IHandler import IHandler
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums import VarEnum
 
 
 class RuleLearnerSummaryRulesPage:

@@ -1,5 +1,5 @@
-import backend.RuleFinding.VR.ValueRule as vr
-import backend.RuleFinding.VR.ValueRuleElement as vre
+import src.backend.RuleFinding.VR.ValueRule as vr
+import src.backend.RuleFinding.VR.ValueRuleElement as vre
 
 
 def test_value_rule():

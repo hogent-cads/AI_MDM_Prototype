@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
 
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums import VarEnum
 
 
 class ZinggClusterRedirectPage:

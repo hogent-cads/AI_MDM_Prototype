@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import math
-from backend.RuleFinding.CR.ColumnRule import (
+from src.backend.RuleFinding.CR.ColumnRule import (
     ColumnRule, fi_measure, g3_measure, rfi_measure)
 
 

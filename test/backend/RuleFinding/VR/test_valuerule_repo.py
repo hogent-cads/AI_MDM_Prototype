@@ -1,4 +1,4 @@
-import backend.RuleFinding.VR.ValueRuleRepo as vrr
+import src.backend.RuleFinding.VR.ValueRuleRepo as vrr
 
 
 def test_empty_value_rule_repo():

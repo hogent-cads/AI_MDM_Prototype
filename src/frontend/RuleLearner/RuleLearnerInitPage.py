@@ -2,11 +2,9 @@ import streamlit as st
 import extra_streamlit_components as stx
 
 from src.frontend.Handler.IHandler import IHandler
-from src.shared.Enums.FiltererEnum import FiltererEnum
-from src.shared.Enums.BinningEnum import BinningEnum
-from src.shared.Enums.DroppingEnum import DroppingEnum
-from src.frontend.enums.VarEnum import VarEnum
-from src.shared.Configs.RuleFindingConfig import RuleFindingConfig
+from src.shared.enums import BinningEnum, DroppingEnum, FiltererEnum
+from src.frontend.enums import VarEnum
+from src.shared.configs import RuleFindingConfig
 from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
     DatasetDisplayerComponent,
 )

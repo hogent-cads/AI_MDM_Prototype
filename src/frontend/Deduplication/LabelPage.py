@@ -4,8 +4,7 @@ import pandas as pd
 
 from st_aggrid import GridOptionsBuilder, AgGrid
 
-from src.frontend.enums.VarEnum import VarEnum
-from src.frontend.enums.DialogEnum import DialogEnum as d
+from src.frontend.enums import DialogEnum as d, VarEnum
 
 
 class ZinggLabelPage:

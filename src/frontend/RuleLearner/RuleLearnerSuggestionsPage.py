@@ -6,7 +6,7 @@ from st_aggrid import GridOptionsBuilder, AgGrid
 
 from src.frontend.StateManager import StateManager
 from src.frontend.Handler.IHandler import IHandler
-from src.frontend.enums.VarEnum import VarEnum
+from src.frontend.enums import VarEnum
 import config as cfg
 
 
