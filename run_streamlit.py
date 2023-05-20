@@ -132,7 +132,7 @@ def _reload_dataframe(uploaded_file, handler):
     current_profiling = st.session_state[v.SB_CURRENT_PROFILING]
     skip_file_reading = st.session_state[v.DDC_FORCE_RELOAD_CACHE]
 
-    if skip_file_reading == True:
+    if skip_file_reading:
         loaded_dataframe = st.session_state[v.SB_LOADED_DATAFRAME]
         loaded_dataframe_name = st.session_state[v.SB_LOADED_DATAFRAME_NAME]
         loaded_dataframe_id = st.session_state[v.SB_LOADED_DATAFRAME_ID]
@@ -144,7 +144,7 @@ def _reload_dataframe(uploaded_file, handler):
     for key in st.session_state.keys():
         del st.session_state[key]
 
-    if skip_file_reading == True:
+    if skip_file_reading:
         st.session_state[v.SB_LOADED_DATAFRAME] = loaded_dataframe
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = loaded_dataframe_name
         st.session_state[v.SB_LOADED_DATAFRAME_ID] = loaded_dataframe_id
@@ -247,7 +247,7 @@ def main():
 
         if (
             st.session_state[v.SB_LOADED_DATAFRAME_ID] != uploaded_file.id
-        ) or st.session_state[v.DDC_FORCE_RELOAD_CACHE] == True:
+        ) or st.session_state[v.DDC_FORCE_RELOAD_CACHE]:
             _reload_dataframe(uploaded_file, handler)
 
         # CALCULATE CURRENT SEQ IF NOT ALREADY PRESENT

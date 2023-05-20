@@ -518,7 +518,7 @@ class DomainController(FlaskView):
             md5_of_dataframe,
             seq,
         )
-        if result_in_local_storage != None:
+        if result_in_local_storage is not None:
             return json.dumps(result_in_local_storage)
 
         # COMPUTE RESULTS

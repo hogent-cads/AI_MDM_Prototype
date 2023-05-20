@@ -23,25 +23,25 @@ class Router:
     def route_data_extraction(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] is None:
             DataExtractorInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_data_profiling(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] is None:
             ProfilerInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_data_cleaning(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] is None:
             CleanerInitPage(canvas=canvas, handler=self.handler).show()
 
     def route_rule_learning(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] is None:
             RuleLearnerInitPage(canvas=canvas, handler=self.handler).show()
 
         if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_RL_RULES:
@@ -53,7 +53,7 @@ class Router:
     def route_dedupe(self):
         canvas = st.empty()
 
-        if st.session_state[VarEnum.GB_CURRENT_STATE] == None:
+        if st.session_state[VarEnum.GB_CURRENT_STATE] is None:
             InitPage(canvas=canvas, handler=self.handler).show()
 
         if st.session_state[VarEnum.GB_CURRENT_STATE] == VarEnum.ST_DD_LABELING:
