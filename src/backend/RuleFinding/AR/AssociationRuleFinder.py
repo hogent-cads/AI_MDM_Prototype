@@ -38,11 +38,10 @@ class AssociationRuleFinder:
         cfg.logger.debug("Shape of frequent_itemsets: %s", frequent_itemsets.shape)
         cfg.logger.debug("%s", frequent_itemsets)
 
-        """ Oude code met lift.
-        ar = association_rules(frequent_itemsets, metric = 'lift', min_threshold=min_lift)
+        # Oude code met lift.
+        # ar = association_rules(frequent_itemsets, metric = 'lift', min_threshold=min_lift)
         # Filter out low confidence rules
-        return ar[ar['confidence'] > min_confidence]
-        """
+        # return ar[ar['confidence'] > min_confidence]
 
         # Remove association rules with multiple consequents.
         # First use confidence, later filter on lift.
@@ -161,15 +160,15 @@ class AssociationRuleFinder:
         if support_only:
             metric = "support"
         else:
-            if metric not in metric_dict.keys():
+            if metric not in metric_dict:
                 raise ValueError(
-                    "Metric must be 'confidence' or 'lift', got '{}'".format(metric)
+                    f"Metric must be 'confidence' or 'lift', got '{metric}'"
                 )
 
         # get dict of {frequent itemset} -> support
         keys = df["itemsets"].values
         values = df["support"].values
-        frozenset_vect = np.vectorize(lambda x: frozenset(x))
+        frozenset_vect = np.vectorize(frozenset)
         frequent_items_dict = dict(zip(frozenset_vect(keys), values))
 
         # prepare buckets to collect frequent rules
@@ -178,10 +177,7 @@ class AssociationRuleFinder:
         rule_supports = []
 
         # iterate over all frequent itemsets
-        for k in frequent_items_dict.keys():
-            # if len(k) == 1: # do not allow rules with empty antecedent
-            #    continue
-            sAC = frequent_items_dict[k]
+        for k, sAC in frequent_items_dict.items():
             for c in k:
                 consequent = frozenset([c])
                 antecedent = k.difference(consequent)
@@ -207,7 +203,7 @@ class AssociationRuleFinder:
                             " You can try using the "
                             " `support_only=True` option"
                         )
-                        raise KeyError(s)
+                        raise KeyError(s) from e
 
                 # check for the threshold
                 score = metric_dict[metric](sAC, sA, sC)
@@ -219,25 +215,25 @@ class AssociationRuleFinder:
         # check if frequent rule was generated
         if not rule_supports:
             return pd.DataFrame(columns=["antecedents", "consequents"] + columns_ordered)
+
+        # generate metrics
+        rule_supports = np.array(rule_supports).T.astype(float)
+        df_res = pd.DataFrame(
+            data=list(zip(rule_antecedents, rule_consequents)),
+            columns=["antecedents", "consequents"],
+        )
+
+        if support_only:
+            sAC = rule_supports[0]
+            for m in columns_ordered:
+                df_res[m] = np.nan
+            df_res["support"] = sAC
+
         else:
-            # generate metrics
-            rule_supports = np.array(rule_supports).T.astype(float)
-            df_res = pd.DataFrame(
-                data=list(zip(rule_antecedents, rule_consequents)),
-                columns=["antecedents", "consequents"],
-            )
+            sAC = rule_supports[0]
+            sA = rule_supports[1]
+            sC = rule_supports[2]
+            for m in columns_ordered:
+                df_res[m] = metric_dict[m](sAC, sA, sC)
 
-            if support_only:
-                sAC = rule_supports[0]
-                for m in columns_ordered:
-                    df_res[m] = np.nan
-                df_res["support"] = sAC
-
-            else:
-                sAC = rule_supports[0]
-                sA = rule_supports[1]
-                sC = rule_supports[2]
-                for m in columns_ordered:
-                    df_res[m] = metric_dict[m](sAC, sA, sC)
-
-            return df_res
+        return df_res
