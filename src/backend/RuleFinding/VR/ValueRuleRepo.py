@@ -23,8 +23,8 @@ class ValueRuleRepo:
         ] = self._filter_low_support_rules(min_support)
 
         potential_conf_dict = self._create_potential_conf_dict_from_value_rules()
-        cfg.logger.debug("potential_conf_dict" + str(potential_conf_dict))
-        cfg.logger.debug(f"potential_conf_dict has {len(potential_conf_dict)} keys")
+        cfg.logger.debug("potential_conf_dict %s", potential_conf_dict)
+        cfg.logger.debug("potential_conf_dict has %s keys", len(potential_conf_dict))
 
         # Filter out rules that have a low maximum confidence.
         # TODO: filter out magic number 0.9
@@ -34,7 +34,7 @@ class ValueRuleRepo:
             if max_conf >= 0.9
         }
 
-        cfg.logger.debug(f"potential_conf_dict has {len(potential_conf_dict)} keys")
+        cfg.logger.debug("potential_conf_dict has %s keys", len(potential_conf_dict))
 
         return filtered
 
@@ -64,7 +64,9 @@ class ValueRuleRepo:
             counter += 1
             if (counter % int(1 + (len(potential_conf_dict) / 10))) == 0:
                 cfg.logger.info(
-                    f"Progressie LemmaRule Maken en Filteren:  {counter}/{len(potential_conf_dict)}"
+                    "Progressie LemmaRule Maken en Filteren: %s/%s",
+                    counter,
+                    len(potential_conf_dict)
                 )
 
             cr = ColumnRule(rs, confidence=max_confidence)
@@ -90,12 +92,11 @@ class ValueRuleRepo:
                                 if rs in dict_of_kept_rules_to_be_filtered:
                                     # TODO: should we also keep these rules for later reference
                                     cfg.logger.debug(
-                                        f"Remove column rule {rs}, because of {e}"
+                                        "Remove column rule %s, because of %s", rs, e
                                     )
-                                    print(f"Remove column rule {rs}, because of {e}")
                                     del dict_of_kept_rules_to_be_filtered[rs]
 
-        cfg.logger.debug(f"Kept rules = {dict_of_kept_rules_to_be_filtered}")
+        cfg.logger.debug("Kept rules = %s", dict_of_kept_rules_to_be_filtered)
 
         return dict_of_kept_rules_to_be_filtered.keys()
 
@@ -133,7 +134,7 @@ class ValueRuleRepo:
         """
         cfg.logger.info(
             "Trying to remove rule_strings"
-            + f" for which total support is less than {min_support}"
+            + " for which total support is less than %s",  min_support
         )
 
         removed_rs: Dict[str, Set[ValueRule]] = {}
@@ -147,8 +148,11 @@ class ValueRuleRepo:
                 kept_rs[rs] = self.value_rules_dict[rs]
 
         cfg.logger.info(
-            f"Removed {len(removed_rs)} rule strings because of low support"
-            + f" kept {len(kept_rs)}. Minimum support has value {min_support}"
+            "Removed %s rule strings because of low support"
+            + " kept %s. Minimum support has value %s",
+            len(removed_rs),
+            len(kept_rs),
+            min_support
         )
 
         return kept_rs
@@ -166,13 +170,13 @@ class ValueRuleRepo:
         this rule can ever achieve
         """
         cfg.logger.debug(
-            f"Calculating max confidence for {';'.join(str(_) for _ in value_rules)}"
+            "Calculating max confidence for %s", ';'.join(str(_) for _ in value_rules)
         )
         support = np.sum([vr.support for vr in value_rules])
-        cfg.logger.debug(f"The value rules together have support {support}")
+        cfg.logger.debug("The value rules together have support %s", support)
 
         weighted_confidence = np.sum([vr.support * vr.confidence for vr in value_rules])
 
-        cfg.logger.debug(f"Weighted confidence: {weighted_confidence}")
+        cfg.logger.debug("Weighted confidence: %s", weighted_confidence)
 
         return weighted_confidence + (1 - support) * 1.0

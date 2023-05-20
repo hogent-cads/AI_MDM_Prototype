@@ -32,11 +32,11 @@ class AssociationRuleFinder:
             "conviction" of all rules for which
             lift(rule) >= min_lift and  confidence(rule) >= min_confidence.
         """
-        cfg.logger.debug(f"Shape of df in get_association_rules: {self.df_dummy.shape}")
+        cfg.logger.debug("Shape of df in get_association_rules: %s", self.df_dummy.shape)
         frequent_itemsets = fpgrowth(self.df_dummy, min_support=self.min_support,
                                      use_colnames=True, max_len=self.max_len)
-        cfg.logger.debug(f"Shape of frequent_itemsets: {frequent_itemsets.shape}")
-        cfg.logger.debug(f"{str(frequent_itemsets)}")
+        cfg.logger.debug("Shape of frequent_itemsets: %s", frequent_itemsets.shape)
+        cfg.logger.debug("%s", frequent_itemsets)
 
         """ Oude code met lift.
         ar = association_rules(frequent_itemsets, metric = 'lift', min_threshold=min_lift)
@@ -54,7 +54,7 @@ class AssociationRuleFinder:
             self.min_confidence)
 
         cfg.logger.debug("Association rules before pruning")
-        cfg.logger.debug(f"{str(ar)}")
+        cfg.logger.debug("%s", ar)
 
         return ar[ar['lift'] > self.min_lift]
 

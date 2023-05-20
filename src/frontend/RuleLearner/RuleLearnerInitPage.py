@@ -20,7 +20,8 @@ class RuleLearnerInitPage:
         return st.session_state["dropping_options"]
 
     @st.cache_data
-    def _create_default_dropping_dict(self, d):
+    @staticmethod
+    def _create_default_dropping_dict(d):
         return d
 
     def __init__(self, canvas, handler: IHandler) -> None:
@@ -53,7 +54,7 @@ class RuleLearnerInitPage:
                 default_binning_option = st.session_state["binning_option"]
                 default_dropping_options = st.session_state["dropping_options"]
 
-            preview_default_to_show = self._create_default_dropping_dict(
+            preview_default_to_show = RuleLearnerInitPage._create_default_dropping_dict(
                 default_dropping_options
             )
             if "dropping_options" in st.session_state:

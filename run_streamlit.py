@@ -108,7 +108,7 @@ class WebsocketClient:
         return json.loads(result)["val"]
 
     def set_local_storage_val(self, key, val):
-        cfg.logger.debug(f"Going to set {key} with {val} in local storage")
+        cfg.logger.debug("Going to set %s with %s in local storage", key, val)
         result = self.send_command(
             json.dumps({"cmd": "localStorage_set_key", "key": key, "val": val})
         )

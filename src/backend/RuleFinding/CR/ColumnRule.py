@@ -179,12 +179,13 @@ class ColumnRule:
 
         consequent_col_name = list(self.consequent_set)[0]
 
-        cfg.logger.debug(f"{predictions[consequent_col_name].index}"
-                         + f" versus {df[consequent_col_name].index}")
+        cfg.logger.debug("%s versus %s",
+                         predictions[consequent_col_name].index,
+                         df[consequent_col_name].index)
 
-        cfg.logger.debug("The predictions are "
-                         + f"{predictions[consequent_col_name]}")
-        cfg.logger.debug(f"The actual values are {df[consequent_col_name]}")
+        cfg.logger.debug("The predictions are %s",
+                         predictions[consequent_col_name])
+        cfg.logger.debug("The actual values are %s", df[consequent_col_name])
 
         return np.where(
             predictions[consequent_col_name].reset_index(drop=True) ==

@@ -150,7 +150,7 @@ class DomainController(FlaskView):
         path = f"storage/{unique_storage_id}/{hashlib.md5(dataframe_in_json.encode('utf-8')).hexdigest()}"
         path_with_file = f"{path}/session_map.json"
         if not os.path.exists(path):
-            cfg.logger.debug(f"Creating new session_map.json in {path}")
+            cfg.logger.debug("Creating new session_map.json in %s", path)
             os.makedirs(path)
             with open(path_with_file, "w+") as f:
                 f.write(json.dumps({}))
@@ -190,7 +190,7 @@ class DomainController(FlaskView):
         else:
             content[session_id] = {method_name: file_name_of_results}
 
-        cfg.logger.debug(f"Writing to file {path}")
+        cfg.logger.debug("Writing to file %s", path)
         with open(path, "w+") as json_file:
             json_file.write(json.dumps(content))
 

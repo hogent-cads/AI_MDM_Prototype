@@ -50,7 +50,7 @@ class RuleMediator:
 
         cfg.logger.debug(
             "Dataframe with association rules created."
-            + f" Has {ar_df.shape[0]} columns."
+            + " Has %s columns.", ar_df.shape[0]
         )
 
         # Maak een dict van ValueRules aan in de VR Factory

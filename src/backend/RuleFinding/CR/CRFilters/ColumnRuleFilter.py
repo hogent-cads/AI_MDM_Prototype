@@ -43,7 +43,7 @@ class ColumnRuleFilter(ABC):
         seen: Dict[str, ColumnRule] = {}
 
         for column_rule in rules:
-            cfg.logger.debug(f"Considering column_rule {column_rule}")
+            cfg.logger.debug("Considering column_rule %s", column_rule)
 
             inverse_rule_string = (
                 column_rule.rule_string.split(" => ")[1]
@@ -51,7 +51,7 @@ class ColumnRuleFilter(ABC):
                 + column_rule.rule_string.split(" => ")[0]
             )
             if inverse_rule_string in seen:
-                cfg.logger.debug(f"We have already seen {inverse_rule_string}")
+                cfg.logger.debug("We have already seen %s", inverse_rule_string)
                 inverse_rule = seen[inverse_rule_string]
                 if math.isclose(inverse_rule.confidence, column_rule.confidence):
                     cfg.logger.debug(
@@ -61,13 +61,19 @@ class ColumnRuleFilter(ABC):
                     result["ToKeep"].append(inverse_rule)
                 elif inverse_rule.confidence > column_rule.confidence:
                     cfg.logger.debug(
-                        f"{inverse_rule_string} has higher confidence then {column_rule.rule_string}. Discarding {column_rule.rule_string}"
+                        "%s has higher confidence than %s . Discarding %s",
+                        inverse_rule_string,
+                        column_rule.rule_string,
+                        column_rule.rule_string
                     )
                     result["ToKeep"].append(inverse_rule)
                     result["ToDiscard"].append(column_rule)
                 else:
                     cfg.logger.debug(
-                        f"{inverse_rule_string} has lower confidence then {column_rule.rule_string}. Discarding {inverse_rule_string}"
+                        "%s has lower confidence than %s. Discarding %s",
+                        inverse_rule_string,
+                        column_rule.rule_string,
+                        inverse_rule_string
                     )
                     result["ToKeep"].append(column_rule)
                     result["ToDiscard"].append(inverse_rule)
@@ -218,7 +224,7 @@ class ColumnRuleFilter_ZScore(ColumnRuleFilter):
             ColumnRule
         """
 
-        cfg.logger.info(f"Starting with {len(rules.values())} rules")
+        cfg.logger.info("Starting with %s rules", len(rules.values()))
 
         # When the rules are empty, we can return immediately
         if len(rules) == 0:
@@ -363,8 +369,9 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
             ]
             if len(more_general_rules) > 0:
                 cfg.logger.debug(
-                    f"Skipping rule {column_rule.rule_string} because "
-                    + "a more general rule is already considered interesting."
+                    "Skipping rule  %s because "
+                    + "a more general rule is already considered interesting.",
+                    column_rule.rule_string
                 )
                 continue  # Skip this rule, a more general interesting rule already exists
 
@@ -375,10 +382,11 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
             ) and column_rule.compute_c_measure() >= self.c_threshold:
                 filtered_rules[column_rule.rule_string] = column_rule
                 cfg.logger.debug(
-                    f"Rule {column_rule.rule_string} is interesting. "
-                    + f"g3: {column_rule.g3_measure_}, "
-                    + f"fi: {column_rule.fi_measure_}, "
-                    + f"c: {column_rule.c_measure_}"
+                    "Rule %s is interesting. g3: %s, fi: %s, c: %s",
+                    column_rule.rule_string,
+                    column_rule.g3_measure_,
+                    column_rule.fi_measure_,
+                    column_rule.c_measure_
                 )
             else:
                 g3 = (
@@ -397,8 +405,8 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
                     else "not determined"
                 )
                 cfg.logger.debug(
-                    f"Rule {column_rule.rule_string} is not interesting. "
-                    + f"g3: {g3}, fi: {fi}, c: {c}"
+                    "Rule %s is not interesting. g3: %s, fi: %s, c: %s",
+                    column_rule.rule_string, g3, fi, c
                 )
 
         return filtered_rules

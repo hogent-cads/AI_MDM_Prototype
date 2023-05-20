@@ -21,7 +21,7 @@ class ColumnRuleFactory:
         for index, rule in enumerate(cr_rule_strings):
             # Log progress
             if index % index_mod == 0:
-                cfg.logger.info(f" {index} / {len(cr_rule_strings)}")
+                cfg.logger.info("%s / %s",  index, len(cr_rule_strings))
 
             rule_list.append(self.expand_single_column_rule(rule))
 
@@ -39,9 +39,9 @@ class ColumnRuleFactory:
         a sequence of rules
         """
 
-        cfg.logger.info(f"get_definitions received {len(column_rules)} column rules")
+        cfg.logger.info("get_definitions received %s column rules", len(column_rules))
         cfg.logger.debug(
-            f"The column rules are {';'.join(str(cr) for cr in column_rules)}"
+            "The column rules are %s", ';'.join(str(cr) for cr in column_rules)
         )
 
         result = {"Definitions": {}, "NoDefinitions": {}}
@@ -74,9 +74,9 @@ class ColumnRuleFactory:
             result["NoDefinitions"][k] = v
         # result["NoDefinitions"].extend(rules_with_confidence_one.values())
 
-        cfg.logger.info(f"Number of definitions found: {len(result['Definitions'])}")
+        cfg.logger.info("Number of definitions found: %s", len(result['Definitions']))
         cfg.logger.debug(
-            f"Definitions are: {';'.join(str(cr) for cr in result['Definitions'])}"
+            "Definitions are: %s",  ';'.join(str(cr) for cr in result['Definitions'])
         )
 
         # Voeg ook de columnRules toe met een lege antecedent (Als ze aan de voorwaarde voldoen), Zijn trouwens sowieso geen definities

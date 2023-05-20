@@ -39,7 +39,7 @@ class Zingg:
 
     @staticmethod
     def run_zingg_phase(phase, modelID):
-        cfg.logger.debug(f"Running Zingg phase: {phase} on modelID: {modelID}")
+        cfg.logger.debug("Running Zingg phase: %s on modelID: %s", phase, modelID)
 
         if phase == "findTrainingData":
             # remove existing unmarked pairs and run findTrainingData phase
@@ -162,7 +162,7 @@ class Zingg:
                 index=False,
             )
             tmp = Zingg._read_parquet_schema_df(f"{dir}/{label}{z_cluster_id}.parquet")
-            cfg.logger.debug(f"Saved {z_cluster_id}.parquet")
+            cfg.logger.debug("Saved %s.parquet", z_cluster_id)
 
     @staticmethod
     def get_stats(modelID):
