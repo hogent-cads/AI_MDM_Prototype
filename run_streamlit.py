@@ -10,7 +10,7 @@ import streamlit.components.v1 as components
 
 # KEEP NESTED LAYOUT!
 import streamlit_nested_layout  # pylint: disable=unused-import
-import websockets
+import websockets.client
 
 from src.frontend.Handler.LocalHandler import LocalHandler
 from src.frontend.Handler.RemoteHandler import RemoteHandler
@@ -87,7 +87,7 @@ class WebsocketClient:
 
     def send_command(self, value, wait_for_response=True):
         async def query(future):
-            async with websockets.connect(self.host_port + "/?uid=" + self.uid) as ws:
+            async with websockets.client.connect(self.host_port + "/?uid=" + self.uid) as ws:
                 await ws.send(value)
                 if wait_for_response:
                     response = await ws.recv()

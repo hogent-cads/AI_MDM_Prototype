@@ -20,7 +20,7 @@ jobs:
         pip install pylint pylint-exit pytest pytest-cov -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint --init-hook="import sys; sys.path.append('.')" --variable-rgx="[a-z0-9_]{1,30}" src/ run_streamlit.py run_flask.py || pylint-exit $?
+        pylint --init-hook="import sys; sys.path.append('.')" --variable-rgx="[a-z0-9_]{1,30}" --generated-members="pandas.*,pd.*" src/ run_streamlit.py run_flask.py || pylint-exit $?
     - name: Test the code with pytest
       run: |
         pytest test/ --cov=src.backend --cov-report=html

@@ -11,16 +11,16 @@ from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
 
 
 class RuleLearnerInitPage:
-    def _create_total_binning_dict(_self, dict_to_show):
+    def _create_total_binning_dict(self, dict_to_show):
         st.session_state["binning_option"] = dict_to_show
         return st.session_state["binning_option"]
 
-    def _create_total_dropping_dict(_self, dict_to_show):
+    def _create_total_dropping_dict(self, dict_to_show):
         st.session_state["dropping_options"] = dict_to_show
         return st.session_state["dropping_options"]
 
     @st.cache_data
-    def _create_default_dropping_dict(_self, d):
+    def _create_default_dropping_dict(self, d):
         return d
 
     def __init__(self, canvas, handler: IHandler) -> None:

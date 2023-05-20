@@ -31,7 +31,7 @@ class DataExtractorInitPage:
             )
 
     @st.cache_resource
-    def _kmeans_cluster(_self, n_clusters, _tfidf_vectorizer_vectors):
+    def _kmeans_cluster(self, n_clusters, _tfidf_vectorizer_vectors):
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
 
     def _gpt_code(self):

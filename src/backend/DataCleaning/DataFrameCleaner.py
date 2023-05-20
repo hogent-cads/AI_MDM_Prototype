@@ -550,7 +550,7 @@ class DataFrameCleaner:
             re.sub(REGEX_WHITESPACE, " ", str(text)).strip() if pd.notna(text) else text
         )
 
-    def _replace_bracketed(
+    def _replace_bracketed(self,
         text: Any, brackets: Union[str, Set[str]], value: str, inclusive: bool = True
     ) -> Any:
         """
