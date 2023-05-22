@@ -15,7 +15,7 @@ import websockets.client
 from src.frontend.handler import LocalHandler, RemoteHandler
 from src.frontend.router import Router
 from src.frontend.state_manager import StateManager
-from src.frontend.enums import DialogEnum as d, VarEnum as v
+from src.frontend.enums import Dialog as d, Variables as v
 import config as cfg
 
 

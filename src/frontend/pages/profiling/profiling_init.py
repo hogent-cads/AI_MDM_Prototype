@@ -7,7 +7,7 @@ from dataprep.eda import create_report
 from ydata_profiling import ProfileReport
 
 from src.frontend.handler import IHandler
-from src.frontend.enums import DialogEnum as d, VarEnum as v
+from src.frontend.enums import Dialog as d, Variables as v
 from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )

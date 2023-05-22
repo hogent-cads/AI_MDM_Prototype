@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
 
-from src.frontend.enums import VarEnum
+from src.frontend.enums import Variables
 
 
 class ZinggClusterRedirectPage:
@@ -12,25 +12,25 @@ class ZinggClusterRedirectPage:
         self.handler = handler
 
     def redirect_get_clusters(self):
-        st.session_state[VarEnum.DD_CLUSTER_DF] = pd.DataFrame(
+        st.session_state[Variables.DD_CLUSTER_DF] = pd.DataFrame(
             self.handler.zingg_get_clusters()
         )
         # value_counts of values in cluster_id kolom and keep the cluster°id where there are more than 2 records
         # cluster_ids = st.session_state['zingg_clusters_df']['z_cluster'].value_counts()[st.session_state['zingg_clusters_df']['z_cluster'].value_counts() >= 2].index.tolist()
 
         cluster_ids = (
-            st.session_state[VarEnum.DD_CLUSTER_DF]["z_cluster"]
+            st.session_state[Variables.DD_CLUSTER_DF]["z_cluster"]
             .value_counts()[
-                st.session_state[VarEnum.DD_CLUSTER_DF]["z_cluster"].value_counts() >= 0
-            ]
+                st.session_state[Variables.DD_CLUSTER_DF]["z_cluster"].value_counts() >= 0
+                ]
             .index.tolist()
         )
         # for each cluster_id, get the records and create a ClusterView
         list_of_cluster_view = []
         for cluster_id in cluster_ids:
-            records_df = st.session_state[VarEnum.DD_CLUSTER_DF][
-                st.session_state[VarEnum.DD_CLUSTER_DF]["z_cluster"] == cluster_id
-            ]
+            records_df = st.session_state[Variables.DD_CLUSTER_DF][
+                st.session_state[Variables.DD_CLUSTER_DF]["z_cluster"] == cluster_id
+                ]
 
             if len(records_df) > 1:
                 cluster_low = records_df["z_minScore"].min()
@@ -73,7 +73,7 @@ class ZinggClusterRedirectPage:
 
         st.session_state["list_of_cluster_view"] = list_of_cluster_view
 
-        st.session_state[VarEnum.GB_CURRENT_STATE] = VarEnum.ST_DD_CLUSTERING
+        st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DD_CLUSTERING
         st.experimental_rerun()
 
 
@@ -132,7 +132,7 @@ class ZinggClusterPage:
             # Give which columns are primary keys
             pks = st.multiselect(
                 "Select the columns that form primary key, they well be left alone during merging of records",
-                st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns,
+                st.session_state[Variables.SB_LOADED_DATAFRAME].columns,
             )
 
             col0, col1 = st.columns([6, 2])
@@ -203,7 +203,7 @@ class ZinggClusterPage:
         fast_rows = []
 
         merged_df = pd.DataFrame(
-            columns=st.session_state[VarEnum.SB_LOADED_DATAFRAME].columns
+            columns=st.session_state[Variables.SB_LOADED_DATAFRAME].columns
         )
         for cv in list_of_cluster_view:
             # rows that are not-selected must be added to the merged_df, but left in their original form
@@ -252,7 +252,7 @@ class ZinggClusterPage:
 
         merged_df = pd.DataFrame(fast_rows)
 
-        st.session_state[VarEnum.GB_CURRENT_STATE] = None
+        st.session_state[Variables.GB_CURRENT_STATE] = None
         if set(["_selectedRowNodeInfo", "exists"]) <= set(list(merged_df.columns)):
             merged_df = merged_df.drop(columns=["_selectedRowNodeInfo", "exists"])
 
@@ -263,8 +263,8 @@ class ZinggClusterPage:
                 columns=["z_minScore", "z_maxScore", "z_cluster"]
             )
 
-        st.session_state[VarEnum.SB_LOADED_DATAFRAME] = merged_df
-        st.session_state[VarEnum.GB_CURRENT_STATE] = None
+        st.session_state[Variables.SB_LOADED_DATAFRAME] = merged_df
+        st.session_state[Variables.GB_CURRENT_STATE] = None
 
     def _create_cluster_card(self, idx, cv, pks):
         MIN_HEIGHT = 90

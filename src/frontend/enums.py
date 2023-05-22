@@ -1,7 +1,7 @@
 import enum
 
 
-class DialogEnum(str, enum.Enum):
+class Dialog(str, enum.Enum):
     # GLOBAL
     GB_PAGE_TITLE = "AI MDM Tool"
 
@@ -146,7 +146,7 @@ class DialogEnum(str, enum.Enum):
     # Rule-Learning
 
 
-class VarEnum(str, enum.Enum):
+class Variables(str, enum.Enum):
     # Configuration
     CFG_WEBSOCKET_SERVER_URL = "WEBSOCKET_SERVER_URL"
 
@@ -197,7 +197,7 @@ class VarEnum(str, enum.Enum):
     # Rule-Learning
 
 
-class ZinggTypesEnum(str, enum.Enum):
+class ZingTypes(str, enum.Enum):
     DONT_USE = 'Appears in the output but no computation is done on these. Helpful for ' \
                'fields like ids that are required in the output.'
     FUZZY = 'Broad matches with typos, abbreviations, and other variations.'

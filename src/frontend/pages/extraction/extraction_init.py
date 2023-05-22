@@ -2,7 +2,7 @@ import streamlit as st
 import extra_streamlit_components as stx
 from sklearn.cluster import KMeans
 
-from src.frontend.enums import VarEnum
+from src.frontend.enums import Variables
 from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
@@ -35,7 +35,7 @@ class DataExtractorInitPage:
         return KMeans(n_clusters).fit(_tfidf_vectorizer_vectors)
 
     def _gpt_code(self):
-        df = st.session_state[VarEnum.SB_LOADED_DATAFRAME.value][
+        df = st.session_state[Variables.SB_LOADED_DATAFRAME.value][
             "Material Description EN"
         ]
         # st.write(type(df))

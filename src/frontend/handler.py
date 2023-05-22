@@ -6,7 +6,7 @@ import requests
 import streamlit as st
 
 from src.backend.DomainController import DomainController
-from src.frontend.enums import VarEnum
+from src.frontend.enums import Variables
 from src.shared.views import ColumnRuleView
 
 
@@ -206,7 +206,7 @@ class RemoteHandler(IHandler):
             k: ColumnRuleView.parse_from_json(v)
             for (k, v) in requests.post(
                 f"{self.connection_string}/get_all_column_rules_from_df_and_config",
-                cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+                cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
                 data=json.dumps(data),
             )
             .json()
@@ -236,7 +236,7 @@ class RemoteHandler(IHandler):
         return json.dumps(
             requests.post(
                 f"{self.connection_string}/get_suggestions_given_dataframe_and_column_rules",
-                cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+                cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
                 data=json.dumps(data),
             ).json()
         )
@@ -256,7 +256,7 @@ class RemoteHandler(IHandler):
         data["dataframe_in_json"] = dataframe_in_json
         return requests.post(
             f"{self.connection_string}/get_session_map",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=json.dumps(data),
         ).json()
 
@@ -275,7 +275,7 @@ class RemoteHandler(IHandler):
 
         requests.post(
             f"{self.connection_string}/recalculate_column_rules",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=json.dumps(data),
         )
 
@@ -286,14 +286,14 @@ class RemoteHandler(IHandler):
         data["dedupe_data"] = dedupe_data
         requests.post(
             f"{self.connection_string}/create_deduper_object",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=json.dumps(data),
         )
 
     def dedupe_next_pair(self) -> json:
         return requests.get(
             f"{self.connection_string}/dedupe_next_pair",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
         ).json()
 
     def dedupe_mark_pair(self, labeled_pair) -> json:
@@ -302,28 +302,28 @@ class RemoteHandler(IHandler):
         temp_data = json.dumps(data)
         requests.post(
             f"{self.connection_string}/dedupe_mark_pair",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=temp_data,
         )
 
     def dedupe_get_stats(self) -> json:
         return requests.get(
             f"{self.connection_string}/dedupe_get_stats",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
         ).json()
 
     def dedupe_train(self):
         data = {}
         requests.post(
             f"{self.connection_string}/dedupe_train",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=json.dumps(data),
         )
 
     def dedupe_get_clusters(self):
         return requests.get(
             f"{self.connection_string}/dedupe_get_clusters",
-            cookies={"session_flask": st.session_state[VarEnum.GB_SESSION_ID]},
+            cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
         ).json()
 
     # ZINGG
@@ -334,7 +334,7 @@ class RemoteHandler(IHandler):
         return requests.post(
             f"{self.connection_string}/prepare_zingg",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
             data=json.dumps(data),
         )
@@ -345,7 +345,7 @@ class RemoteHandler(IHandler):
         return requests.post(
             f"{self.connection_string}/run_zingg_phase",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
             data=json.dumps(data),
         )
@@ -354,7 +354,7 @@ class RemoteHandler(IHandler):
         return requests.post(
             f"{self.connection_string}/zingg_clear",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
         )
 
@@ -362,7 +362,7 @@ class RemoteHandler(IHandler):
         return requests.get(
             f"{self.connection_string}/zingg_unmarked_pairs",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
         ).json()
 
@@ -372,7 +372,7 @@ class RemoteHandler(IHandler):
         return requests.post(
             f"{self.connection_string}/zingg_mark_pairs",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
             data=json.dumps(data),
         )
@@ -381,7 +381,7 @@ class RemoteHandler(IHandler):
         return requests.get(
             f"{self.connection_string}/zingg_get_stats",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
         ).json()
 
@@ -389,7 +389,7 @@ class RemoteHandler(IHandler):
         return requests.get(
             f"{self.connection_string}/zingg_get_clusters",
             cookies={
-                "session_flask": f"{st.session_state[VarEnum.GB_SESSION_ID]}-{st.session_state[VarEnum.SB_LOADED_DATAFRAME_HASH]}"
+                "session_flask": f"{st.session_state[Variables.GB_SESSION_ID]}-{st.session_state[Variables.SB_LOADED_DATAFRAME_HASH]}"
             },
         ).json()
 

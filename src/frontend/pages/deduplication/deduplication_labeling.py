@@ -4,7 +4,7 @@ import pandas as pd
 
 from st_aggrid import GridOptionsBuilder, AgGrid
 
-from src.frontend.enums import DialogEnum as d, VarEnum
+from src.frontend.enums import Dialog as d, Variables
 
 
 class ZinggLabelPage:
@@ -15,12 +15,12 @@ class ZinggLabelPage:
     def show(self):
         st.header(d.DD_DEDUPLICATION.value)
         stats = st.container()
-        if VarEnum.DD_CURRENT_LABEL_ROUND not in st.session_state:
-            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
+        if Variables.DD_CURRENT_LABEL_ROUND not in st.session_state:
+            st.session_state[Variables.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
                 self.handler.zingg_unmarked_pairs()
             )
-        if VarEnum.DD_LABEL_STATS not in st.session_state:
-            st.session_state[VarEnum.DD_LABEL_STATS] = self.handler.zingg_get_stats()
+        if Variables.DD_LABEL_STATS not in st.session_state:
+            st.session_state[Variables.DD_LABEL_STATS] = self.handler.zingg_get_stats()
 
         reponse_error_container = st.empty()
 
@@ -31,7 +31,7 @@ class ZinggLabelPage:
             self._give_custom_css_to_container()
             counter = 0
             for z_cluster_id, z_cluster_df in st.session_state[
-                VarEnum.DD_CURRENT_LABEL_ROUND
+                Variables.DD_CURRENT_LABEL_ROUND
             ].groupby("z_cluster"):
                 counter += 1
                 self._create_zingg_label_card(z_cluster_df, z_cluster_id, counter)
@@ -41,43 +41,43 @@ class ZinggLabelPage:
         with stats:
             colB_1, colB_2 = st.columns([1, 1])
             with colB_1:
-                sum_stats = sum(st.session_state[VarEnum.DD_LABEL_STATS].values())
+                sum_stats = sum(st.session_state[Variables.DD_LABEL_STATS].values())
                 st.write(
-                    f"Previous Round(s): {st.session_state[VarEnum.DD_LABEL_STATS]['match_files']}/{sum_stats} MATCHES, {st.session_state[VarEnum.DD_LABEL_STATS]['no_match_files']}/{sum_stats} NON-MATCHES, {st.session_state[VarEnum.DD_LABEL_STATS]['unsure_files']}/{sum_stats} UNSURE"
+                    f"Previous Round(s): {st.session_state[Variables.DD_LABEL_STATS]['match_files']}/{sum_stats} MATCHES, {st.session_state[Variables.DD_LABEL_STATS]['no_match_files']}/{sum_stats} NON-MATCHES, {st.session_state[Variables.DD_LABEL_STATS]['unsure_files']}/{sum_stats} UNSURE"
                 )
                 # st.write("Previous Round(s): " + self.handler.zingg_get_stats())
                 st.write(
                     "Current labeling round: {}/{} MATCHES, {}/{} NON-MATCHES, {}/{} UNSURE".format(
                         len(
-                            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND][
+                            st.session_state[Variables.DD_CURRENT_LABEL_ROUND][
                                 st.session_state[
-                                    VarEnum.DD_CURRENT_LABEL_ROUND
+                                    Variables.DD_CURRENT_LABEL_ROUND
                                 ].z_isMatch
                                 == 1
                             ]
                         )
                         // 2,
-                        len(st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]) // 2,
+                        len(st.session_state[Variables.DD_CURRENT_LABEL_ROUND]) // 2,
                         len(
-                            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND][
+                            st.session_state[Variables.DD_CURRENT_LABEL_ROUND][
                                 st.session_state[
-                                    VarEnum.DD_CURRENT_LABEL_ROUND
+                                    Variables.DD_CURRENT_LABEL_ROUND
                                 ].z_isMatch
                                 == 0
                             ]
                         )
                         // 2,
-                        len(st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]) // 2,
+                        len(st.session_state[Variables.DD_CURRENT_LABEL_ROUND]) // 2,
                         len(
-                            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND][
+                            st.session_state[Variables.DD_CURRENT_LABEL_ROUND][
                                 st.session_state[
-                                    VarEnum.DD_CURRENT_LABEL_ROUND
+                                    Variables.DD_CURRENT_LABEL_ROUND
                                 ].z_isMatch
                                 == 2
                             ]
                         )
                         // 2,
-                        len(st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]) // 2,
+                        len(st.session_state[Variables.DD_CURRENT_LABEL_ROUND]) // 2,
                     )
                 )
             with colB_2:
@@ -94,22 +94,22 @@ class ZinggLabelPage:
 
         if next:
             _ = self.handler.zingg_mark_pairs(
-                st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND].to_json()
+                st.session_state[Variables.DD_CURRENT_LABEL_ROUND].to_json()
             )
             _ = self.handler.run_zingg_phase("findTrainingData")
-            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
+            st.session_state[Variables.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
                 self.handler.zingg_unmarked_pairs()
             )
-            st.session_state[VarEnum.DD_LABEL_STATS] = self.handler.zingg_get_stats()
+            st.session_state[Variables.DD_LABEL_STATS] = self.handler.zingg_get_stats()
             st.experimental_rerun()
 
         if clear:
             _ = self.handler.zingg_clear()
             _ = self.handler.run_zingg_phase("findTrainingData")
-            st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
+            st.session_state[Variables.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
                 self.handler.zingg_unmarked_pairs()
             )
-            st.session_state[VarEnum.DD_LABEL_STATS] = self.handler.zingg_get_stats()
+            st.session_state[Variables.DD_LABEL_STATS] = self.handler.zingg_get_stats()
             st.experimental_rerun()
 
         if finish:
@@ -117,8 +117,8 @@ class ZinggLabelPage:
             response = self.handler.run_zingg_phase("train").json()
             if response == "200":
                 st.session_state[
-                    VarEnum.GB_CURRENT_STATE
-                ] = VarEnum.ST_DD_REDIRECT_CLUSTERING
+                    Variables.GB_CURRENT_STATE
+                ] = Variables.ST_DD_REDIRECT_CLUSTERING
                 st.experimental_rerun()
             else:
                 with reponse_error_container:
@@ -135,7 +135,7 @@ class ZinggLabelPage:
         max_height=500,
         row_height=50,
     ):
-        fields = st.session_state[VarEnum.DD_TYPE_DICT].keys()
+        fields = st.session_state[Variables.DD_TYPE_DICT].keys()
 
         cont_card = st.container()
         with cont_card:
@@ -195,20 +195,20 @@ class ZinggLabelPage:
                     key="selectbox_" + z_cluster_id,
                 )
                 if choice == d.DD_DEDUPLICATION_LABEL_IS_A_MATCH.value:
-                    st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND].loc[
-                        st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]["z_cluster"]
+                    st.session_state[Variables.DD_CURRENT_LABEL_ROUND].loc[
+                        st.session_state[Variables.DD_CURRENT_LABEL_ROUND]["z_cluster"]
                         == z_cluster_id,
                         "z_isMatch",
                     ] = 1
                 if choice == d.DD_DEDUPLICATION_LABEL_IS_NOT_A_MATCH.value:
-                    st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND].loc[
-                        st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]["z_cluster"]
+                    st.session_state[Variables.DD_CURRENT_LABEL_ROUND].loc[
+                        st.session_state[Variables.DD_CURRENT_LABEL_ROUND]["z_cluster"]
                         == z_cluster_id,
                         "z_isMatch",
                     ] = 0
                 if choice == d.DD_DEDUPLICATION_LABEL_UNSURE.value:
-                    st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND].loc[
-                        st.session_state[VarEnum.DD_CURRENT_LABEL_ROUND]["z_cluster"]
+                    st.session_state[Variables.DD_CURRENT_LABEL_ROUND].loc[
+                        st.session_state[Variables.DD_CURRENT_LABEL_ROUND]["z_cluster"]
                         == z_cluster_id,
                         "z_isMatch",
                     ] = 2
