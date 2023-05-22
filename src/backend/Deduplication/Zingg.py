@@ -62,7 +62,7 @@ class Zingg:
                 + ["./external/zingg-0.3.4/scripts/zingg.sh"]
                 + ["--run"]
                 + [f"./storage/{modelID}/scripts/{phase}/generated_zingg_script.py"]
-                + [">./logginBlabla.txt 2>&1"]
+                + [">./zingg_logs.txt 2>&1"]
             )
             process = Popen(cmd, stdout=PIPE, stderr=STDOUT)
             _, _ = process.communicate()
