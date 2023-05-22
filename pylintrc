@@ -1,0 +1,22 @@
+[MAIN]
+
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+init-hook=import sys; sys.path.append('.')
+
+[BASIC]
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=df,k,v,_
+
+# Regular expression matching correct variable names. Overrides variable-
+# naming-style. If left empty, variable names will be checked with the set
+# naming style.
+variable-rgx=[a-z0-9_]{2,30}$
+
+[TYPECHECK]
+
+# List of members which are set dynamically and missed by pylint inference
+# system, and so shouldn't trigger E1101 when accessed. Python regular
+# expressions are accepted.
+generated-members=pandas.*,pd.*
