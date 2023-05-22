@@ -1,23 +1,26 @@
 import streamlit as st
 import extra_streamlit_components as stx
 
-from src.frontend.Handler.IHandler import IHandler
+from src.frontend.handler import IHandler
 from src.shared.enums import BinningEnum, DroppingEnum, FiltererEnum
 from src.frontend.enums import VarEnum
 from src.shared.configs import RuleFindingConfig
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
 
 
-class RuleLearnerInitPage:
-    def _create_total_binning_dict(self, dict_to_show):
-        st.session_state["binning_option"] = dict_to_show
-        return st.session_state["binning_option"]
+def _create_total_dropping_dict(dict_to_show):
+    st.session_state["dropping_options"] = dict_to_show
+    return st.session_state["dropping_options"]
 
-    def _create_total_dropping_dict(self, dict_to_show):
-        st.session_state["dropping_options"] = dict_to_show
-        return st.session_state["dropping_options"]
+
+def _create_total_binning_dict(dict_to_show):
+    st.session_state["binning_option"] = dict_to_show
+    return st.session_state["binning_option"]
+
+
+class RuleLearnerInitPage:
 
     @st.cache_data
     @staticmethod
@@ -58,17 +61,17 @@ class RuleLearnerInitPage:
                 default_dropping_options
             )
             if "dropping_options" in st.session_state:
-                preview_total_to_show = self._create_total_dropping_dict(
+                preview_total_to_show = _create_total_dropping_dict(
                     st.session_state["dropping_options"]
                 )
             else:
-                preview_total_to_show = self._create_total_dropping_dict({})
+                preview_total_to_show = _create_total_dropping_dict({})
             if "binning_option" in st.session_state:
-                preview_total_to_show_binning = self._create_total_binning_dict(
+                preview_total_to_show_binning = _create_total_binning_dict(
                     st.session_state["binning_option"]
                 )
             else:
-                preview_total_to_show_binning = self._create_total_binning_dict({})
+                preview_total_to_show_binning = _create_total_binning_dict({})
             # # END DEFAULTS
 
             chosen_tab = stx.tab_bar(
@@ -183,8 +186,8 @@ class RuleLearnerInitPage:
                             [
                                 e
                                 for e in st.session_state[
-                                    VarEnum.SB_LOADED_DATAFRAME
-                                ].columns
+                                VarEnum.SB_LOADED_DATAFRAME
+                            ].columns
                             ],
                         )
                     with col2:
@@ -221,7 +224,7 @@ class RuleLearnerInitPage:
                     }
                     if use_default:
                         if preview_total_to_show is None:
-                            preview_total_to_show = self._create_total_dropping_dict({})
+                            preview_total_to_show = _create_total_dropping_dict({})
 
                         for k, v in temp_dict.items():
                             for v1, v2 in v.items():
@@ -280,8 +283,8 @@ class RuleLearnerInitPage:
                             [
                                 e
                                 for e in st.session_state[
-                                    VarEnum.SB_LOADED_DATAFRAME
-                                ].columns
+                                VarEnum.SB_LOADED_DATAFRAME
+                            ].columns
                             ],
                             key="Kolom_Binning",
                         )

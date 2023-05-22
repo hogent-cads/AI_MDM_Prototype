@@ -2,6 +2,7 @@
 storage/
 .ai_tetra/
 .vscode/
+.idea/
 external/
 
 # Byte-compiled / optimized / DLL files

@@ -1,11 +1,10 @@
 import streamlit as st
 import extra_streamlit_components as stx
 
-from src.frontend.Deduplication.Enums.ZinggTypesEnum import ZinggTypesEnum
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
-from src.frontend.enums import DialogEnum as d, VarEnum
+from src.frontend.enums import DialogEnum as d, VarEnum, ZinggTypesEnum
 
 
 class InitPage:

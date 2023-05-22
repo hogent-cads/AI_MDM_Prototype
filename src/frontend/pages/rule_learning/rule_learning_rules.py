@@ -5,8 +5,8 @@ import pandas as pd
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid, ColumnsAutoSizeMode
 
-from src.frontend.StateManager import StateManager
-from src.frontend.Handler.IHandler import IHandler
+from src.frontend.state_manager import StateManager
+from src.frontend.handler import IHandler
 from src.frontend.enums import VarEnum
 
 

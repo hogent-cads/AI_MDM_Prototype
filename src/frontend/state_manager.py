@@ -5,7 +5,7 @@ import streamlit as st
 from src.shared.views import ColumnRuleView
 from src.shared.configs import RuleFindingConfig
 from src.frontend.enums import VarEnum
-from src.frontend.Handler.IHandler import IHandler
+from src.frontend.handler import IHandler
 
 
 class StateManager:

@@ -1,17 +1,17 @@
 import streamlit as st
 
-from src.frontend.RuleLearner.RuleLearnerSuggestionsPage import RuleLearnerSuggestionsPage
-from src.frontend.RuleLearner.RuleLearnerInitPage import RuleLearnerInitPage
-from src.frontend.RuleLearner.RuleLearnerSummaryRulesPage import (
+from src.frontend.pages.rule_learning.rule_learning_suggestions import RuleLearnerSuggestionsPage
+from src.frontend.pages.rule_learning.rule_learning_init import RuleLearnerInitPage
+from src.frontend.pages.rule_learning.rule_learning_rules import (
     RuleLearnerSummaryRulesPage)
-from src.frontend.Handler.IHandler import IHandler
-from src.frontend.Cleaner.CleanerInitPage import CleanerInitPage
-from src.frontend.Deduplication.InitPage import InitPage
-from src.frontend.Deduplication.ClusterPage import (
+from src.frontend.handler import IHandler
+from src.frontend.pages.cleaning.cleaning_init import CleanerInitPage
+from src.frontend.pages.deduplication.deduplication_init import InitPage
+from src.frontend.pages.deduplication.deduplication_clustering import (
     ZinggClusterRedirectPage, ZinggClusterPage)
-from src.frontend.Profiler.ProfilerInitPage import ProfilerInitPage
-from src.frontend.Extractor.DataExtractorInitPage import DataExtractorInitPage
-from src.frontend.Deduplication.LabelPage import ZinggLabelPage
+from src.frontend.pages.profiling.profiling_init import ProfilerInitPage
+from src.frontend.pages.extraction.extraction_init import DataExtractorInitPage
+from src.frontend.pages.deduplication.deduplication_labeling import ZinggLabelPage
 from src.frontend.enums import VarEnum
 
 

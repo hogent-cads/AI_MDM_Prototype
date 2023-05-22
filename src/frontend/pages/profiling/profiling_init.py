@@ -6,9 +6,9 @@ import extra_streamlit_components as stx
 from dataprep.eda import create_report
 from ydata_profiling import ProfileReport
 
-from src.frontend.Handler.IHandler import IHandler
+from src.frontend.handler import IHandler
 from src.frontend.enums import DialogEnum as d, VarEnum as v
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
 import config as cfg
@@ -76,7 +76,7 @@ class ProfilerInitPage:
                     report.save(path)
 
                 st.session_state[v.DP_DATAPREP_PROFILE] = os.path.join(
-                    "..",
+                    "../..",
                     "reports",
                     f"{st.session_state[v.SB_LOADED_DATAFRAME_HASH]}.html",
                 )

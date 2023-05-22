@@ -12,10 +12,9 @@ import streamlit.components.v1 as components
 import streamlit_nested_layout  # pylint: disable=unused-import
 import websockets.client
 
-from src.frontend.Handler.LocalHandler import LocalHandler
-from src.frontend.Handler.RemoteHandler import RemoteHandler
-from src.frontend.Router import Router
-from src.frontend.StateManager import StateManager
+from src.frontend.handler import LocalHandler, RemoteHandler
+from src.frontend.router import Router
+from src.frontend.state_manager import StateManager
 from src.frontend.enums import DialogEnum as d, VarEnum as v
 import config as cfg
 
@@ -170,10 +169,10 @@ def _reload_dataframe(uploaded_file, handler):
 def main():
     # Page Style:
     st.set_page_config(page_title=d.GB_PAGE_TITLE.value, layout="wide")
-    with open("src/frontend/Resources/css/style.css") as f:
+    with open("src/frontend/resources/css/style.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    # Choose whether to acces domain locally or remotely
+    # Choose whether to access domain locally or remotely
     if cfg.configuration["HANDLER_TYPE"] == d.SB_TYPE_HANDLER_OPTION_REMOTE.value:
         handler = RemoteHandler(
             f"http://{cfg.configuration['remote_url']}:{cfg.configuration['remote_port']}"

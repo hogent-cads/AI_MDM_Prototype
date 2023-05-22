@@ -5,9 +5,9 @@ import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
 import extra_streamlit_components as stx
 
-from src.frontend.Handler.IHandler import IHandler
+from src.frontend.handler import IHandler
 from src.frontend.enums import DialogEnum as d, VarEnum
-from src.frontend.DatasetDisplayer.DatasetDisplayerComponent import (
+from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
 import config as cfg
@@ -104,10 +104,6 @@ class CleanerInitPage:
                     )
                     tmp2 = list(tmp.mean())[0]
                     return tmp2
-                    return pd.to_numeric(
-                        st.session_state[VarEnum.SB_LOADED_DATAFRAME][column],
-                        errors="coerce",
-                    ).mean()
                 except Exception as e:
                     return 0
             if type == d.DC_CLEANING_FILLNA_VALUE_MODE.value:
