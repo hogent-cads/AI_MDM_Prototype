@@ -64,7 +64,7 @@ class FuzzyMatcher:
                  col: str, df_name: str, ngram, radius, block_size):
         self.clusters = pd.Series(dtype=object)
         self._df = self._to_dask(df)
-        cfg.logger.debug(f"FuzzyMatcher: __init__: df.head = {self._df.head()}")
+        cfg.logger.debug("FuzzyMatcher: __init__: df.head = %s", self._df.head())
         self._counts = pd.Series(dtype=object)
         self._df_name = df_name
         self._col = col

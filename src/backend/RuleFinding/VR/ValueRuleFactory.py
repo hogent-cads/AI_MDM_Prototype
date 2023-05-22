@@ -1,8 +1,9 @@
+from typing import Dict, Set, List
+
 import pandas as pd
 
 from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 from src.backend.RuleFinding.VR.ValueRule import ValueRule
-from typing import Dict, Set, List
 
 
 class ValueRuleFactory:
@@ -34,7 +35,7 @@ class ValueRuleFactory:
             row,
             value_rules_dict: Dict[str, Set[ValueRule]]) -> None:
         """
-        row: numpy array of five elements: antecedents, consequents, support, confidence 
+        row: numpy array of five elements: antecedents, consequents, support, confidence
                 and lift of a value rule
         value_rules_dict : dictionary
 

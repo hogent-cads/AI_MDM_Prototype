@@ -1,6 +1,16 @@
 import json
 from typing import Dict
-from src.shared.Enums.BinningEnum import BinningEnum
+
+from src.shared.enums import BinningEnum
+
+
+class CleaningConfig:
+    def __init__(self, cleaning_options):
+        self.cleaning_options = cleaning_options
+
+
+    def to_json(self):
+        return json.dumps(self.__dict__)
 
 
 class RuleFindingConfig:

@@ -1,10 +1,10 @@
+from typing import Sequence
+
 import pandas as pd
 import numpy as np
-import config as cfg
 
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
-
-from typing import Sequence
+import config as cfg
 
 
 class SuggestionFinder:
@@ -19,11 +19,11 @@ class SuggestionFinder:
         self.original_df = original_df
 
         # Create DataFrame with incorrect rows according to the column rules
-        cfg.logger.info(f"Using {len(self.column_rules)} for giving suggestions")
+        cfg.logger.info("Using %s for giving suggestions", len(self.column_rules))
         self.df_errors_ = self.combine_all_errors()
 
-        cfg.logger.info("Total number of values that might need correcting: "
-                        + f"{self.df_errors_.shape[0]}")
+        cfg.logger.info("Total number of values that might need correcting: %s",
+                        self.df_errors_.shape[0])
 
     def combine_all_errors(self) -> pd.DataFrame:
         """
@@ -55,10 +55,10 @@ class SuggestionFinder:
 
             # Change original df, with predicted column
             predicted_column.index = df.index  # Make sure to use the same index !
-            cfg.logger.debug(f"The predicted column is {predicted_column}")
+            cfg.logger.debug("The predicted column is %s", predicted_column)
             df[consequent_column_name] = predicted_column
 
-            cfg.logger.debug(f"After assigning to df {df[consequent_column_name]}")
+            cfg.logger.debug("After assigning to df %s", df[consequent_column_name])
 
             # Check the score for each suggestion
             score = np.zeros(shape=(df.shape[0],))
@@ -67,7 +67,7 @@ class SuggestionFinder:
                 score += cr2.status(df)
 
             score = pd.Series(score, index=df.index)
-            cfg.logger.debug(f"The following score was determined {score}")
+            cfg.logger.debug("The following score was determined\n%s", score)
 
             df['__SCORE:' + cr.rule_string] = score
             df['__PREDICTION:' + cr.rule_string] = predicted_column
@@ -115,10 +115,10 @@ class SuggestionFinder:
 
         if filter_rows:
             predictions = df_with_suggestions['__BEST_PREDICTION']
-            cfg.logger.debug(f"predictions: {predictions}")
+            cfg.logger.debug("predictions:\n%s", predictions)
             rhs_col = (df_with_suggestions['__BEST_RULE']
                        .apply(lambda x: x.split(' => ')[1].strip()))
-            cfg.logger.debug(f"rhs_col: {rhs_col}")
+            cfg.logger.debug("rhs_col:\n%s", rhs_col)
             idx, cols = pd.factorize(rhs_col)
             actual_values = \
                 (df_with_suggestions.reindex(cols, axis=1)

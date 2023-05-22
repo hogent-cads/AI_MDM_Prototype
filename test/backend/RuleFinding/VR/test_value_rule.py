@@ -1,5 +1,5 @@
-import backend.RuleFinding.VR.ValueRule as vr
-import backend.RuleFinding.VR.ValueRuleElement as vre
+import src.backend.RuleFinding.VR.ValueRule as vr
+import src.backend.RuleFinding.VR.ValueRuleElement as vre
 
 
 def test_value_rule():
@@ -22,7 +22,7 @@ def test_get_column_rule_string():
     rl2 = vre.ValueRuleElement("B", "b")
 
     rl3 = vre.ValueRuleElement("C", "c")
-    
+
     value_rule = vr.ValueRule([rl1, rl2], rl3, 0.2, 2.5, 0.99)
 
     assert value_rule.get_column_rule_string() == "A,B => C"

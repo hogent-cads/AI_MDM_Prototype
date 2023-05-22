@@ -1,19 +1,19 @@
 import pandas as pd
 import src.backend.DomainController as dc
-import src.shared.Configs.RuleFindingConfig as rfc
-import src.shared.Enums.FiltererEnum as fe
+import src.shared.configs
+import src.shared.enums
 
 
 # Check that get_all_column_rules_from_df_and_config returns a
 # valid response.
 # We only check that the response is not None and that it is a string.
 def test_get_all_column_rules_from_df_and_config_1():
-    rule_finding_config = rfc.RuleFindingConfig(
+    rule_finding_config = src.shared.configs.RuleFindingConfig(
         rule_length=2,
         min_support=10**-9,  # essentially zero
         lift=1.0,
         confidence=0.95,
-        filtering_string=fe.FiltererEnum.C_METRIC.value,
+        filtering_string=src.shared.enums.FiltererEnum.C_METRIC.value,
         binning_option={},
         dropping_options={}
     )

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-import pandas as pd
 import re
+
+import pandas as pd
 
 
 class CleaningCommand(ABC):
@@ -20,7 +21,7 @@ class CleaningCommand_Trim(CleaningCommand):
 
 
 class CleaningCommand_StringToFloat(CleaningCommand):
-    """ Gets the "last" floating point number from a string. 
+    """ Gets the "last" floating point number from a string.
     """
 
     def __init__(self, series: pd.Series) -> None:

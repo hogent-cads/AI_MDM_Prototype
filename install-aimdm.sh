@@ -5,7 +5,7 @@
 
 sudo dnf -y install git nginx java-1.8.0-openjdk wget pip
 
-# Download external files 
+# Download external files
 wget https://github.com/zinggAI/zingg/releases/download/v0.3.4/zingg-0.3.4-SNAPSHOT-spark-3.1.2.tar.gz
 wget https://archive.apache.org/dist/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
 tar xf zingg-0.3.4-SNAPSHOT-spark-3.1.2.tar.gz
@@ -18,7 +18,7 @@ mkdir AI_MDM_Prototype/external
 cp -r zingg-0.3.4 AI_MDM_Prototype/external/
 cp -r spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/
 ln -sr AI_MDM_Prototype/external/zingg-0.3.4 AI_MDM_Prototype/external/zingg
-ln -sr AI_MDM_Prototype/external/spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/spark 
+ln -sr AI_MDM_Prototype/external/spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/spark
 
 
 
@@ -34,7 +34,7 @@ pip install gunicorn gunicorn[gevent]
 # Note: root is set as /usr/share/nginx/html in nginx.conf
 sudo mkdir  -p /usr/share/nginx/html/reports
 sudo chmod a+rw /usr/share/nginx/html/reports
-# Copy nginx.conf to /etc/nginx. 
+# Copy nginx.conf to /etc/nginx.
 # !! THIS WILL OVERWRITE THE EXISTING nginx.conf FILE !!
 sudo cp nginx.conf /etc/nginx/
 sudo systemctl enable nginx

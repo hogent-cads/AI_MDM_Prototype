@@ -1,6 +1,7 @@
-from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 from typing import List, FrozenSet
 import math
+
+from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
 
 
 class ValueRule:
@@ -33,7 +34,7 @@ class ValueRule:
         s = ",".join(sorted([str(a) for a in self.antecedents]))
         s += " || "
         s += str(self.consequent)
-        s += " || "    
+        s += " || "
         s += str(self.support)
         s += " || "
         s += str(self.lift)

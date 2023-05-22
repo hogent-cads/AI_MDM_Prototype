@@ -1,11 +1,13 @@
-import pandas as pd
-import numpy as np
-import config as cfg
 import math
 import pprint
 import json
 from typing import List
-from src.shared.Views.ColumnRuleView import ColumnRuleView
+
+import pandas as pd
+import numpy as np
+
+from src.shared.views import ColumnRuleView
+import config as cfg
 
 
 class ColumnRule:
@@ -177,12 +179,13 @@ class ColumnRule:
 
         consequent_col_name = list(self.consequent_set)[0]
 
-        cfg.logger.debug(f"{predictions[consequent_col_name].index}"
-                         + f" versus {df[consequent_col_name].index}")
+        cfg.logger.debug("%s versus %s",
+                         predictions[consequent_col_name].index,
+                         df[consequent_col_name].index)
 
-        cfg.logger.debug("The predictions are "
-                         + f"{predictions[consequent_col_name]}")
-        cfg.logger.debug(f"The actual values are {df[consequent_col_name]}")
+        cfg.logger.debug("The predictions are %s",
+                         predictions[consequent_col_name])
+        cfg.logger.debug("The actual values are %s", df[consequent_col_name])
 
         return np.where(
             predictions[consequent_col_name].reset_index(drop=True) ==
@@ -330,7 +333,7 @@ def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
         for y in rhs_values.index:
             cy = rhs_values.loc[y]
             # Start from 1, k = 0 yields zero
-            for k in range(max(1, cx+cy - n), min(cx, cy) + 1):  
+            for k in range(max(1, cx+cy - n), min(cx, cy) + 1):
                 p0 = math.comb(cy, k) * math.comb(n - cy, cx - k) / math.comb(n, cx)
                 m_zero += p0 * k * np.log2(k * n / (cx * cy))
 
