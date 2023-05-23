@@ -22,8 +22,8 @@ def _create_total_binning_dict(dict_to_show):
 
 class RuleLearnerInitPage:
 
-    @st.cache_data
     @staticmethod
+    @st.cache_data
     def _create_default_dropping_dict(d):
         return d
 
