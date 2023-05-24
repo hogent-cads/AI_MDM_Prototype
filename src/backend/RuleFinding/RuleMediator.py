@@ -62,12 +62,12 @@ class RuleMediator:
         self.value_rule_repo = ValueRuleRepo(vr_dict)
 
         # Roep get_filtered methode aan op de Repo
-        list_of_strings_that_represent_CR = self.value_rule_repo.filter_out_column_rule_strings_from_dict_of_value_rules(
+        list_of_strings_that_represent_cr = self.value_rule_repo.filter_out_column_rule_strings_from_dict_of_value_rules(
             min_support=min_support
         )
         # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
         cr_dict = self.column_rule_factory.create_dict_of_dict_of_column_rules_from_list_of_strings(
-            list_of_strings_that_represent_CR
+            list_of_strings_that_represent_cr
         )
 
         # Maak een CR Repo aan door de dict van ColumnRules mee te geven
@@ -118,13 +118,13 @@ class RuleMediator:
         )
         return self.association_rule_finder.get_association_rules()
 
-    def _parse_filterer_string(self, s: str) -> ColumnRuleFilter:
+    def _parse_filterer_string(self, filter_string: str) -> ColumnRuleFilter:
         filter_to_return = None
-        if s == FiltererEnum.Z_SCORE:
+        if filter_string == FiltererEnum.Z_SCORE:
             filter_to_return = ColumnRuleFilter_ZScore()
-        elif s == FiltererEnum.ENTROPY:
+        elif filter_string == FiltererEnum.ENTROPY:
             filter_to_return = ColumnRuleFilter_Entropy(self.original_df)
-        elif s == FiltererEnum.C_METRIC:
+        elif filter_string == FiltererEnum.C_METRIC:
             # TODO: make thresholds configurable
             filter_to_return = ColumnRuleFilterCMetric(
                 g3_threshold=0.9, fi_threshold=0.9, c_threshold=4.0

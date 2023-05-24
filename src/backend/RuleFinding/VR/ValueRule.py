@@ -31,16 +31,16 @@ class ValueRule:
         self.confidence: float = confidence
 
     def __str__(self) -> str:
-        s = ",".join(sorted([str(a) for a in self.antecedents]))
-        s += " || "
-        s += str(self.consequent)
-        s += " || "
-        s += str(self.support)
-        s += " || "
-        s += str(self.lift)
-        s += " || "
-        s += str(self.confidence)
-        return s
+        the_str = ",".join(sorted([str(a) for a in self.antecedents]))
+        the_str += " || "
+        the_str += str(self.consequent)
+        the_str += " || "
+        the_str += str(self.support)
+        the_str += " || "
+        the_str += str(self.lift)
+        the_str += " || "
+        the_str += str(self.confidence)
+        return the_str
 
     def get_column_rule_string(self) -> str:
         """

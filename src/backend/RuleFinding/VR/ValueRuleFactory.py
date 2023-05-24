@@ -56,13 +56,13 @@ class ValueRuleFactory:
         rl = list(row[1])[0].split("_")
         rl_element = ValueRuleElement(rl[0], rl[1])
 
-        r = ValueRule(ll_elements, rl_element, support=row[2],
+        value_rule = ValueRule(ll_elements, rl_element, support=row[2],
                       confidence=row[3], lift=row[4])
-        rule_string = r.get_column_rule_string()
+        rule_string = value_rule.get_column_rule_string()
 
         # Add this value rule to the map under the appropriate key, i.e. the rule string
         # corresponding to this value rule
         if rule_string in value_rules_dict:
-            value_rules_dict[rule_string].add(r)
+            value_rules_dict[rule_string].add(value_rule)
         else:
-            value_rules_dict[rule_string] = set([r])
+            value_rules_dict[rule_string] = set([value_rule])

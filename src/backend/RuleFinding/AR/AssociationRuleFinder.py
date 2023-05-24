@@ -148,12 +148,12 @@ class AssociationRuleFinder:
 
         # metrics for association rules
         metric_dict = {
-            "antecedent support": lambda _, sA, __: sA,
-            "consequent support": lambda _, __, sC: sC,
-            "support": lambda sAC, _, __: sAC,
-            "confidence": lambda sAC, sA, _: sAC / sA,
-            "lift": lambda sAC, sA, sC: metric_dict["confidence"](sAC, sA, sC) / sC,
-            "leverage": lambda sAC, sA, sC: metric_dict["support"](sAC, sA, sC) - sA * sC,
+            "antecedent support": lambda _, s_a, __: s_a,
+            "consequent support": lambda _, __, s_c: s_c,
+            "support": lambda s_ac, _, __: s_ac,
+            "confidence": lambda s_ac, s_a, _: s_ac / s_a,
+            "lift": lambda s_ac, s_a, s_c: metric_dict["confidence"](s_ac, s_a, s_c) / s_c,
+            "leverage": lambda s_ac, s_a, s_c: metric_dict["support"](s_ac, s_a, s_c) - s_a * s_c,
         }
 
         # check for metric compliance
@@ -177,40 +177,40 @@ class AssociationRuleFinder:
         rule_supports = []
 
         # iterate over all frequent itemsets
-        for k, sAC in frequent_items_dict.items():
-            for c in k:
-                consequent = frozenset([c])
+        for k, s_ac in frequent_items_dict.items():
+            for con in k:
+                consequent = frozenset([con])
                 antecedent = k.difference(consequent)
 
                 if support_only:
                     # support doesn't need these,
                     # hence, placeholders should suffice
-                    sA = None
-                    sC = None
+                    s_a = None
+                    s_c = None
 
                 else:
                     try:
                         # support of empty antecedent is 1.0
-                        sA = 1.0 if len(antecedent) == 0 \
+                        s_a = 1.0 if len(antecedent) == 0 \
                                  else frequent_items_dict[antecedent]
-                        sC = frequent_items_dict[consequent]
-                    except KeyError as e:
-                        s = (
-                            str(e) + "You are likely getting this error"
+                        s_c = frequent_items_dict[consequent]
+                    except KeyError as key_error:
+                        error_message = (
+                            str(key_error) + "You are likely getting this error"
                             " because the DataFrame is missing "
                             " antecedent and/or consequent "
                             " information."
                             " You can try using the "
                             " `support_only=True` option"
                         )
-                        raise KeyError(s) from e
+                        raise KeyError(error_message) from key_error
 
                 # check for the threshold
-                score = metric_dict[metric](sAC, sA, sC)
+                score = metric_dict[metric](s_ac, s_a, s_c)
                 if score >= min_threshold:
                     rule_antecedents.append(antecedent)
                     rule_consequents.append(consequent)
-                    rule_supports.append([sAC, sA, sC])
+                    rule_supports.append([s_ac, s_a, s_c])
 
         # check if frequent rule was generated
         if not rule_supports:
@@ -224,16 +224,16 @@ class AssociationRuleFinder:
         )
 
         if support_only:
-            sAC = rule_supports[0]
-            for m in columns_ordered:
-                df_res[m] = np.nan
-            df_res["support"] = sAC
+            s_ac = rule_supports[0]
+            for met in columns_ordered:
+                df_res[met] = np.nan
+            df_res["support"] = s_ac
 
         else:
-            sAC = rule_supports[0]
-            sA = rule_supports[1]
-            sC = rule_supports[2]
-            for m in columns_ordered:
-                df_res[m] = metric_dict[m](sAC, sA, sC)
+            s_ac = rule_supports[0]
+            s_a = rule_supports[1]
+            s_c = rule_supports[2]
+            for met in columns_ordered:
+                df_res[met] = metric_dict[met](s_ac, s_a, s_c)
 
         return df_res

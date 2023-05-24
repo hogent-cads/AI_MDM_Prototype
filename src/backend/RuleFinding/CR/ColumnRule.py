@@ -266,13 +266,13 @@ class ColumnRule:
         We compute this measure on the basis of the mapping dataframe
         because this contains already all the required information.
         """
-        s = self.mapping_df['__SUPPORT_LHS_AND_RHS'].sum()
+        total = self.mapping_df['__SUPPORT_LHS_AND_RHS'].sum()
         num_tuples = self.original_df.shape[0]
         if num_tuples != self.mapping_df.shape[0]:
             self.g3_measure_ = \
-                1 - (num_tuples - s)/(num_tuples - self.mapping_df.shape[0])
+                1 - (num_tuples - total)/(num_tuples - self.mapping_df.shape[0])
         else:
-            assert num_tuples == s, "Error in mapping dataframe"
+            assert num_tuples == total, "Error in mapping dataframe"
             self.g3_measure_ = 1
         return self.g3_measure_
 
@@ -324,7 +324,7 @@ def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
     lhs_values = df.value_counts(subset=lhs_cols, sort=False)
     rhs_values = df.value_counts(subset=[rhs_col], sort=False)
 
-    n = df.shape[0]  # number of tuples in the relation
+    num_tuples = df.shape[0]  # number of tuples in the relation
 
     # Naive implementation. Can be sped up.
     m_zero = 0.0
@@ -333,11 +333,11 @@ def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
         for y in rhs_values.index:
             cy = rhs_values.loc[y]
             # Start from 1, k = 0 yields zero
-            for k in range(max(1, cx+cy - n), min(cx, cy) + 1):
-                p0 = math.comb(cy, k) * math.comb(n - cy, cx - k) / math.comb(n, cx)
-                m_zero += p0 * k * np.log2(k * n / (cx * cy))
+            for k in range(max(1, cx+cy - num_tuples), min(cx, cy) + 1):
+                p0 = math.comb(cy, k) * math.comb(num_tuples - cy, cx - k) / math.comb(num_tuples, cx)
+                m_zero += p0 * k * np.log2(k * num_tuples / (cx * cy))
 
-    m_zero /= n  # Division by n is independent of the loop
+    m_zero /= num_tuples  # Division by n is independent of the loop
 
     y = df[rhs_col].value_counts(normalize=True).values
     entropy_y = - (y * np.log2(y)).sum()  # Entropy of y

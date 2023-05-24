@@ -399,14 +399,14 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
                     if hasattr(column_rule, "fi_measure_")
                     else "not determined"
                 )
-                c = (
+                c_metric = (
                     column_rule.c_measure_
                     if hasattr(column_rule, "c_measure_")
                     else "not determined"
                 )
                 cfg.logger.debug(
                     "Rule %s is not interesting. g3: %s, fi: %s, c: %s",
-                    column_rule.rule_string, g3, fi, c
+                    column_rule.rule_string, g3, fi, c_metric
                 )
 
         return filtered_rules
