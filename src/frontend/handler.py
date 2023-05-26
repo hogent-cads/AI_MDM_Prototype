@@ -96,7 +96,7 @@ class LocalHandler(IHandler):
 
     def get_column_rules(
         self, dataframe_in_json, rule_finding_config_in_json, seq
-    ) -> List[ColumnRuleView]:
+    ):
         return {
             k: ColumnRuleView.parse_from_json(v)
             for (k, v) in json.loads(
@@ -196,11 +196,9 @@ class RemoteHandler(IHandler):
 
     def get_column_rules(
         self, dataframe_in_json, rule_finding_config_in_json, seq
-    ) -> List[ColumnRuleView]:
-        data = {}
-        data["dataframe_in_json"] = dataframe_in_json
-        data["rule_finding_config_in_json"] = rule_finding_config_in_json
-        data["seq"] = seq
+    ):
+        data = {"dataframe_in_json": dataframe_in_json, "rule_finding_config_in_json": rule_finding_config_in_json,
+                "seq": seq}
 
         return {
             k: ColumnRuleView.parse_from_json(v)
@@ -214,9 +212,7 @@ class RemoteHandler(IHandler):
         }
 
     def get_column_rule_from_string(self, dataframe_in_json, rule_string):
-        data = {}
-        data["dataframe_in_json"] = dataframe_in_json
-        data["rule_string"] = rule_string
+        data = {"dataframe_in_json": dataframe_in_json, "rule_string": rule_string}
         return ColumnRuleView.parse_from_json(
             json.dumps(
                 requests.post(

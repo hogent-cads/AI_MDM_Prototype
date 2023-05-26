@@ -107,12 +107,12 @@ class DomainController(FlaskView):
 
     # VERIFICATION IN LOCAL STORAGE
     def _verify_in_local_storage(
-        self,
-        md5_to_check: str,
-        unique_storage_id,
-        md5_of_dataframe,
-        seq,
-        save_file=True,
+            self,
+            md5_to_check: str,
+            unique_storage_id,
+            md5_of_dataframe,
+            seq,
+            save_file=True,
     ) -> json:
         # If method returns None -> Was not in storage with specific settings
         list_of_globs = glob.glob(
@@ -161,13 +161,13 @@ class DomainController(FlaskView):
                 return content
 
     def _write_to_session_map(
-        self,
-        unique_storage_id,
-        md5_of_dataframe,
-        method_name: str,
-        session_id: str,
-        file_name_of_results: str,
-        is_in_local: bool,
+            self,
+            unique_storage_id,
+            md5_of_dataframe,
+            method_name: str,
+            session_id: str,
+            file_name_of_results: str,
+            is_in_local: bool,
     ):
         session_id = str(session_id)
         path = f"storage/{unique_storage_id}/{md5_of_dataframe}/session_map.json"
@@ -203,7 +203,7 @@ class DomainController(FlaskView):
     # TODO REPLACE
     @route("/clean_dataframe_dataprep", methods=["POST"])
     def clean_dataframe_dataprep(
-        self, dataframe_in_json="", custom_pipeline=""
+            self, dataframe_in_json="", custom_pipeline=""
     ) -> json:
         # custom_pipeline = [
         # {"text": [
@@ -233,14 +233,14 @@ class DomainController(FlaskView):
 
     @route("/fuzzy_match_dataprep", methods=["POST"])
     def fuzzy_match_dataprep(
-        self,
-        dataframe_in_json="",
-        col="",
-        cluster_method="",
-        df_name="",
-        ngram="",
-        radius="",
-        block_size="",
+            self,
+            dataframe_in_json="",
+            col="",
+            cluster_method="",
+            df_name="",
+            ngram="",
+            radius="",
+            block_size="",
     ) -> json:
         unique_storage_id = "Local"
         try:
@@ -267,7 +267,7 @@ class DomainController(FlaskView):
 
     @route("/structure_detection", methods=["POST"])
     def structure_detection(
-        self, series_in_json="", exception_chars="", compress=""
+            self, series_in_json="", exception_chars="", compress=""
     ) -> json:
         unique_storage_id = "Local"
         try:
@@ -289,24 +289,21 @@ class DomainController(FlaskView):
     # RULE LEARNING
     @route("/get_all_column_rules_from_df_and_config", methods=["GET", "POST"])
     def get_all_column_rules_from_df_and_config(
-        self, dataframe_in_json="", rule_finding_config_in_json="", seq=""
+            self, dataframe_in_json="", rule_finding_config_in_json="", seq=""
     ) -> json:
+
+        unique_storage_id = "Local"
+
         try:
-            # LOAD PARAMS
-            unique_storage_id = "Local"
-            if (
-                dataframe_in_json == ""
-                and rule_finding_config_in_json == ""
-                and seq == ""
-            ):
-                data_to_use = json.loads(request.data)
-                unique_storage_id = request.cookies.get("session_flask")
-                dataframe_in_json = data_to_use["dataframe_in_json"]
-                rule_finding_config_in_json = data_to_use["rule_finding_config_in_json"]
-                if "seq" not in data_to_use:
-                    seq = ""
-                else:
-                    seq = data_to_use["seq"]
+            data_to_use = json.loads(request.data)
+            unique_storage_id = request.cookies.get("session_flask")
+            dataframe_in_json = data_to_use["dataframe_in_json"]
+            rule_finding_config_in_json = data_to_use["rule_finding_config_in_json"]
+            if "seq" not in data_to_use:
+                seq = ""
+            else:
+                seq = data_to_use["seq"]
+        finally:
 
             cfg.logger.debug("Going to check local storage for results...")
 
@@ -330,22 +327,22 @@ class DomainController(FlaskView):
             rfc = RuleFindingConfig.create_from_json(rule_finding_config_in_json)
             df = pd.read_json(dataframe_in_json)
 
-            # DROPPING AND BINNING
-            # df_after_drop_and_bin = \
-            #   self.data_prepper.clean_data_frame(df, rule_finding_config_in_json)
-            df_after_drop_and_bin = df
+            # Drop the columns that are not needed for the rule finding
+            df = df[rfc.cols_to_use].astype(str)
 
-            df_to_use = df_after_drop_and_bin.astype(str)
-            df_OHE = self.data_prepper.transform_data_frame_to_ohe(
-                df_to_use, drop_nan=False
+            df_ohe = self.data_prepper.transform_data_frame_to_ohe(
+                df, drop_nan=False
             )
-            self.rule_mediator = RuleMediator(original_df=df_to_use, df_ohe=df_OHE)
+            self.rule_mediator = RuleMediator(original_df=df, df_ohe=df_ohe)
             self.rule_mediator.create_column_rules_from_clean_dataframe(
-                min_support=rfc.min_support,
-                max_len=rfc.rule_length,
-                min_lift=rfc.lift,
-                min_confidence=rfc.confidence,
-                filterer_string=rfc.filtering_string,
+                rule_length=rfc.rule_length,
+                confidence=rfc.confidence,
+                speed=rfc.speed,
+                quality=rfc.quality,
+                abs_min_support=rfc.abs_min_support,
+                max_potential_confidence=rfc.max_potential_confidence,
+                g3_threshold=rfc.g3_threshold,
+                fi_threshold=rfc.fi_threshold,
             )
 
             result = {
@@ -380,8 +377,6 @@ class DomainController(FlaskView):
 
             # RETURN RESULTS
             return json.dumps(result)
-        except Exception as e:
-            print(e)
 
     @route("/get_column_rule_from_string", methods=["GET", "POST"])
     def get_column_rule_from_string(self, dataframe_in_json="", rule_string=""):
@@ -405,19 +400,19 @@ class DomainController(FlaskView):
 
     @route("/recalculate_column_rules", methods=["GET", "POST"])
     def recalculate_column_rules(
-        self,
-        old_df_in_json="",
-        new_df_in_json="",
-        rule_finding_config_in_json="",
-        affected_columns="",
+            self,
+            old_df_in_json="",
+            new_df_in_json="",
+            rule_finding_config_in_json="",
+            affected_columns="",
     ):
         # Check if remote or local
         unique_storage_id = "Local"
         if (
-            old_df_in_json == ""
-            and new_df_in_json == ""
-            and rule_finding_config_in_json == ""
-            and affected_columns == ""
+                old_df_in_json == ""
+                and new_df_in_json == ""
+                and rule_finding_config_in_json == ""
+                and affected_columns == ""
         ):
             data_to_use = json.loads(request.data)
             unique_storage_id = request.cookies.get("session_flask")
@@ -496,7 +491,7 @@ class DomainController(FlaskView):
     # SUGGESTIONS
     @route("/get_suggestions_given_dataframe_and_column_rules", methods=["POST"])
     def get_suggestions_given_dataframe_and_column_rules(
-        self, dataframe_in_json="", list_of_rule_string_in_json="", seq=""
+            self, dataframe_in_json="", list_of_rule_string_in_json="", seq=""
     ) -> json:
         # LOAD PARAMS
         unique_storage_id = "Local"
@@ -568,6 +563,5 @@ class DomainController(FlaskView):
 
         # RETURN RESULTS
         return json.dumps(result)
-
 
 # DomainController.register(app, route_base="/")

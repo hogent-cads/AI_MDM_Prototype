@@ -38,14 +38,17 @@ class RuleMediator:
 
     def create_column_rules_from_clean_dataframe(
         self,
-        min_support: float,
-        max_len: int,
-        min_lift: float,
-        min_confidence: float,
-        filterer_string: str,
+            rule_length,
+            confidence,
+            speed,
+            quality,
+            abs_min_support,
+            max_potential_confidence,
+            g3_threshold,
+            fi_threshold,
     ) -> None:
         ar_df = self._find_association_rules(
-            self.df_ohe, min_support, max_len, min_lift, min_confidence
+            self.df_ohe, abs_min_support, rule_length, speed, confidence
         )
 
         cfg.logger.debug(
@@ -63,7 +66,8 @@ class RuleMediator:
 
         # Roep get_filtered methode aan op de Repo
         list_of_strings_that_represent_cr = self.value_rule_repo.filter_out_column_rule_strings_from_dict_of_value_rules(
-            min_support=min_support
+            min_support=1-speed,
+            max_potential_confidence=max_potential_confidence,
         )
         # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
         cr_dict = self.column_rule_factory.create_dict_of_dict_of_column_rules_from_list_of_strings(
@@ -74,8 +78,10 @@ class RuleMediator:
         self.column_rule_repo = ColumnRuleRepo(cr_dict)
         # Roep getInteresting Rules methode aan op de Repo -> Verschillende implementaties en RETURN deze.
         self.column_rule_repo.keep_only_interesting_column_rules(
-            filterer=self._parse_filterer_string(filterer_string),
-            confidence_bound=min_confidence,
+            filterer=ColumnRuleFilterCMetric(
+                g3_threshold=g3_threshold, fi_threshold=fi_threshold, c_threshold=quality
+            ),
+            confidence_bound=confidence,
         )
 
     def get_column_rule_from_string(self, rule_string: str):
@@ -104,31 +110,12 @@ class RuleMediator:
     def _find_association_rules(
         self,
         df_ohe: pd.DataFrame,
-        min_support: float,
-        max_len: int,
-        min_lift: float,
-        min_confidence: float,
+        abs_min_support, rule_length, speed, confidence
     ):
         self.association_rule_finder = AssociationRuleFinder(
             df_ohe,
-            min_support=min_support,
-            max_len=max_len,
-            min_lift=min_lift,
-            min_confidence=min_confidence,
+            rule_length,
+            abs_min_support,
         )
         return self.association_rule_finder.get_association_rules()
 
-    def _parse_filterer_string(self, filter_string: str) -> ColumnRuleFilter:
-        filter_to_return = None
-        if filter_string == FiltererEnum.Z_SCORE:
-            filter_to_return = ColumnRuleFilter_ZScore()
-        elif filter_string == FiltererEnum.ENTROPY:
-            filter_to_return = ColumnRuleFilter_Entropy(self.original_df)
-        elif filter_string == FiltererEnum.C_METRIC:
-            # TODO: make thresholds configurable
-            filter_to_return = ColumnRuleFilterCMetric(
-                g3_threshold=0.9, fi_threshold=0.9, c_threshold=4.0
-            )
-        else:
-            raise Exception("Invalid Parsing of Filterer string")
-        return filter_to_return

@@ -25,8 +25,8 @@ class ValueRuleFactory:
         """
         value_rules_dict: Dict[str, Set[ValueRule]] = {}
         [self._df_to_dict_of_value_rules(*x, value_rules_dict)
-            for x in zip(df[['antecedents', 'consequents',
-                             'support', 'confidence', 'lift']].to_numpy())]
+         for x in zip(df[['antecedents', 'consequents',
+                          'support', 'confidence']].to_numpy())]
 
         return value_rules_dict
 
@@ -57,7 +57,7 @@ class ValueRuleFactory:
         rl_element = ValueRuleElement(rl[0], rl[1])
 
         value_rule = ValueRule(ll_elements, rl_element, support=row[2],
-                      confidence=row[3], lift=row[4])
+                               confidence=row[3])
         rule_string = value_rule.get_column_rule_string()
 
         # Add this value rule to the map under the appropriate key, i.e. the rule string

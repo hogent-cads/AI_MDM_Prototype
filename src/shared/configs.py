@@ -8,7 +8,6 @@ class CleaningConfig:
     def __init__(self, cleaning_options):
         self.cleaning_options = cleaning_options
 
-
     def to_json(self):
         return json.dumps(self.__dict__)
 
@@ -16,19 +15,24 @@ class CleaningConfig:
 class RuleFindingConfig:
 
     def __init__(self,
+                 cols_to_use,
                  rule_length: int,
-                 min_support: float,
-                 lift: int, confidence: float,
-                 filtering_string: str,
-                 binning_option: Dict[str, BinningEnum],
-                 dropping_options: Dict[str, Dict[str, str]]):
+                 confidence: float,
+                 speed,
+                 quality: int,
+                 abs_min_support: int,
+                 max_potential_confidence: float,
+                 g3_threshold: float,
+                 fi_threshold: float) -> None:
         self.rule_length = rule_length
-        self.min_support = min_support
-        self.lift = lift
         self.confidence = confidence
-        self.filtering_string = filtering_string
-        self.binning_option = binning_option
-        self.dropping_options = dropping_options
+        self.speed = speed
+        self.quality = quality
+        self.abs_min_support = abs_min_support
+        self.cols_to_use = cols_to_use
+        self.max_potential_confidence = max_potential_confidence
+        self.g3_threshold = g3_threshold
+        self.fi_threshold = fi_threshold
 
     def to_json(self):
         return json.dumps(self.__dict__)
@@ -38,9 +42,13 @@ class RuleFindingConfig:
         data = json.loads(json_string)
         return RuleFindingConfig(
             rule_length=data["rule_length"],
-            min_support=data["min_support"],
-            lift=data["lift"],
             confidence=data["confidence"],
-            filtering_string=data["filtering_string"],
-            binning_option=data["binning_option"],
-            dropping_options=data["dropping_options"])
+            speed=data["speed"],
+            quality=data["quality"],
+            abs_min_support=data["abs_min_support"],
+            cols_to_use=data["cols_to_use"],
+            max_potential_confidence=data["max_potential_confidence"],
+            g3_threshold=data["g3_threshold"],
+            fi_threshold=data["fi_threshold"]
+        )
+

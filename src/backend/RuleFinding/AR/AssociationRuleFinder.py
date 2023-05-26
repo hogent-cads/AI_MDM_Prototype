@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import numpy as np
 from mlxtend.frequent_patterns import fpgrowth
@@ -9,16 +11,12 @@ class AssociationRuleFinder:
 
     def __init__(self,
                  df_dummy,
-                 min_support: float,
-                 max_len: int,
-                 min_lift: float,
-                 min_confidence: float):
+                 rule_length,
+                 abs_min_support,):
 
         self.df_dummy = df_dummy
-        self.min_support = min_support
-        self.max_len = max_len
-        self.min_lift = min_lift
-        self.min_confidence = min_confidence
+        self.rel_min_support = round(abs_min_support / len(df_dummy), 3)
+        self.rule_length = rule_length
 
     def get_association_rules(self) -> pd.DataFrame:
         """
@@ -33,8 +31,8 @@ class AssociationRuleFinder:
             lift(rule) >= min_lift and  confidence(rule) >= min_confidence.
         """
         cfg.logger.debug("Shape of df in get_association_rules: %s", self.df_dummy.shape)
-        frequent_itemsets = fpgrowth(self.df_dummy, min_support=self.min_support,
-                                     use_colnames=True, max_len=self.max_len)
+        frequent_itemsets = fpgrowth(self.df_dummy, min_support=self.rel_min_support,
+                                     use_colnames=True, max_len=self.rule_length)
         cfg.logger.debug("Shape of frequent_itemsets: %s", frequent_itemsets.shape)
         cfg.logger.debug("%s", frequent_itemsets)
 
@@ -49,13 +47,13 @@ class AssociationRuleFinder:
         # a => b and a => c will be present
         ar = AssociationRuleFinder.association_rules(
             frequent_itemsets,
-            'confidence',
-            self.min_confidence)
+            'support',
+            self.rel_min_support, support_only=False)
 
         cfg.logger.debug("Association rules before pruning")
         cfg.logger.debug("%s", ar)
 
-        return ar[ar['lift'] > self.min_lift]
+        return ar
 
     # Code originally from mlxtend
     @staticmethod
@@ -130,8 +128,6 @@ class AssociationRuleFinder:
             "consequent support",
             "support",
             "confidence",
-            "lift",
-            "leverage",
         ]
 
         if not df.shape[0]:
@@ -152,8 +148,6 @@ class AssociationRuleFinder:
             "consequent support": lambda _, __, s_c: s_c,
             "support": lambda s_ac, _, __: s_ac,
             "confidence": lambda s_ac, s_a, _: s_ac / s_a,
-            "lift": lambda s_ac, s_a, s_c: metric_dict["confidence"](s_ac, s_a, s_c) / s_c,
-            "leverage": lambda s_ac, s_a, s_c: metric_dict["support"](s_ac, s_a, s_c) - s_a * s_c,
         }
 
         # check for metric compliance

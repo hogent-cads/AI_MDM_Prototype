@@ -13,7 +13,7 @@ class ValueRuleRepo:
         self.value_rules_dict: Dict[str, Set[ValueRule]] = value_rules_dict
 
     def filter_out_column_rule_strings_from_dict_of_value_rules(
-        self, min_support: float
+        self, min_support: float, max_potential_confidence: float
     ) -> List[str]:
         """
         TODO!!
@@ -31,12 +31,12 @@ class ValueRuleRepo:
         filtered = {
             rs: max_conf
             for rs, max_conf in potential_conf_dict.items()
-            if max_conf >= 0.9
+            if max_conf >= max_potential_confidence
         }
 
         cfg.logger.debug("potential_conf_dict has %s keys", len(potential_conf_dict))
 
-        return filtered
+        return filtered.keys()
 
         # TODO: Stijn: I think this is the place where you should filter
         #              on the maximum potential confidence.

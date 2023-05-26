@@ -196,6 +196,11 @@ class Variables(str, enum.Enum):
 
     # Rule-Learning
 
+    RL_SETTING_GRID_column = "Column"
+    RL_SETTING_GRID_percent_nan = "Percentage of missing values"
+    RL_SETTING_GRID_dominant_column = "Percentage of occurence of the most frequent value"
+    RL_SETTING_GRID_key_column = "Uniqueness of the column"
+
 
 class ZingTypes(str, enum.Enum):
     DONT_USE = 'Appears in the output but no computation is done on these. Helpful for ' \

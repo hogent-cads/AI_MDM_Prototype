@@ -22,12 +22,10 @@ class ValueRule:
                  antecedents: List[ValueRuleElement],
                  consequent: ValueRuleElement,
                  support: float,
-                 lift: float,
                  confidence: float):
         self.antecedents: FrozenSet[ValueRuleElement] = frozenset(antecedents)
         self.consequent: ValueRuleElement = consequent
         self.support: float = support
-        self.lift: float = lift
         self.confidence: float = confidence
 
     def __str__(self) -> str:
@@ -36,8 +34,6 @@ class ValueRule:
         the_str += str(self.consequent)
         the_str += " || "
         the_str += str(self.support)
-        the_str += " || "
-        the_str += str(self.lift)
         the_str += " || "
         the_str += str(self.confidence)
         return the_str
@@ -59,12 +55,10 @@ class ValueRule:
                 self.antecedents == other.antecedents and
                 self.consequent == other.consequent and
                 math.isclose(self.support, other.support) and
-                math.isclose(self.lift, other.lift) and
                 math.isclose(self.confidence, other.confidence))
 
     def __hash__(self):
         return hash((self.antecedents,
                      self.consequent,
                      self.support,
-                     self.lift,
                      self.confidence))
