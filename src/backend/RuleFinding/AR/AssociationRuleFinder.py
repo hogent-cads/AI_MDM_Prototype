@@ -10,12 +10,12 @@ import config as cfg
 class AssociationRuleFinder:
 
     def __init__(self,
-                 df_dummy,
-                 rule_length,
-                 abs_min_support,):
+                 df_dummy: pd.DataFrame,
+                 rule_length: int,
+                 min_support_count: int, ):
 
         self.df_dummy = df_dummy
-        self.rel_min_support = round(abs_min_support / len(df_dummy), 3)
+        self.rel_min_support = round(min_support_count / len(df_dummy), 3)
         self.rule_length = rule_length
 
     def get_association_rules(self) -> pd.DataFrame:

@@ -7,11 +7,10 @@ def test_get_association_rules_empty_antecedent():
     df = pd.DataFrame({'A': ['1'] * 9 + ['2']})
     df_one_hot = pd.get_dummies(df)
     ar_finder = arf.AssociationRuleFinder(
-        df_one_hot,
-        min_support=10**-9,  # essentially zero
-        min_confidence=0.0,
-        min_lift=0.0,
-        max_len=1)
+        df_dummy=df_one_hot,
+        rule_length=1,
+        min_support_count=1
+    )
     ar_df = ar_finder.get_association_rules()
 
     assert ar_df.shape[0] == 2
@@ -29,10 +28,6 @@ def test_get_association_rules_empty_antecedent():
             ["confidence"].values[0] == 0.9)
     assert (ar_df[ar_df["consequents"] == frozenset(["A_2"])]
             ["confidence"].values[0] == 0.1)
-    assert (ar_df[ar_df["consequents"] == frozenset(["A_1"])]
-            ["lift"].values[0] == 1.0)
-    assert (ar_df[ar_df["consequents"] == frozenset(["A_2"])]
-            ["lift"].values[0] == 1.0)
 
 
 def test_get_association_rules():
@@ -42,11 +37,10 @@ def test_get_association_rules():
         'B': ['1'] * 9 + ['2']})
     df_one_hot = pd.get_dummies(df)
     ar_finder = arf.AssociationRuleFinder(
-        df_one_hot,
-        min_support=10**-9,  # essentially zero
-        min_confidence=0.0,
-        min_lift=0.0,
-        max_len=2)
+        df_dummy=df_one_hot,
+        rule_length=2,
+        min_support_count=1
+    )
     ar_df = ar_finder.get_association_rules()
 
     # Rules are:

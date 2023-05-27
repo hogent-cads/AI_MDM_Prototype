@@ -8,13 +8,13 @@ def test_value_rule():
 
     rl3 = vre.ValueRuleElement("C", "c")
 
-    value_rule = vr.ValueRule([rl1, rl2], rl3, 0.2, 2.5, 0.99)
+    value_rule = vr.ValueRule([rl1, rl2], rl3, 0.2, 0.99)
 
-    assert str(value_rule) == "A=a,B=b || C=c || 0.2 || 2.5 || 0.99"
+    assert str(value_rule) == "A=a,B=b || C=c || 0.2 || 0.99"
 
-    value_rule = vr.ValueRule([rl2, rl1], rl3, 0.2, 2.5, 0.99)
+    value_rule = vr.ValueRule([rl2, rl1], rl3, 0.2, 0.99)
     # String is always sorted
-    assert str(value_rule) == "A=a,B=b || C=c || 0.2 || 2.5 || 0.99"
+    assert str(value_rule) == "A=a,B=b || C=c || 0.2 || 0.99"
 
 
 def test_get_column_rule_string():
@@ -23,12 +23,12 @@ def test_get_column_rule_string():
 
     rl3 = vre.ValueRuleElement("C", "c")
 
-    value_rule = vr.ValueRule([rl1, rl2], rl3, 0.2, 2.5, 0.99)
+    value_rule = vr.ValueRule([rl1, rl2], rl3, 0.2, 0.99)
 
     assert value_rule.get_column_rule_string() == "A,B => C"
 
     # Andere volgorde
-    value_rule = vr.ValueRule([rl2, rl1], rl3, 0.2, 2.5, 0.99)
+    value_rule = vr.ValueRule([rl2, rl1], rl3, 0.2, 0.99)
 
     # Moet nog steeds dezelfde column_rule string geven
     assert value_rule.get_column_rule_string() == "A,B => C"

@@ -13,13 +13,13 @@ def test_value_rule_factory():
     consequents = [frozenset([f"B_{i}"]) for i in range(3)]
     support = [i/10 for i in range(3)]
     confidence = [i/5 for i in range(3)]
-    lift = [i for i in range(3)]
+
     df = pd.DataFrame(
         {"antecedents": antecedents,
          "consequents": consequents,
          "support": support,
          "confidence": confidence,
-         "lift": lift}
+         }
     )
 
     factory = vrf.ValueRuleFactory()
@@ -36,7 +36,7 @@ def test_value_rule_factory():
             consequent=consequent,
             support=support[i],
             confidence=confidence[i],
-            lift=lift[i])
+        )
         assert rule in value_rules_dict["A => B"]
 
 

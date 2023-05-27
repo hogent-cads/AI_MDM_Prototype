@@ -9,13 +9,15 @@ import src.shared.enums
 # We only check that the response is not None and that it is a string.
 def test_get_all_column_rules_from_df_and_config_1():
     rule_finding_config = src.shared.configs.RuleFindingConfig(
+        cols_to_use=['a', 'b'],
         rule_length=2,
-        min_support=10**-9,  # essentially zero
-        lift=1.0,
+        abs_min_support=1,
         confidence=0.95,
-        filtering_string=src.shared.enums.FiltererEnum.C_METRIC.value,
-        binning_option={},
-        dropping_options={}
+        speed=0.5,
+        quality=4,
+        max_potential_confidence=0.0,
+        g3_threshold=0.75,
+        fi_threshold=0.75
     )
     domain_controller = dc.DomainController()
     df = pd.DataFrame({
