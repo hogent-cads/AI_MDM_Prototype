@@ -14,9 +14,9 @@ class ColumnRule:
     def __init__(
       self,
       rule_string: str,
-      original_df=None,
-      value_mapping=False,
-      confidence=None,):
+      original_df: pd.DataFrame = None,
+      value_mapping: bool = False,
+      confidence: float = None,):
         """
         rule_string: string of the form "A,B => C" (or "/ => C" or " => C")
         original_df: dataframe containing the original data (not one-hot encoded),
@@ -45,6 +45,11 @@ class ColumnRule:
             self.confidence = 1.0 - self.df_to_correct.shape[0]/original_df.shape[0]
         else:
             self.confidence = confidence
+
+        self.g3_measure_ = None
+        self.fi_measure_ = None
+        self.c_measure_ = None
+        self.rfi_measure_ = None
 
     def __str__(self):
         return (self.rule_string
@@ -157,9 +162,10 @@ class ColumnRule:
         if len(self.antecedent_set) != 0:
             return df_relevant.merge(
                 self.mapping_df[[rhs_col]], how="left", on=list(self.antecedent_set))
-        else:
-            df_relevant[list(self.consequent_set)[0]] = self.mapping_df[[rhs_col]].iloc[0, 0]
-            return df_relevant
+
+        # len(self.antecedent) is zero
+        df_relevant[list(self.consequent_set)[0]] = self.mapping_df[[rhs_col]].iloc[0, 0]
+        return df_relevant
 
     def status(self, df: pd.DataFrame) -> np.ndarray:
         """
@@ -204,9 +210,9 @@ class ColumnRule:
         This is based on the flow chart on page 39 of
         https://documentserver.uhasselt.be/bitstream/1942/35321/1/845d31c7-7084-4c8b-a964-d10bad246e52.pdf
         """
-        if not hasattr(self, "fi_measure_"):
+        if self.fi_measure_ is None:
             self.compute_fi_measure()
-        if not hasattr(self, "g3_measure_"):
+        if self.g3_measure_ is None:
             self.compute_g3_measure()
         c_measure = 2.5*(self.fi_measure_ + self.g3_measure_)
 
@@ -290,8 +296,8 @@ def fi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
     """ Fraction of information measure. See section 3.2.3 in
          https://documentserver.uhasselt.be/bitstream/1942/35321/1/845d31c7-7084-4c8b-a964-d10bad246e52.pdf
     """
-    y = df[rhs_col].value_counts(normalize=True).values
-    if len(y) == 1:  # Return zero if right hand side is constant
+    y_dist = df[rhs_col].value_counts(normalize=True).values
+    if len(y_dist) == 1:  # Return zero if right hand side is constant
         return 0
 
     # Return 0 if left hand side is empty.
@@ -301,16 +307,16 @@ def fi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
     if len(lhs_cols) == 0:
         return 0
 
-    entropy_y = - (y * np.log2(y)).sum()  # Entropy of y
+    entropy_y = - (y_dist * np.log2(y_dist)).sum()  # Entropy of y
 
     # Compute conditional entropy
     values = df.value_counts(subset=lhs_cols + [rhs_col], normalize=True, sort=False)
     lhs_values = df.value_counts(subset=lhs_cols, normalize=True, sort=False)
 
     conditional_entropy = 0
-    for x in lhs_values.index:
-        y_for_this_x = values.loc[x].values
-        px = lhs_values.loc[x]
+    for x_value in lhs_values.index:
+        y_for_this_x = values.loc[x_value].values
+        px = lhs_values.loc[x_value]
 
         conditional_entropy += (y_for_this_x * np.log2(y_for_this_x / px)).sum()
 
@@ -320,6 +326,8 @@ def fi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
 
 
 def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
+    # pylint: disable-msg=too-many-locals
+
     # Compute RFI measure as described on page 44 and page 28
     lhs_values = df.value_counts(subset=lhs_cols, sort=False)
     rhs_values = df.value_counts(subset=[rhs_col], sort=False)
@@ -328,26 +336,28 @@ def rfi_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
 
     # Naive implementation. Can be sped up.
     m_zero = 0.0
-    for x in lhs_values.index:
-        cx = lhs_values.loc[x]
-        for y in rhs_values.index:
-            cy = rhs_values.loc[y]
+    for x_value in lhs_values.index:
+        cx = lhs_values.loc[x_value]
+        for y_value in rhs_values.index:
+            cy = rhs_values.loc[y_value]
             # Start from 1, k = 0 yields zero
             for k in range(max(1, cx+cy - num_tuples), min(cx, cy) + 1):
-                p0 = math.comb(cy, k) * math.comb(num_tuples - cy, cx - k) / math.comb(num_tuples, cx)
+                p0 = (math.comb(cy, k) * math.comb(num_tuples - cy, cx - k)
+                      / math.comb(num_tuples, cx))
                 m_zero += p0 * k * np.log2(k * num_tuples / (cx * cy))
 
     m_zero /= num_tuples  # Division by n is independent of the loop
 
-    y = df[rhs_col].value_counts(normalize=True).values
-    entropy_y = - (y * np.log2(y)).sum()  # Entropy of y
+    y_dist = df[rhs_col].value_counts(normalize=True).values
+    entropy_y = - (y_dist * np.log2(y_dist)).sum()  # Entropy of y
     b_zero = m_zero / entropy_y
 
     return fi_measure(df, lhs_cols, rhs_col) - b_zero
 
 
 def g3_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
-    """ g3 measure as described in https://documentserver.uhasselt.be/bitstream/1942/35321/1/845d31c7-7084-4c8b-a964-d10bad246e52.pdf
+    """ g3 measure as described in
+    https://documentserver.uhasselt.be/bitstream/1942/35321/1/845d31c7-7084-4c8b-a964-d10bad246e52.pdf
         See section 3.2.1, page 18.
     """
     num_tuples = df.shape[0]  # number of tuples in the relation
@@ -358,14 +368,15 @@ def g3_measure(df: pd.DataFrame, lhs_cols: List[str], rhs_col: str) -> float:
 
     lhs_values = df.value_counts(subset=lhs_cols)
 
-    s = 0
-    for x in lhs_values.index:
+    support_count = 0
+    for x_value in lhs_values.index:
         # This may cause a performance warning because the index isn't sorted.
         # However, because the index isn't sorted, we know that the most frequent
         # value is the first one. So we can just take the first value.
-        s += values.loc[x].iloc[0]
+        support_count += values.loc[x_value].iloc[0]
     if num_tuples != lhs_values.shape[0]: # Avoid division by zero
-        return 1 - (num_tuples - s)/(num_tuples - lhs_values.shape[0])
-    else:
-        assert num_tuples == s
-        return 1
+        return 1 - (num_tuples - support_count)/(num_tuples - lhs_values.shape[0])
+
+    # num_tuples == lhs_values.shape[0]
+    assert num_tuples == support_count
+    return 1
