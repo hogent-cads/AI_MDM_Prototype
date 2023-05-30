@@ -44,7 +44,7 @@ class InitPage:
             if selected_type:
                 st.write("")
                 st.write("")
-                st.write(eval(f"ZinggTypesEnum.{selected_type}"))
+                st.write(eval(f"ZingTypes.{selected_type}"))
 
         # FOR DEBUG ON RESTOS.CSV PRE-DEFINED FIELDS:
         if (Variables.DD_TYPE_DICT not in st.session_state) or (
