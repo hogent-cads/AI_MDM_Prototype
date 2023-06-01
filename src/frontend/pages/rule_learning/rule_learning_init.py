@@ -124,7 +124,7 @@ class RuleLearnerInitPage:
                     if len(selection_to_drop) > 0:
                         exclude_btn = st.button("Exclude selected columns")
                         if exclude_btn:
-                            cols_to_drop = [x[Variables.RL_SETTING_GRID_column.value] for x in
+                            cols_to_drop = [x[Variables.RL_SETTING_GRID_COLUMN.value] for x in
                                             selection_to_drop]
 
                             st.session_state["cols_to_exclude"] = list(
@@ -307,10 +307,10 @@ class RuleLearnerInitPage:
 
             if precent_nan_threshold <= percent_nan_value or dominant_column_threshold <= dominant_column_value \
                     or key_column_threshold <= key_column_value:
-                dict_to_append[Variables.RL_SETTING_GRID_column.value] = col
-                dict_to_append[Variables.RL_SETTING_GRID_percent_nan.value] = percent_nan_value * 100
-                dict_to_append[Variables.RL_SETTING_GRID_dominant_column.value] = dominant_column_value * 100
-                dict_to_append[Variables.RL_SETTING_GRID_key_column.value] = key_column_value
+                dict_to_append[Variables.RL_SETTING_GRID_COLUMN.value] = col
+                dict_to_append[Variables.RL_SETTING_GRID_PERCENT_NAN.value] = percent_nan_value * 100
+                dict_to_append[Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value] = dominant_column_value * 100
+                dict_to_append[Variables.RL_SETTING_GRID_KEY_COLUMN.value] = key_column_value
                 list_of_dicts.append(dict_to_append)
         df_of_columns_to_exclude_for_rl = pd.DataFrame(list_of_dicts)
 
@@ -327,11 +327,11 @@ class RuleLearnerInitPage:
         )
         gb.configure_side_bar()
         gb.configure_default_column(editable=True)
-        gb.configure_column(field=Variables.RL_SETTING_GRID_percent_nan.value, cellStyle=percent_nan_js,
+        gb.configure_column(field=Variables.RL_SETTING_GRID_PERCENT_NAN.value, cellStyle=percent_nan_js,
                             headerClass="")
-        gb.configure_column(field=Variables.RL_SETTING_GRID_dominant_column.value, cellStyle=dominant_column_js,
+        gb.configure_column(field=Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value, cellStyle=dominant_column_js,
                             headerClass="")
-        gb.configure_column(field=Variables.RL_SETTING_GRID_key_column.value, cellStyle=key_column_js,
+        gb.configure_column(field=Variables.RL_SETTING_GRID_KEY_COLUMN.value, cellStyle=key_column_js,
                             headerClass="")
         gb.configure_selection(selection_mode="multiple", use_checkbox=True, pre_select_all_rows=True,
                                header_checkbox=True)

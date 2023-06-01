@@ -148,9 +148,13 @@ def _reload_dataframe(uploaded_file, handler):
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = loaded_dataframe_name
         st.session_state[v.SB_LOADED_DATAFRAME_ID] = loaded_dataframe_id
     else:
-        st.session_state[v.SB_LOADED_DATAFRAME] = _remove_speciale_chars_from_columns(
-            pd.read_csv(uploaded_file, delimiter=separator if separator else ",")
-        )
+        try:
+            st.session_state[v.SB_LOADED_DATAFRAME] = _remove_speciale_chars_from_columns(
+                pd.read_csv(uploaded_file, delimiter=separator if separator else ",")
+            )
+        except Exception as e:
+            st.error(f"Error while reading the file, please check if the 'optional separator' is correct.")
+            st.session_state[v.SB_LOADED_DATAFRAME] = pd.DataFrame()
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = uploaded_file.name
         st.session_state[v.SB_LOADED_DATAFRAME_ID] = uploaded_file.id
 
