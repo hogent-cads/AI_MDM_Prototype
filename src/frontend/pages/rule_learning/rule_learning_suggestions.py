@@ -98,7 +98,6 @@ class RuleLearnerSuggestionsPage:
                     suggestions_rows_selected = response_selection_suggestion_finder[
                         "selected_rows"
                     ]
-                    print(f"suggestions_row_selected = {suggestions_rows_selected}")
 
                     list_of_df_idx = df_with_predictions.index
 
