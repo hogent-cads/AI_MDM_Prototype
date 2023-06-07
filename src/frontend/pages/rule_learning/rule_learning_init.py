@@ -1,17 +1,14 @@
-import numpy as np
 import pandas as pd
 import streamlit as st
 import extra_streamlit_components as stx
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, JsCode, ColumnsAutoSizeMode
 
 from src.frontend.handler import IHandler
-from src.shared.enums import BinningEnum, DroppingEnum, FiltererEnum
 from src.frontend.enums import Variables
 from src.shared.configs import RuleFindingConfig
 from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
-
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, JsCode, ColumnsAutoSizeMode
 
 
 # def _create_total_binning_dict(dict_to_show):
@@ -64,7 +61,6 @@ class RuleLearnerInitPage:
                 default_g3_threshold = st.session_state["rule_finding_config"].g3_threshold
                 default_fi_threshold = st.session_state["rule_finding_config"].fi_threshold
 
-
             #     default_binning_option = st.session_state["binning_option"]
             #
             # if "binning_option" in st.session_state:
@@ -88,34 +84,49 @@ class RuleLearnerInitPage:
 
             if chosen_tab == "2":
                 st.header("Column Selection Settings")
-                columnselection_settings_exp = st.expander("Exclusion Settings", expanded=True)
-                with columnselection_settings_exp:
+                col_selection_settings_exp = st.expander("Exclusion Settings", expanded=True)
+                with col_selection_settings_exp:
                     if "cols_to_exclude" not in st.session_state:
                         st.session_state["cols_to_exclude"] = []
                         st.session_state["cols_to_use"] = st.session_state[
                             Variables.SB_LOADED_DATAFRAME
                         ].columns.tolist()
 
-                    st.write("We advise to exclude the following columns, based on these filter thresholds:")
+                    st.write("We advise to exclude the following columns, \
+                             based on these filter thresholds:")
                     colA_1, colA_2, colA_3 = st.columns([1, 1, 1])
                     with colA_1:
-                        precent_nan_threshold = st.slider("Percentage of non empty values:", min_value=0.0, max_value=1.0,
-                                                          value=0.5, step=0.01, key="slider_percent_nan_threshold")
+                        percent_nan_threshold = st.slider(
+                            "Percentage of non empty values:",
+                            min_value=0.0,
+                            max_value=1.0,
+                            value=0.5,
+                            step=0.01,
+                            key="slider_percent_nan_threshold")
                     with colA_2:
                         dominant_column_threshold = st.slider(
-                            "Threshold to determine the Dominance of a value in a column:", min_value=0.0,
-                            max_value=1.0, value=0.75, step=0.01,
+                            "Threshold to determine the dominance of a value in a column:",
+                            min_value=0.0,
+                            max_value=1.0,
+                            value=0.75,
+                            step=0.01,
                             key="slider_dominant_column_threshold")
                     with colA_3:
-                        key_column_threshold = st.slider("Threshold to determine if a column uniquely identifies rows:",
-                                                         min_value=0.0, max_value=1.0, value=0.95, step=0.01,
-                                                         key="slider_key_column_threshold")
+                        key_column_threshold = st.slider(
+                            "Threshold to determine if a column uniquely identifies rows:",
+                            min_value=0.0,
+                            max_value=1.0,
+                            value=0.95,
+                            step=0.01,
+                            key="slider_key_column_threshold")
 
                     selection_filter_dataframe = st.container()
 
                     with selection_filter_dataframe:
-                        selection_to_drop = self.show_column_filtering(dominant_column_threshold, key_column_threshold,
-                                                                       precent_nan_threshold)
+                        selection_to_drop = self.show_column_filtering(
+                            dominant_column_threshold,
+                            key_column_threshold,
+                            percent_nan_threshold)
 
                     if len(selection_to_drop) > 0:
                         exclude_btn = st.button("Exclude selected columns")
@@ -125,8 +136,9 @@ class RuleLearnerInitPage:
 
                             st.session_state["cols_to_exclude"] = list(
                                 set(st.session_state["cols_to_exclude"] + cols_to_drop))
-                            st.session_state["cols_to_use"] = [x for x in st.session_state["cols_to_use"] if
-                                                               x not in st.session_state["cols_to_exclude"]]
+                            st.session_state["cols_to_use"] = \
+                                [x for x in st.session_state["cols_to_use"]
+                                 if x not in st.session_state["cols_to_exclude"]]
                             st.experimental_rerun()
 
                     st.session_state["cols_to_exclude"] = st.multiselect(
@@ -166,7 +178,9 @@ class RuleLearnerInitPage:
                 adv_settings_exp = st.expander("Advanced Settings")
                 with adv_settings_exp:
                     st.session_state["abs_min_support"] = st.number_input(
-                        "Minimum number of records for a mapping of a rule:", value=default_abs_min_support, format="%d"
+                        "Minimum number of records for a mapping of a rule:",
+                        value=default_abs_min_support,
+                        format="%d"
                     )
 
                     st.session_state["g3_threshold"] = st.slider(
@@ -187,7 +201,9 @@ class RuleLearnerInitPage:
                     rule_finding_config = RuleFindingConfig(
                         rule_length=st.session_state["rule_length"],
                         confidence=st.session_state["confidence"],
-                        cols_to_use = list(set(st.session_state[Variables.SB_LOADED_DATAFRAME].columns) - set(st.session_state["cols_to_exclude"])),
+                        cols_to_use=list(
+                            set(st.session_state[Variables.SB_LOADED_DATAFRAME].columns) -
+                            set(st.session_state["cols_to_exclude"])),
                         speed=st.session_state["speed"],
                         quality=st.session_state["quality"],
                         abs_min_support=st.session_state["abs_min_support"],
@@ -202,7 +218,8 @@ class RuleLearnerInitPage:
                     st.session_state[
                         "gevonden_rules_dict"
                     ] = self.handler.get_column_rules(
-                        dataframe_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME].to_json(),
+                        dataframe_in_json=st.session_state[
+                            Variables.SB_LOADED_DATAFRAME].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
                         seq=st.session_state[Variables.GB_CURRENT_SEQUENCE_NUMBER],
                     )
@@ -273,31 +290,43 @@ class RuleLearnerInitPage:
             #     st.subheader("Options that will be applied:")
             #     st.write(preview_total_to_show_binning)
 
-    def show_column_filtering(self, dominant_column_threshold, key_column_threshold, precent_nan_threshold):
+    def show_column_filtering(
+            self,
+            dominant_column_threshold,
+            key_column_threshold,
+            percent_nan_threshold):
         # For each column calculate a couple of metrics
         # 1. Percentage of empty values in a column
         # 2. The dominance of a value in a column, by looking at the maximum of value counts
-        # 3. Percentage of uniqueness, by looking at the distinct values devided by the total number of values
+        # 3. Percentage of uniqueness, by looking at the distinct values divided by the
+        #    total number of values
         list_of_dicts = []
         for col in st.session_state["cols_to_use"]:
             dict_to_append = {}
             # 1. Percentage of empty values in a column
-            percent_nan_value = st.session_state[Variables.SB_LOADED_DATAFRAME][col].isna().sum() / len(
+            percent_nan_value = st.session_state[Variables.SB_LOADED_DATAFRAME][
+                                    col].isna().sum() / len(
                 st.session_state[Variables.SB_LOADED_DATAFRAME][col])
 
             # 2. The dominance of a value in a column, by looking at the maximum of value counts
-            vc = st.session_state[Variables.SB_LOADED_DATAFRAME][col].value_counts(normalize=True)
+            vc = st.session_state[Variables.SB_LOADED_DATAFRAME][col].value_counts(
+                normalize=True)
             dominant_column_value = vc.max()
 
-            # 3. Percentage of uniqueness, by looking at the distinct values devided by the total number of values
+            # 3. Percentage of uniqueness, by looking at the distinct values divided by
+            # the total number of values
             unique_values = st.session_state[Variables.SB_LOADED_DATAFRAME][col].nunique()
-            key_column_value = unique_values / len(st.session_state[Variables.SB_LOADED_DATAFRAME][col])
+            key_column_value = unique_values / len(
+                st.session_state[Variables.SB_LOADED_DATAFRAME][col])
 
-            if precent_nan_threshold <= percent_nan_value or dominant_column_threshold <= dominant_column_value \
+            if percent_nan_threshold <= percent_nan_value \
+                    or dominant_column_threshold <= dominant_column_value \
                     or key_column_threshold <= key_column_value:
                 dict_to_append[Variables.RL_SETTING_GRID_COLUMN.value] = col
-                dict_to_append[Variables.RL_SETTING_GRID_PERCENT_NAN.value] = percent_nan_value * 100
-                dict_to_append[Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value] = dominant_column_value * 100
+                dict_to_append[
+                    Variables.RL_SETTING_GRID_PERCENT_NAN.value] = percent_nan_value * 100
+                dict_to_append[
+                    Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value] = dominant_column_value * 100
                 dict_to_append[Variables.RL_SETTING_GRID_KEY_COLUMN.value] = key_column_value
                 list_of_dicts.append(dict_to_append)
         df_of_columns_to_exclude_for_rl = pd.DataFrame(list_of_dicts)
@@ -306,7 +335,7 @@ class RuleLearnerInitPage:
             st.write("No further columns that don't comply with these thresholds!")
             return []
         # Create an AGGRID with default all selected
-        percent_nan_js = _create_js_code_for_specific_column(precent_nan_threshold)
+        percent_nan_js = _create_js_code_for_specific_column(percent_nan_threshold)
         dominant_column_js = _create_js_code_for_specific_column(dominant_column_threshold)
         key_column_js = _create_js_code_for_specific_column(key_column_threshold)
 
@@ -315,14 +344,23 @@ class RuleLearnerInitPage:
         )
         gb.configure_side_bar()
         gb.configure_default_column(editable=True)
-        gb.configure_column(field=Variables.RL_SETTING_GRID_PERCENT_NAN.value, cellStyle=percent_nan_js,
-                            headerClass="")
-        gb.configure_column(field=Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value, cellStyle=dominant_column_js,
-                            headerClass="")
-        gb.configure_column(field=Variables.RL_SETTING_GRID_KEY_COLUMN.value, cellStyle=key_column_js,
-                            headerClass="")
-        gb.configure_selection(selection_mode="multiple", use_checkbox=True, pre_select_all_rows=True,
-                               header_checkbox=True)
+        gb.configure_column(
+            field=Variables.RL_SETTING_GRID_PERCENT_NAN.value,
+            cellStyle=percent_nan_js,
+            headerClass="")
+        gb.configure_column(
+            field=Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value,
+            cellStyle=dominant_column_js,
+            headerClass="")
+        gb.configure_column(
+            field=Variables.RL_SETTING_GRID_KEY_COLUMN.value,
+            cellStyle=key_column_js,
+            headerClass="")
+        gb.configure_selection(
+            selection_mode="multiple",
+            use_checkbox=True,
+            pre_select_all_rows=True,
+            header_checkbox=True)
         standard_grid_options = gb.build()
         extra_grid_options = {
             "alwaysShowHorizontalScroll": True,
