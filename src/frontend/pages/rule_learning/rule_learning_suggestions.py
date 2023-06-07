@@ -1,3 +1,4 @@
+from typing import List, Set
 import hashlib
 
 import pandas as pd
@@ -97,33 +98,60 @@ class RuleLearnerSuggestionsPage:
                     suggestions_rows_selected = response_selection_suggestion_finder[
                         "selected_rows"
                     ]
-                    list_of_df_idx = df_with_predictions.index
-                    set_of_cols = set()
-                    for idx, row in enumerate(suggestions_rows_selected):
-                        index_of_to_change = list_of_df_idx[idx]
-                        val_to_change = row["__BEST_PREDICTION"]
-                        rs = row["__BEST_RULE"]
-                        rss = rs.split(" => ")
-                        col_to_change = rss[1]
-                        set_of_cols.add(col_to_change)
-                        for e in rss[0].split(","):
-                            set_of_cols.add(e)
-                        # Change value in temp_dataframe
-                        st.session_state["temp_dataframe"].loc[
-                            index_of_to_change, col_to_change
-                        ] = val_to_change
+                    print(f"suggestions_row_selected = {suggestions_rows_selected}")
 
+                    list_of_df_idx = df_with_predictions.index
+
+                    # TODO: Remove this 'old' code once we are satisfied with the 'new' code
+                    # Start original code
+                    # print(f"list_of_df_idx = {list_of_df_idx}")
+                    # set_of_cols = set()
+                    # # Is this correct? I don't think so.
+                    # for idx, row in enumerate(suggestions_rows_selected):
+                    #     index_of_to_change = list_of_df_idx[idx]
+                    #     val_to_change = row["__BEST_PREDICTION"]
+                    #     rs = row["__BEST_RULE"]
+                    #     rss = rs.split(" => ")
+                    #     col_to_change = rss[1]
+                    #     set_of_cols.add(col_to_change)
+                    #     for e in rss[0].split(","):
+                    #         set_of_cols.add(e)
+                    #     # Change value in temp_dataframe
+                    #     st.session_state["temp_dataframe"].loc[
+                    #         index_of_to_change, col_to_change
+                    #     ] = val_to_change
+                    #
+                    # st.session_state[
+                    #     "columns_affected_by_suggestion_application"
+                    # ] = list(set_of_cols)
+                    # End original code
+
+                    # Start new code
+                    indices_in_idx = [sel_row['_selectedRowNodeInfo']['nodeRowIndex']
+                                      for sel_row in suggestions_rows_selected]
+                    st.session_state["temp_dataframe"] = _apply_suggestions(
+                        current_df=st.session_state["temp_dataframe"],
+                        predictions_df=df_with_predictions,
+                        indices_in_index=indices_in_idx)
                     st.session_state[
                         "columns_affected_by_suggestion_application"
-                    ] = list(set_of_cols)
+                    ] = _compute_affected_columns(
+                        predictions_df=df_with_predictions,
+                        indices_in_index=indices_in_idx
+                    )
+                    # End new code
+
 
                     with aangepaste_dataset:
                         st.info(
-                            'Changes have been applied to the dataset! Press the "Recalculate rules" button to see what impact your changes have on the rules.'
+                            'Changes have been applied to the dataset!' +
+                            ' Press the "Recalculate rules" button to see what impact your' +
+                            ' changes have on the rules.'
                         )
                         st.header("Modified dataset:")
                         rows_selected = []
 
+                        # ?? What is the purpose of this code
                         for idx, row in enumerate(suggestions_rows_selected):
                             rows_selected.append(int(list_of_df_idx[idx]))
 
@@ -212,3 +240,59 @@ class RuleLearnerSuggestionsPage:
                         file_name=f"new_{st.session_state[Variables.SB_LOADED_DATAFRAME_NAME]}",
                         mime="text/csv",
                     )
+
+
+def _apply_suggestions(
+        current_df: pd.DataFrame,
+        predictions_df: pd.DataFrame,
+        indices_in_index: List[int]
+) -> pd.DataFrame:
+    """
+    current_df: the DataFrame where we are going to apply the suggestions to
+    predictions_df: the DataFrame with the predictions.
+                    We use the columns "__BEST_RULE" and "__BEST_PREDICTION"
+    indices_in_index: list of integers that says which element from the index
+                      of predictions_df to select.
+                      This then determines the row to change in the current_df
+
+    returns: a new dataframe with the same number of rows and columns as current_df
+             but with the suggestions applied to it
+    """
+    # Start by making a defensive copy of the dataframe
+    new_df = current_df.copy()
+
+    for idx_in_idx in indices_in_index:
+        idx = predictions_df.index[idx_in_idx]
+        consequent = predictions_df.loc[idx, "__BEST_RULE"].split(" => ")[1]
+        new_value = predictions_df.loc[idx, "__BEST_PREDICTION"]
+        new_df.loc[idx, consequent] = new_value
+
+    return new_df
+
+
+def _compute_affected_columns(
+    predictions_df: pd.DataFrame,
+    indices_in_index: List[int]
+) -> List[str]:
+    """
+    Determine the columns that participate in at least one applied rule.
+
+    predictions_df: the DataFrame with the predictions.
+                    We use the columns "__BEST_RULE"
+    indices_in_index: list of integers that says which element from the index
+                      of predictions_df to select.
+                      This then determines the row to change in the current_df
+
+    returns: a list of strings, where each string is the name of column
+             participating in at least one rule
+    """
+    cols : Set[str] = set()
+    for idx_in_idx in indices_in_index:
+        idx = predictions_df.index[idx_in_idx]
+        rule_str = predictions_df.loc[idx, "__BEST_RULE"]
+        antecedents = rule_str.split(" => ")[0].split(",")
+        cols.update(antecedents)
+        consequent = rule_str.split(" => ")[1]
+        cols.add(consequent)
+
+    return list(cols)
