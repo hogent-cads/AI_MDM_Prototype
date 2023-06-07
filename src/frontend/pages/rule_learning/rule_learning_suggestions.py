@@ -164,7 +164,7 @@ class RuleLearnerSuggestionsPage:
 
                     self.handler.recalculate_column_rules(
                         old_df_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME][
-                            st.session_state["colsToUse"]
+                            st.session_state["cols_to_use"]
                         ].to_json(),
                         new_df_in_json=st.session_state["temp_dataframe"].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,

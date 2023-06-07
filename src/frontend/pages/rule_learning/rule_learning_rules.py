@@ -106,7 +106,7 @@ class RuleLearnerSummaryRulesPage:
                         ] = self.handler.get_suggestions_given_dataframe_and_column_rules(
                             dataframe_in_json=st.session_state[
                                 Variables.SB_LOADED_DATAFRAME
-                            ][st.session_state["colsToUse"]].to_json(),
+                            ][st.session_state["cols_to_use"]].to_json(),
                             list_of_rule_string_in_json=json.dumps(
                                 [
                                     x["Regel"]

@@ -344,7 +344,8 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
         self.fi_threshold = fi_threshold
         self.c_threshold = c_threshold
 
-    def execute(self, rules: Dict[str, ColumnRule]) -> Dict[str, ColumnRule]:
+    #def execute(self, rules: Dict[str, ColumnRule]) -> Dict[str, ColumnRule]:
+    def execute(self, rules: Sequence[ColumnRule]) -> Sequence[ColumnRule]:
         """
         Filter the given rules based on the C-Metric.
         More in particular, a rule is considered interesting if
@@ -361,7 +362,7 @@ class ColumnRuleFilterCMetric(ColumnRuleFilter):
         )
         filtered_rules = {}
         # Consider rules in order of increasing antecedent set length
-        for column_rule in sorted(rules.values(), key=lambda r: len(r.antecedent_set)):
+        for column_rule in sorted(rules, key=lambda r: len(r.antecedent_set)):
             more_general_rules = [
                 r
                 for r in filtered_rules.values()

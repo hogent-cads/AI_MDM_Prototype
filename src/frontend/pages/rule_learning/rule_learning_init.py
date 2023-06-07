@@ -49,7 +49,6 @@ class RuleLearnerInitPage:
                 default_speed = 0.95
                 default_quality = 4
                 default_abs_min_support = 3
-                default_max_potential_confidence = 0.90
                 default_g3_threshold = 0.9
                 default_fi_threshold = 0.9
             else:
@@ -62,9 +61,6 @@ class RuleLearnerInitPage:
                 default_abs_min_support = st.session_state[
                     "rule_finding_config"
                 ].abs_min_support
-                default_max_potential_confidence = st.session_state[
-                    "rule_finding_config"
-                ].max_potential_confidence
                 default_g3_threshold = st.session_state["rule_finding_config"].g3_threshold
                 default_fi_threshold = st.session_state["rule_finding_config"].fi_threshold
 
@@ -173,13 +169,6 @@ class RuleLearnerInitPage:
                         "Minimum number of records for a mapping of a rule:", value=default_abs_min_support, format="%d"
                     )
 
-                    st.session_state["max_potential_confidence"] = st.slider(
-                        "max_potential_confidence",
-                        min_value=0.0,
-                        max_value=1.0,
-                        value=default_max_potential_confidence,
-                    )
-
                     st.session_state["g3_threshold"] = st.slider(
                         "g3_threshold",
                         min_value=0.0,
@@ -202,7 +191,6 @@ class RuleLearnerInitPage:
                         speed=st.session_state["speed"],
                         quality=st.session_state["quality"],
                         abs_min_support=st.session_state["abs_min_support"],
-                        max_potential_confidence=st.session_state["max_potential_confidence"],
                         g3_threshold=st.session_state["g3_threshold"],
                         fi_threshold=st.session_state["fi_threshold"],
                     )

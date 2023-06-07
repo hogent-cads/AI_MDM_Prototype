@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import src.backend.DomainController as dc
 import src.shared.configs
@@ -13,9 +15,8 @@ def test_get_all_column_rules_from_df_and_config_1():
         rule_length=2,
         abs_min_support=1,
         confidence=0.95,
-        speed=0.5,
-        quality=4,
-        max_potential_confidence=0.0,
+        speed=1.0,
+        quality=0,
         g3_threshold=0.75,
         fi_threshold=0.75
     )
@@ -32,6 +33,19 @@ def test_get_all_column_rules_from_df_and_config_1():
     assert result is not None
     assert type(result) == str
 
+    result_dict = json.loads(result)
+
+    assert type(result_dict) == dict
+
+    assert "a => b" in result_dict.keys()
+    assert "b => a" not in result_dict.keys()
+
+    assert len(result_dict.keys()) == 1
+
+    assert type(result_dict["a => b"]) == str
+
+    rule_info = json.loads(result_dict["a => b"])
+    assert type(rule_info) == dict
 
 if __name__ == "__main__":
     test_get_all_column_rules_from_df_and_config_1()

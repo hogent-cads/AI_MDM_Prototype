@@ -1,5 +1,4 @@
-import math
-from typing import Sequence, Dict
+from typing import Sequence
 
 from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter
@@ -7,28 +6,17 @@ from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilt
 
 class ColumnRuleRepo:
 
-    def __init__(self, cr_dict: Dict[str, Dict[str, Sequence[ColumnRule]]]) -> None:
-        self.definitions_dict = cr_dict["Definitions"]
-        self.no_definitions_dict = cr_dict["NoDefinitions"]
+    def __init__(self, column_rules: Sequence[ColumnRule]) -> None:
+        self.column_rules = column_rules
 
     def keep_only_interesting_column_rules(
             self,
             filterer: ColumnRuleFilter,
-            confidence_bound: float):
-        # self.noDefinitions_dict = filterer.filter_based_on_confidence_bound(rules = self.noDefinitions_dict, rule_confidence_bound=confidence_bound)
-        self.no_definitions_dict = filterer.execute(rules=self.no_definitions_dict)
-        # self.noDefinitions_dict = filterer.filter_reverse_rules_with_lower_confidence(self.noDefinitions_dict)
+            confidence_bound: float) -> None:
+        # Only keep those column rules that achieve the required minimum confidence
+        self.column_rules = [rule for rule in self.column_rules
+                             if rule.confidence >= confidence_bound]
+        self.column_rules = filterer.execute(rules=self.column_rules)
 
-    def get_definitions_dict(self):
-        return self.definitions_dict
-
-    def get_non_definitions_dict(self):
-        return self.no_definitions_dict
-
-    def get_cr_with_100_confidence_dict(self):
-        return {rs: cr for (rs, cr) in self.no_definitions_dict.items()
-                if math.isclose(cr.confidence, 1)}
-
-    def get_cr_without_100_confidence_dict(self):
-        return {rs: cr for (rs, cr) in self.no_definitions_dict.items()
-                if not math.isclose(cr.confidence, 1)}
+    def get_column_rules(self):
+        return self.column_rules

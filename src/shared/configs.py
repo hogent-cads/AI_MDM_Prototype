@@ -21,7 +21,6 @@ class RuleFindingConfig:
                  speed,
                  quality: int,
                  abs_min_support: int,
-                 max_potential_confidence: float,
                  g3_threshold: float,
                  fi_threshold: float) -> None:
         self.rule_length = rule_length
@@ -30,7 +29,6 @@ class RuleFindingConfig:
         self.quality = quality
         self.abs_min_support = abs_min_support
         self.cols_to_use = cols_to_use
-        self.max_potential_confidence = max_potential_confidence
         self.g3_threshold = g3_threshold
         self.fi_threshold = fi_threshold
 
@@ -47,7 +45,6 @@ class RuleFindingConfig:
             quality=data["quality"],
             abs_min_support=data["abs_min_support"],
             cols_to_use=data["cols_to_use"],
-            max_potential_confidence=data["max_potential_confidence"],
             g3_threshold=data["g3_threshold"],
             fi_threshold=data["fi_threshold"]
         )

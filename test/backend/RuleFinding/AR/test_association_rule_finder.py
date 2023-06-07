@@ -13,21 +13,14 @@ def test_get_association_rules_empty_antecedent():
     )
     ar_df = ar_finder.get_association_rules()
 
-    assert ar_df.shape[0] == 2
+    assert ar_df.shape[0] == 1
     assert ar_df[ar_df["consequents"] == frozenset(["A_1"])].shape[0] == 1
-    assert ar_df[ar_df["consequents"] == frozenset(["A_2"])].shape[0] == 1
     assert (ar_df[ar_df["consequents"] == frozenset(["A_1"])]
             ["antecedents"].values[0] == frozenset())
-    assert (ar_df[ar_df["consequents"] == frozenset(["A_2"])]
-            ["antecedents"].values[0] == frozenset())
     assert (ar_df[ar_df["consequents"] == frozenset(["A_1"])]
-            ["antecedent support"].values[0] == 1.0)
-    assert (ar_df[ar_df["consequents"] == frozenset(["A_2"])]
             ["antecedent support"].values[0] == 1.0)
     assert (ar_df[ar_df["consequents"] == frozenset(["A_1"])]
             ["confidence"].values[0] == 0.9)
-    assert (ar_df[ar_df["consequents"] == frozenset(["A_2"])]
-            ["confidence"].values[0] == 0.1)
 
 
 def test_get_association_rules():
@@ -43,17 +36,17 @@ def test_get_association_rules():
     )
     ar_df = ar_finder.get_association_rules()
 
+    print(ar_df)
+
     # Rules are:
     # => A_1
-    # => A_2
     # => B_1
-    # => B_2
     # A_1 => B_1
     # A_2 => B_2
     # B_1 => A_1
     # B_2 => A_2
-    assert ar_df.shape[0] == 8
-    assert ar_df[ar_df["antecedents"] == frozenset([])].shape[0] == 4
+    assert ar_df.shape[0] == 6
+    assert ar_df[ar_df["antecedents"] == frozenset([])].shape[0] == 2
     assert ar_df[ar_df["antecedents"] == frozenset(["A_1"])].shape[0] == 1
     assert ar_df[ar_df["antecedents"] == frozenset(["A_2"])].shape[0] == 1
     assert ar_df[ar_df["antecedents"] == frozenset(["B_1"])].shape[0] == 1

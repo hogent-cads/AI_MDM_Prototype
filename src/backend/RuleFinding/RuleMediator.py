@@ -1,21 +1,14 @@
-from typing import Dict
+from typing import Dict, Sequence, Set
 
 import pandas as pd
 
-from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import ColumnRuleFilter
-from src.backend.RuleFinding.VR.ValueRuleElement import ValueRuleElement
+from src.backend.RuleFinding.VR.ValueRule import ValueRule
 from src.backend.RuleFinding.VR.ValueRuleFactory import ValueRuleFactory
 from src.backend.RuleFinding.VR.ValueRuleRepo import ValueRuleRepo
 from src.backend.RuleFinding.CR.ColumnRuleFactory import ColumnRuleFactory
 from src.backend.RuleFinding.CR.ColumnRuleRepo import ColumnRuleRepo
+from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
 from src.backend.RuleFinding.AR.AssociationRuleFinder import AssociationRuleFinder
-from src.shared.enums import FiltererEnum
-from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import (
-    ColumnRuleFilter_ZScore,
-)
-from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import (
-    ColumnRuleFilter_Entropy,
-)
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import (
     ColumnRuleFilterCMetric,
 )
@@ -23,7 +16,7 @@ import config as cfg
 
 
 class RuleMediator:
-    def __init__(self, df_ohe, original_df):
+    def __init__(self, df_ohe: pd.DataFrame, original_df: pd.DataFrame):
         self.df_ohe = df_ohe
         self.original_df = original_df
 
@@ -38,48 +31,59 @@ class RuleMediator:
 
     def create_column_rules_from_clean_dataframe(
         self,
-            rule_length,
-            confidence,
-            speed,
-            quality,
-            abs_min_support,
-            max_potential_confidence,
-            g3_threshold,
-            fi_threshold,
+        rule_length,
+        confidence,
+        speed,
+        quality,
+        abs_min_support,
+        g3_threshold,
+        fi_threshold,
     ) -> None:
+        """
+        Create column rules and store them in `self.column_rule_repo`.
+        """
+
         ar_df = self._find_association_rules(
-            self.df_ohe, abs_min_support, rule_length, speed, confidence
+            df_ohe=self.df_ohe,
+            abs_min_support=abs_min_support,
+            rule_length=rule_length
         )
 
         cfg.logger.debug(
             "Dataframe with association rules created."
-            + " Has %s columns.", ar_df.shape[0]
+            + " has %s rows.", ar_df.shape[0]
         )
 
         # Maak een dict van ValueRules aan in de VR Factory
         vr_dict: Dict[
-            str, ValueRuleElement
+            str, Set[ValueRule]
         ] = self.value_rule_factory.transform_ar_dataframe_to_value_rules_dict(ar_df)
 
         # Maak een VR Repo aan door de dict van ValueRules mee te geven
         self.value_rule_repo = ValueRuleRepo(vr_dict)
 
-        # Roep get_filtered methode aan op de Repo
-        list_of_strings_that_represent_cr = self.value_rule_repo.filter_out_column_rule_strings_from_dict_of_value_rules(
-            min_support=1-speed,
-            max_potential_confidence=max_potential_confidence,
+        # Bereken de rule strings die we verder nog gaan bekijken
+        # gebaseerd op de support van de waarderegel en de mogelijke confidence
+        # die deze regel nog kan bereiken
+        rule_strings: Sequence[str] = self.value_rule_repo.filter_column_rule_strings(
+            min_support=speed,
+            confidence=confidence,
         )
         # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
-        cr_dict = self.column_rule_factory.create_dict_of_dict_of_column_rules_from_list_of_strings(
-            list_of_strings_that_represent_cr
+        column_rules: Sequence[ColumnRule] = \
+            self.column_rule_factory.create_column_rules_from_strings(
+            rule_strings
         )
 
         # Maak een CR Repo aan door de dict van ColumnRules mee te geven
-        self.column_rule_repo = ColumnRuleRepo(cr_dict)
-        # Roep getInteresting Rules methode aan op de Repo -> Verschillende implementaties en RETURN deze.
+        self.column_rule_repo = ColumnRuleRepo(column_rules)
+
+        # For now, we only use the c-metric to filter rules.
         self.column_rule_repo.keep_only_interesting_column_rules(
             filterer=ColumnRuleFilterCMetric(
-                g3_threshold=g3_threshold, fi_threshold=fi_threshold, c_threshold=quality
+                g3_threshold=g3_threshold,
+                fi_threshold=fi_threshold,
+                c_threshold=quality
             ),
             confidence_bound=confidence,
         )
@@ -87,30 +91,14 @@ class RuleMediator:
     def get_column_rule_from_string(self, rule_string: str):
         return self.column_rule_factory.expand_single_column_rule(rule_string)
 
-    # Waarschijnlijk alle onderstaande methoden niet nodig
     def get_all_column_rules(self):
-        return {
-            **self.get_cr_definitions_dict(),
-            **self.get_cr_with_100_confidence_dict(),
-            **self.get_cr_without_100_confidence_dict(),
-        }
-
-    def get_cr_definitions_dict(self):
-        return self.column_rule_repo.get_definitions_dict()
-
-    def get_cr_with_100_confidence_dict(self):
-        return self.column_rule_repo.get_cr_with_100_confidence_dict()
-
-    def get_cr_without_100_confidence_dict(self):
-        return self.column_rule_repo.get_cr_without_100_confidence_dict()
-
-    def get_non_definition_column_rules_dict(self):
-        return self.column_rule_repo.get_non_definitions_dict()
+        return self.column_rule_repo.get_column_rules()
 
     def _find_association_rules(
         self,
         df_ohe: pd.DataFrame,
-        abs_min_support, rule_length, speed, confidence
+        abs_min_support: int,
+        rule_length: int
     ):
         self.association_rule_finder = AssociationRuleFinder(
             df_ohe,
@@ -119,3 +107,25 @@ class RuleMediator:
         )
         return self.association_rule_finder.get_association_rules()
 
+    @staticmethod
+    def _preprocess_association_rules(ar_df):  # TODO: remove this method
+        """
+        Filter some rows from the ar_df dataframe.
+        Namely, rows that have the same antecedent and that deal with the same consequent
+        column.
+        Only keep one of these rows, namely the one with the highest confidence.
+        """
+        ar_df["consequent_column_name"] = ar_df["consequents"].apply(
+            lambda con_set: list(con_set)[0].split("_")[0]  # This assumes no _ in column names
+        )
+        grouped = ar_df.groupby(["antecedents", "consequent_column_name"]).max()
+
+        # Add 'consequents' column to the index of grouped
+        grouped.set_index("consequents", append=True, inplace=True)
+
+        print("grouped association rules")
+        print(grouped)
+
+        return ar_df.set_index(
+            ["antecedents", "consequent_column_name", "consequents"]).loc[grouped.index,
+              :].reset_index().drop("consequent_column_name", axis="columns")

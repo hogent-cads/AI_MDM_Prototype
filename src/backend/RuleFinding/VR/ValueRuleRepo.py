@@ -1,10 +1,8 @@
-from typing import Dict, Set, List, FrozenSet
+from typing import Dict, Set, List
 
 import numpy as np
 
 from src.backend.RuleFinding.VR.ValueRule import ValueRule
-from src.backend.RuleFinding.CR.ColumnRule import ColumnRule
-from src.backend.HelperFunctions import HelperFunctions
 import config as cfg
 
 
@@ -12,8 +10,8 @@ class ValueRuleRepo:
     def __init__(self, value_rules_dict: Dict[str, Set[ValueRule]]):
         self.value_rules_dict: Dict[str, Set[ValueRule]] = value_rules_dict
 
-    def filter_out_column_rule_strings_from_dict_of_value_rules(
-        self, min_support: float, max_potential_confidence: float
+    def filter_column_rule_strings(
+        self, min_support: float, confidence: float
     ) -> List[str]:
         """
         TODO!!
@@ -27,78 +25,16 @@ class ValueRuleRepo:
         cfg.logger.debug("potential_conf_dict has %s keys", len(potential_conf_dict))
 
         # Filter out rules that have a low maximum confidence.
-        # TODO: filter out magic number 0.9
         filtered = {
             rs: max_conf
             for rs, max_conf in potential_conf_dict.items()
-            if max_conf >= max_potential_confidence
+            if max_conf >= confidence
         }
 
         cfg.logger.debug("potential_conf_dict has %s keys", len(potential_conf_dict))
+        cfg.logger.debug("filtered dictionary has %s keys", len(filtered))
 
         return filtered.keys()
-
-        # TODO: Stijn: I think this is the place where you should filter
-        #              on the maximum potential confidence.
-
-        return potential_conf_dict.keys()
-        # Stijn: do not do any of the following ?
-        # dict_of_antecedents_to_list_of_column_rules = self._create_dict_of_column_rules_with_potential_confidence_from_value_rules(potential_conf_dict)
-        # cfg.logger.debug(f"dict_of_antecedents_to_list_of_column_rules: has type {type(dict_of_antecedents_to_list_of_column_rules)}")
-        # cfg.logger.debug(f"The keys have type {type(list(dict_of_antecedents_to_list_of_column_rules.keys())[0])}")
-        # # Stijn: don't do any filtering here.
-        # list_of_kept_rules_after_potential_conf_filter = self._filter_on_potential_conf_of_rules(potential_conf_dict,dict_of_antecedents_to_list_of_column_rules,self.value_rules_dict)
-
-        # cfg.logger.debug(f"list_of_kept_rules_after_potential_conf_filter: has type {type(list_of_kept_rules_after_potential_conf_filter)}")
-        # return list_of_kept_rules_after_potential_conf_filter
-
-    def _filter_on_potential_conf_of_rules(
-        self,
-        potential_conf_dict,
-        dict_of_antecedents_to_list_of_column_rules,
-        dict_of_kept_rules_to_be_filtered,
-    ):
-        counter = 0
-        for rs, max_confidence in potential_conf_dict.items():
-            # Log progress
-            counter += 1
-            if (counter % int(1 + (len(potential_conf_dict) / 10))) == 0:
-                cfg.logger.info(
-                    "Progressie LemmaRule Maken en Filteren: %s/%s",
-                    counter,
-                    len(potential_conf_dict)
-                )
-
-            cr = ColumnRule(rs, confidence=max_confidence)
-            if len(cr.antecedent_set) > 1:
-                for s in [
-                    frozenset(_)
-                    for _ in HelperFunctions.subsets_minus_one(cr.antecedent_set)
-                ]:
-                    if s in dict_of_antecedents_to_list_of_column_rules:
-                        innerListToCheck: List[
-                            ColumnRule
-                        ] = dict_of_antecedents_to_list_of_column_rules[
-                            s
-                        ]  # consequents of this rule
-                        for e in innerListToCheck:
-                            # When a 'smaller' rule exists that has the same consequent, but a smaller antecedent
-                            # and the smaller rule has a higher confidence then we drop the larger rule
-
-                            # TODO: maybe change >= into > or math.isclose()
-                            if (e.consequent_set == cr.consequent_set) and (
-                                e.confidence >= cr.confidence
-                            ):
-                                if rs in dict_of_kept_rules_to_be_filtered:
-                                    # TODO: should we also keep these rules for later reference
-                                    cfg.logger.debug(
-                                        "Remove column rule %s, because of %s", rs, e
-                                    )
-                                    del dict_of_kept_rules_to_be_filtered[rs]
-
-        cfg.logger.debug("Kept rules = %s", dict_of_kept_rules_to_be_filtered)
-
-        return dict_of_kept_rules_to_be_filtered.keys()
 
     def _create_potential_conf_dict_from_value_rules(self):
         potential_conf_dict: Dict[str, float] = {
@@ -106,20 +42,6 @@ class ValueRuleRepo:
             for rs, vrs in self.value_rules_dict.items()
         }
         return potential_conf_dict
-
-    def _create_dict_of_column_rules_with_potential_confidence_from_value_rules(
-        self, potential_conf_dict
-    ):
-        antecedents_to_column_rules: Dict[FrozenSet[str], List[ColumnRule]] = {}
-        for rs, max_confidence in potential_conf_dict.items():
-            cr = ColumnRule(rs, confidence=max_confidence)
-            key_lr = cr.antecedent_set
-            if key_lr in antecedents_to_column_rules:
-                antecedents_to_column_rules[key_lr].append(cr)
-            else:
-                antecedents_to_column_rules[key_lr] = [cr]
-
-        return antecedents_to_column_rules
 
     def _filter_low_support_rules(self, min_support) -> Dict[str, Set[ValueRule]]:
         """Remove all entries from the dictionary `self.value_rules_dict` whose total
@@ -141,6 +63,11 @@ class ValueRuleRepo:
         kept_rs: Dict[str, Set[ValueRule]] = {}
         for rs, value_rules in self.value_rules_dict.items():
             support = np.sum([vr.support for vr in value_rules])
+
+            cfg.logger.debug("value rules with %s together have support %s",
+                             rs, support)
+            cfg.logger.debug("The value rules are %s",
+                             " ".join(str(value_rule) for value_rule in value_rules))
 
             if support < min_support:  # remove this one
                 removed_rs[rs] = self.value_rules_dict[rs]

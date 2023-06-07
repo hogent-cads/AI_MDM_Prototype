@@ -340,7 +340,6 @@ class DomainController(FlaskView):
                 speed=rfc.speed,
                 quality=rfc.quality,
                 abs_min_support=rfc.abs_min_support,
-                max_potential_confidence=rfc.max_potential_confidence,
                 g3_threshold=rfc.g3_threshold,
                 fi_threshold=rfc.fi_threshold,
             )

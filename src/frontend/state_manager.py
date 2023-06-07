@@ -48,13 +48,14 @@ class StateManager:
                     st.session_state[k] = v
 
                 st.session_state["rule_finding_config"] = RuleFindingConfig(
+                    cols_to_use=t_dict["cols_to_use"],
                     rule_length=t_dict["rule_length"],
-                    min_support=t_dict["min_support"],
-                    lift=t_dict["lift"],
                     confidence=t_dict["confidence"],
-                    filtering_string=t_dict["filtering_string"],
-                    dropping_options=t_dict["dropping_options"],
-                    binning_option=t_dict["binning_option"],
+                    speed=t_dict["speed"],
+                    quality=t_dict["quality"],
+                    abs_min_support=t_dict["abs_min_support"],
+                    g3_threshold=t_dict["g3_threshold"],
+                    fi_threshold=t_dict["fi_threshold"]
                 )
                 st.session_state[Variables.GB_CURRENT_STATE] = "BekijkRules"
 

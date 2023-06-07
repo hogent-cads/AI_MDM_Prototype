@@ -48,10 +48,10 @@ class AssociationRuleFinder:
             'support',
             self.rel_min_support, support_only=False)
 
-        cfg.logger.debug("Association rules before pruning")
-        cfg.logger.debug("%s", ar)
-
-        return ar
+        # Only keep association rule with a confidence > 50%.
+        # There can only be one such rule for each antecedent.
+        # Plus, it also makes sense from the perspective of error correction.
+        return ar[ar['confidence'] > 0.50]
 
     # Code originally from mlxtend
     @staticmethod
@@ -229,3 +229,5 @@ class AssociationRuleFinder:
                 df_res[met] = metric_dict[met](s_ac, s_a, s_c)
 
         return df_res
+
+
