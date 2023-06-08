@@ -7,7 +7,7 @@
 # nohup python run_websocketrelay_server.py &
 
 # Start gunicorn and streamlit
-nohup gunicorn --worker-class gevent -w 3 run_flask:app --access-logfile gunicorn.access.log --error-logfile gunicorn.error.log &
+nohup gunicorn -t 0 --worker-class gevent -w 3 run_flask:app --access-logfile gunicorn.access.log --error-logfile gunicorn.error.log &
 nohup streamlit run run_streamlit.py --server.port 8501 --server.baseUrlPath /aimdmtool/ --server.enableCORS true --server.enableXsrfProtection true --server.headless=true --browser.gatherUsageStats false &
 
 # Set environment variables, but maybe this doesn't do much.
