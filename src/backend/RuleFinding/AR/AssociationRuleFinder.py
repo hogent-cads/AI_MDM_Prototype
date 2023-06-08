@@ -13,7 +13,7 @@ class AssociationRuleFinder:
                  min_support_count: int, ):
 
         self.df_dummy = df_dummy
-        self.rel_min_support = round(min_support_count / len(df_dummy), 3)
+        self.rel_min_support = min_support_count / len(df_dummy)
         self.rule_length = rule_length
 
     def get_association_rules(self) -> pd.DataFrame:
