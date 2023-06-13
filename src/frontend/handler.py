@@ -19,7 +19,7 @@ class IHandler(ABC):
         raise Exception("Not implemented Exception")
 
     @abstractmethod
-    def get_column_rule_from_string(self, dataframe_in_json, rule_string):
+    def get_column_rules_from_strings(self, dataframe_in_json, rule_string):
         raise Exception("Not implemented Exception")
 
     @abstractmethod
@@ -88,6 +88,14 @@ class IHandler(ABC):
     @abstractmethod
     def structure_detection(self, series_in_json, exception_chars, compress) -> json:
         raise Exception("Not implemented Exception")
+    
+    @abstractmethod
+    def add_rule_to_local_storage(self,
+            dataframe_in_json,
+            new_rule,
+            rule_finding_config_in_json,
+            seq)-> json:
+        raise Exception("Not implemented Exception")
 
 
 class LocalHandler(IHandler):
@@ -106,10 +114,10 @@ class LocalHandler(IHandler):
             ).items()
         }
 
-    def get_column_rule_from_string(self, dataframe_in_json, rule_string):
+    def get_column_rules_from_strings(self, dataframe_in_json, rule_string):
         return ColumnRuleView.parse_from_json(
-            self.dc.get_column_rule_from_string(
-                dataframe_in_json=dataframe_in_json, rule_string=rule_string
+            self.dc.get_column_rules_from_strings(
+                dataframe_in_json=dataframe_in_json, list_of_rule_string=[rule_string]
             )
         )
 
@@ -140,6 +148,18 @@ class LocalHandler(IHandler):
             new_df_in_json=new_df_in_json,
             rule_finding_config_in_json=rule_finding_config_in_json,
             affected_columns=json.dumps(affected_columns),
+        )
+
+    def add_rule_to_local_storage(self,
+            dataframe_in_json,
+            new_rule,
+            rule_finding_config_in_json,
+            seq)-> json:
+        return self.dc.add_rule_to_local_storage(
+            dataframe_in_json=dataframe_in_json,
+            new_rule=new_rule,
+            rule_finding_config_in_json=rule_finding_config_in_json,
+            seq=seq
         )
 
     # ZINGG
@@ -211,15 +231,13 @@ class RemoteHandler(IHandler):
             .items()
         }
 
-    def get_column_rule_from_string(self, dataframe_in_json, rule_string):
-        data = {"dataframe_in_json": dataframe_in_json, "rule_string": rule_string}
+    def get_column_rules_from_strings(self, dataframe_in_json, rule_string):
+        data = {"dataframe_in_json": dataframe_in_json, "list_of_rule_string": [rule_string]}
         return ColumnRuleView.parse_from_json(
-            json.dumps(
                 requests.post(
-                    f"{self.connection_string}/get_column_rule_from_string",
+                    f"{self.connection_string}/get_column_rules_from_strings",
                     data=json.dumps(data),
-                ).json()
-            )
+                ).json()[rule_string]
         )
 
     def get_suggestions_given_dataframe_and_column_rules(
@@ -274,6 +292,23 @@ class RemoteHandler(IHandler):
             cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
             data=json.dumps(data),
         )
+
+    def add_rule_to_local_storage(self,
+            dataframe_in_json,
+            new_rule,
+            rule_finding_config_in_json,
+            seq)-> json:
+            data = {}
+            data["dataframe_in_json"] = dataframe_in_json
+            data["new_rule"] = new_rule
+            data["rule_finding_config_in_json"] = rule_finding_config_in_json
+            data["seq"] = seq
+            
+            requests.post(
+                f"{self.connection_string}/add_rule_to_local_storage",
+                cookies={"session_flask": st.session_state[Variables.GB_SESSION_ID]},
+                data=json.dumps(data),
+            )
 
     # DEDUPE
     def create_deduper_object(self, dedupe_type_dict, dedupe_data) -> json:

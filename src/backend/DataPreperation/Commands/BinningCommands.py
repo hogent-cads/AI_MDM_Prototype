@@ -2,7 +2,20 @@ from abc import ABC, abstractmethod
 from sklearn.cluster import KMeans
 
 import pandas as pd
-from src.backend.HelperFunctions import HelperFunctions
+import re
+
+
+def transform_string_series_to_float_series(self, series: pd.Series) -> pd.Series:
+    return series.apply(lambda stringValue: self._extract_float_from_string(stringValue))
+
+
+def _extract_float_from_string(s: str) -> float:
+    lst = re.findall(r"[-+]?\d*\.\d+|\d+", str(s))
+    if len(lst) > 0:
+        return max([float(i) for i in lst])
+    else:
+        return pd.nan
+
 
 class BinningCommand(ABC):
 
@@ -17,12 +30,11 @@ class BinningCommand_KMeans(BinningCommand):
         self.series = series
         self.number_of_bins = number_of_bins
 
-
     def execute(self, series: pd.Series, numberOfBins) -> pd.Series:
-        float_series = HelperFunctions.transform_string_series_to_float_series(series)
+        float_series = transform_string_series_to_float_series(series)
 
         model = KMeans(n_clusters=numberOfBins)
-        cluster_labels = model.fit_predict(float_series.reshape(-1,1))
+        cluster_labels = model.fit_predict(float_series.reshape(-1, 1))
 
         cluster_labelsTemp = [int(x) for x in model.cluster_centers_]
         cluster_labelsTemp.sort()
@@ -33,24 +45,20 @@ class BinningCommand_KMeans(BinningCommand):
         new_cluster_labelsTemp = []
         for idx, l in enumerate(cluster_labelsTemp):
             if l != cluster_labelsTemp[-1]:
-                new_cluster_labelsTemp.append( int((l + cluster_labelsTemp[idx+1]) /2) )
-
-
+                new_cluster_labelsTemp.append(int((l + cluster_labelsTemp[idx + 1]) / 2))
 
         for idx, label in enumerate(new_cluster_labelsTemp):
 
             if label == new_cluster_labelsTemp[0]:
                 cutOffMap[idx] = "Tot " + str(label)
-                nextLabel = new_cluster_labelsTemp[idx+1]
-                cutOffMap[idx+1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
+                nextLabel = new_cluster_labelsTemp[idx + 1]
+                cutOffMap[idx + 1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
             else:
                 if label == new_cluster_labelsTemp[-1]:
-                    cutOffMap[idx+1] = "Vanaf " + str(label)
+                    cutOffMap[idx + 1] = "Vanaf " + str(label)
                 else:
-                    nextLabel = new_cluster_labelsTemp[idx+1]
-                    cutOffMap[idx+1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
-
-
+                    nextLabel = new_cluster_labelsTemp[idx + 1]
+                    cutOffMap[idx + 1] = "[ " + str(label) + " - " + str(nextLabel) + " ]"
 
         return pd.Series([cutOffMap[x] for x in cluster_labels])
 
@@ -62,4 +70,4 @@ class BinningCommand_EqualBins(BinningCommand):
         self.number_of_bins = number_of_bins
 
     def execute(self) -> pd.Series:
-        return pd.cut(HelperFunctions.transform_string_series_to_float_series(self.series), bins=self.number_of_bins)
+        return pd.cut(transform_string_series_to_float_series(self.series), bins=self.number_of_bins)

@@ -14,7 +14,15 @@ class ColumnRuleView:
         self.confidence = confidence
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+        # Return a json representation of this object
+        return json.dumps(
+            {
+                "rule_string": self.rule_string,
+                "value_mapping": self.value_mapping.to_json(),
+                "idx_to_correct": json.dumps(self.idx_to_correct),
+                "confidence": self.confidence,
+            }
+        )
 
     @staticmethod
     def parse_from_json(json_string):

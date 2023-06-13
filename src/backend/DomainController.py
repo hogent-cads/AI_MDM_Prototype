@@ -15,8 +15,16 @@ from src.shared.configs import RuleFindingConfig
 from src.backend.DataCleaning.FuzzyMatcher import FuzzyMatcher
 from src.backend.DataCleaning.StructureDetector import StructureDetector
 from src.backend.Deduplication.Zingg import Zingg
-from src.backend.HelperFunctions import HelperFunctions
 import config as cfg
+from src.shared.views import ColumnRuleView
+
+
+def _save_results_to(json_string: str, unique_id: str, md5_hash: str, file_name:str):
+    dir_path = f"storage/{unique_id}/{md5_hash}"
+    os.makedirs(dir_path, exist_ok=True)
+
+    with open(f"{dir_path}/{file_name}.json", 'w') as outfile:
+        outfile.write(json_string)
 
 
 class DomainController(FlaskView):
@@ -194,13 +202,7 @@ class DomainController(FlaskView):
         with open(path, "w+") as json_file:
             json_file.write(json.dumps(content))
 
-    # DATA PERPARATION
-    @route("/clean_dataframe", methods=["GET", "POST"])
-    def clean_dataframe(self, df, json_string):
-        return self.data_prepper.clean_data_frame(df, json_string)
-
     # DATACLEANING
-    # TODO REPLACE
     @route("/clean_dataframe_dataprep", methods=["POST"])
     def clean_dataframe_dataprep(
             self, dataframe_in_json="", custom_pipeline=""
@@ -311,6 +313,10 @@ class DomainController(FlaskView):
             md5_of_dataframe = hashlib.md5(
                 dataframe_in_json.encode("utf-8")
             ).hexdigest()
+            md5_of_hash = hashlib.md5(
+                rule_finding_config_in_json.encode("utf-8")
+            ).hexdigest()
+
             result_in_local_storage = self._verify_in_local_storage(
                 md5_to_check=hashlib.md5(
                     rule_finding_config_in_json.encode("utf-8")
@@ -348,25 +354,24 @@ class DomainController(FlaskView):
                 k: v.parse_self_to_view().to_json()
                 for (k, v) in self.rule_mediator.get_all_column_rules().items()
             }
-            save_dump = json.dumps(
+
+            # SAVE RESULTS
+            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_hash}"
+            file_path = (
+                f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
+            )
+            _save_results_to(
+                unique_id=unique_storage_id,
+                md5_hash=md5_of_dataframe,
+                json_string=json.dumps(
                 {
                     "result": result,
                     "params": {
                         "rule_finding_config_in_json": rule_finding_config_in_json
                     },
                 }
-            )
-
-            # SAVE RESULTS
-            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
-            file_name = f"Rule-learning_rules_{parsed_date_time}_{hashlib.md5(rule_finding_config_in_json.encode('utf-8')).hexdigest()}"
-            file_path = (
-                f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
-            )
-            HelperFunctions.save_results_to(
-                unique_id=unique_storage_id,
-                md5_hash=hashlib.md5(dataframe_in_json.encode("utf-8")).hexdigest(),
-                json_string=save_dump,
+            ),
                 file_name=file_name,
             )
 
@@ -377,25 +382,23 @@ class DomainController(FlaskView):
             # RETURN RESULTS
             return json.dumps(result)
 
-    @route("/get_column_rule_from_string", methods=["GET", "POST"])
-    def get_column_rule_from_string(self, dataframe_in_json="", rule_string=""):
-        if dataframe_in_json == "" and rule_string == "":
+    @route("/get_column_rules_from_strings", methods=["GET", "POST"])
+    def get_column_rules_from_strings(self, dataframe_in_json="", list_of_rule_string=""):
+        if dataframe_in_json == "" and list_of_rule_string == "":
             data_to_use = json.loads(request.data)
             dataframe_in_json = data_to_use["dataframe_in_json"]
-            rule_string = data_to_use["rule_string"]
+            list_of_rule_string = data_to_use["list_of_rule_string"]
 
         df = pd.read_json(dataframe_in_json)
         df_to_use = df.astype(str)
         df_OHE = self.data_prepper.transform_data_frame_to_ohe(
             df_to_use, drop_nan=False
         )
-
         self.rule_mediator = RuleMediator(original_df=df_to_use, df_ohe=df_OHE)
-        return (
-            self.rule_mediator.get_column_rule_from_string(rule_string=rule_string)
-            .parse_self_to_view()
-            .to_json()
-        )
+        tmp_dict = {k: self.rule_mediator.get_column_rule_from_string(rule_string=k)
+            .parse_self_to_view().to_json()
+             for k in list_of_rule_string}
+        return json.dumps(tmp_dict)
 
     @route("/recalculate_column_rules", methods=["GET", "POST"])
     def recalculate_column_rules(
@@ -407,85 +410,142 @@ class DomainController(FlaskView):
     ):
         # Check if remote or local
         unique_storage_id = "Local"
-        if (
-                old_df_in_json == ""
-                and new_df_in_json == ""
-                and rule_finding_config_in_json == ""
-                and affected_columns == ""
-        ):
+        try:
             data_to_use = json.loads(request.data)
             unique_storage_id = request.cookies.get("session_flask")
             old_df_in_json = data_to_use["old_dataframe_in_json"]
             new_df_in_json = data_to_use["new_dataframe_in_json"]
             rule_finding_config_in_json = data_to_use["rule_finding_config_in_json"]
             affected_columns = data_to_use["affected_columns"]
+        finally:
+            md5_of_old_dataframe = hashlib.md5(old_df_in_json.encode("utf-8")).hexdigest()
+            md5_of_new_dataframe = hashlib.md5(new_df_in_json.encode("utf-8")).hexdigest()
+            md5_of_config = hashlib.md5(
+                rule_finding_config_in_json.encode("utf-8")
+            ).hexdigest()
 
-        md5_of_old_dataframe = hashlib.md5(old_df_in_json.encode("utf-8")).hexdigest()
-        md5_of_new_dataframe = hashlib.md5(new_df_in_json.encode("utf-8")).hexdigest()
-        md5_of_config = hashlib.md5(
-            rule_finding_config_in_json.encode("utf-8")
-        ).hexdigest()
+            # Haal het resultaat op uit de juiste file -> Deze dictionary zijn de oude gevonden column_rules.
+            dict_of_column_rules = self._verify_in_local_storage(
+                md5_to_check=md5_of_config,
+                md5_of_dataframe=md5_of_old_dataframe,
+                unique_storage_id=unique_storage_id,
+                seq="",
+                save_file=False,
+            )
 
-        # Haal het resultaat op uit de juiste file -> Deze dictionary zijn de oude gevonden column_rules.
-        dict_of_column_rules = self._verify_in_local_storage(
-            md5_to_check=md5_of_config,
-            md5_of_dataframe=md5_of_old_dataframe,
-            # VERY HOT PATCH
-            # unique_storage_id='None-'+md5_of_old_dataframe,
-            unique_storage_id=unique_storage_id,
-            # unique_storage_id=unique_storage_id,
+
+            # Herbereken de column_rules op basis van de affected columns.
+            list_of_affected_rule_strings = []
+            if dict_of_column_rules is not None:
+                for k in dict_of_column_rules.keys():
+                    if k.split(" => ")[1] in affected_columns:
+                        list_of_affected_rule_strings.append(k)
+                        
+                new_column_rules_dict = json.loads(self.get_column_rules_from_strings(
+                                dataframe_in_json=new_df_in_json, list_of_rule_string=list_of_affected_rule_strings
+                            ))
+
+                for k,v in new_column_rules_dict.items():
+                    dict_of_column_rules[k] = v
+
+
+            # Schrijf aanpassingen weg naar de schijf
+            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_config}"
+            file_path = (
+                f"storage/{unique_storage_id}/{md5_of_new_dataframe}/{file_name}.json"
+            )
+            _save_results_to(
+                unique_id=unique_storage_id,
+                md5_hash=md5_of_new_dataframe,
+                json_string=json.dumps(
+                {
+                    "result": dict_of_column_rules,
+                    "params": {"rule_finding_config_in_json": rule_finding_config_in_json},
+                }
+            ),
+                file_name=file_name,
+            )
+
+            # Houd bij in de session map waar de regels zijn opgeslagen
+            self._write_to_session_map(
+                unique_storage_id=unique_storage_id,
+                md5_of_dataframe=md5_of_new_dataframe,
+                method_name="rules",
+                session_id="1",
+                file_name_of_results=file_path,
+                is_in_local=False,
+            )
+            return ""
+
+
+    @route("/add_rule_to_local_storage", methods=["GET", "POST"])
+    def add_rule_to_local_storage(
+            self,
+            dataframe_in_json="",
+            new_rule="",
+            rule_finding_config_in_json="",
             seq="",
-            save_file=False,
-        )
+    ):
+        # Check if remote or local
+        unique_storage_id = "Local"
+        try:
+            data_to_use = json.loads(request.data)
+            unique_storage_id = request.cookies.get("session_flask")
+            dataframe_in_json = data_to_use["dataframe_in_json"]
+            new_rule = data_to_use["new_rule"]
+            rule_finding_config_in_json = data_to_use["rule_finding_config_in_json"]
+            seq = data_to_use["seq"]
+        finally:
+            md5_of_dataframe = hashlib.md5(dataframe_in_json.encode("utf-8")).hexdigest()
+            md5_of_config = hashlib.md5(
+                rule_finding_config_in_json.encode("utf-8")
+            ).hexdigest()
 
-        # Pas deze aan: Meest domme manier is om get_column_rule_from_string aan te roepen en op die manier deze te vervangen
-        if dict_of_column_rules is not None:
-            for k in dict_of_column_rules.keys():
-                ks = k.split(" => ")
-                ksr = ks[1]
-                ksl_list = ks[0].split(",")
-                kstotal = [ksr] + ksl_list
-                for e in json.loads(affected_columns):
-                    if e in kstotal:
-                        dict_of_column_rules[k] = self.get_column_rule_from_string(
-                            dataframe_in_json=new_df_in_json, rule_string=k
-                        )
-                        break
+            # Haal het resultaat op uit de juiste file -> Deze dictionary zijn de oude gevonden column_rules.
+            dict_of_column_rules = self._verify_in_local_storage(
+                md5_to_check=md5_of_config,
+                md5_of_dataframe=md5_of_dataframe,
+                unique_storage_id=unique_storage_id,
+                seq=seq,
+                save_file=False,
+            )
 
-        # Maak save_dump
-        save_dump = json.dumps(
-            {
-                "result": dict_of_column_rules,
-                "params": {"rule_finding_config_in_json": rule_finding_config_in_json},
-            }
-        )
+            new_rule_object = ColumnRuleView.parse_from_json(new_rule)
+            # Voeg de nieuwe rule toe aan de dictionary
+            dict_of_column_rules[new_rule_object.rule_string] = new_rule
 
-        # Schrijf dit weg naar de schijf en pas session map aan.
-        parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
-        file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_config}"
-        file_path = (
-            f"storage/{unique_storage_id}/{md5_of_new_dataframe}/{file_name}.json"
-        )
 
-        # Schrijf de nieuwe regels weg
-        HelperFunctions.save_results_to(
-            unique_id=unique_storage_id,
-            md5_hash=md5_of_new_dataframe,
-            json_string=save_dump,
-            file_name=file_name,
-        )
+            # Schrijf aanpassingen weg naar de schijf
+            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_config}"
+            file_path = (
+                f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
+            )
+            _save_results_to(
+                unique_id=unique_storage_id,
+                md5_hash=md5_of_dataframe,
+                json_string=json.dumps(
+                {
+                    "result": dict_of_column_rules,
+                    "params": {"rule_finding_config_in_json": rule_finding_config_in_json},
+                }
+            ),
+                file_name=file_name,
+            )
 
-        # Houd bij in de session map waar de regels zijn opgeslagen
-        self._write_to_session_map(
-            unique_storage_id=unique_storage_id,
-            md5_of_dataframe=md5_of_new_dataframe,
-            method_name="rules",
-            session_id="1",
-            file_name_of_results=file_path,
-            is_in_local=False,
-        )
+            # Houd bij in de session map waar de regels zijn opgeslagen
+            self._write_to_session_map(
+                unique_storage_id=unique_storage_id,
+                md5_of_dataframe=md5_of_dataframe,
+                method_name="rules",
+                session_id=seq,
+                file_name_of_results=file_path,
+                is_in_local=False,
+            )
+            return ""
+        
 
-        return ""
 
     # SUGGESTIONS
     @route("/get_suggestions_given_dataframe_and_column_rules", methods=["POST"])
@@ -550,7 +610,7 @@ class DomainController(FlaskView):
         parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
         file_name = f"Rule-learning_suggestions_{parsed_date_time}_{hashlib.md5(list_of_rule_string_in_json.encode('utf-8')).hexdigest()}"
         file_path = f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
-        HelperFunctions.save_results_to(
+        _save_results_to(
             unique_id=unique_storage_id,
             md5_hash=hashlib.md5(dataframe_in_json.encode("utf-8")).hexdigest(),
             json_string=save_dump,
@@ -562,5 +622,3 @@ class DomainController(FlaskView):
 
         # RETURN RESULTS
         return json.dumps(result)
-
-# DomainController.register(app, route_base="/")

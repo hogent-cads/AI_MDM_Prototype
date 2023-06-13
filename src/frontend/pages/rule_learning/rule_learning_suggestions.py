@@ -80,7 +80,8 @@ class RuleLearnerSuggestionsPage:
                 colb0,
                 colb1,
                 colb2,
-            ) = st.columns([1, 1, 2])
+                _,
+            ) = st.columns([1, 1, 2, 4])
 
             aangepaste_dataset = st.container()
 
@@ -99,32 +100,6 @@ class RuleLearnerSuggestionsPage:
                         "selected_rows"
                     ]
 
-                    list_of_df_idx = df_with_predictions.index
-
-                    # TODO: Remove this 'old' code once we are satisfied with the 'new' code
-                    # Start original code
-                    # print(f"list_of_df_idx = {list_of_df_idx}")
-                    # set_of_cols = set()
-                    # # Is this correct? I don't think so.
-                    # for idx, row in enumerate(suggestions_rows_selected):
-                    #     index_of_to_change = list_of_df_idx[idx]
-                    #     val_to_change = row["__BEST_PREDICTION"]
-                    #     rs = row["__BEST_RULE"]
-                    #     rss = rs.split(" => ")
-                    #     col_to_change = rss[1]
-                    #     set_of_cols.add(col_to_change)
-                    #     for e in rss[0].split(","):
-                    #         set_of_cols.add(e)
-                    #     # Change value in temp_dataframe
-                    #     st.session_state["temp_dataframe"].loc[
-                    #         index_of_to_change, col_to_change
-                    #     ] = val_to_change
-                    #
-                    # st.session_state[
-                    #     "columns_affected_by_suggestion_application"
-                    # ] = list(set_of_cols)
-                    # End original code
-
                     # Start new code
                     indices_in_idx = [sel_row['_selectedRowNodeInfo']['nodeRowIndex']
                                       for sel_row in suggestions_rows_selected]
@@ -140,31 +115,17 @@ class RuleLearnerSuggestionsPage:
                     )
                     # End new code
 
-
                     with aangepaste_dataset:
                         st.info(
                             'Changes have been applied to the dataset!' +
-                            ' Press the "Recalculate rules" button to see what impact your' +
+                            ' Press the "Update rules" button to see what impact your' +
                             ' changes have on the rules.'
                         )
                         st.header("Modified dataset:")
-                        rows_selected = []
-
-                        # ?? What is the purpose of this code
-                        for idx, row in enumerate(suggestions_rows_selected):
-                            rows_selected.append(int(list_of_df_idx[idx]))
-
                         gb22 = GridOptionsBuilder.from_dataframe(
                             st.session_state["temp_dataframe"]
                         )
                         gb22.configure_side_bar()
-                        # gb22.configure_selection('multiple', pre_selected_rows=rows_selected)
-                        # gb22.configure_default_column(
-                        #     groupable=True,
-                        #     value=True,
-                        #     enableRowGroup=True,
-                        #     aggFunc="sum",
-                        #     editable=False)
                         gridOptions = gb22.build()
                         _ = AgGrid(
                             st.session_state["temp_dataframe"],
@@ -175,24 +136,16 @@ class RuleLearnerSuggestionsPage:
                         )
 
             with colb1:
-                submitted = st.button("Recalculate rules")
+                submitted = st.button("Update rules", disabled=(not "columns_affected_by_suggestion_application" in st.session_state))
                 if submitted:
-                    # Get the rule_finding_config from the session_state
-                    rule_finding_config = st.session_state["rule_finding_config"]
-
-                    json_rule_finding_config = rule_finding_config.to_json()
-
-                    # recalculate unique storage id
-                    # st.session_state[VarEnum.gb_SESSION_ID_WITH_FILE_HASH] = f"{st.session_state[VarEnum.gb_SESSION_ID]}-{hashlib.md5(st.session_state['temp_dataframe'].to_json().encode('utf-8')).hexdigest()}"
+                    json_rule_finding_config = st.session_state["rule_finding_config"].to_json()
 
                     st.session_state[Variables.SB_LOADED_DATAFRAME_HASH] = hashlib.md5(
                         st.session_state["temp_dataframe"].to_json().encode("utf-8")
                     ).hexdigest()
 
                     self.handler.recalculate_column_rules(
-                        old_df_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME][
-                            st.session_state["cols_to_use"]
-                        ].to_json(),
+                        old_df_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME].to_json(),
                         new_df_in_json=st.session_state["temp_dataframe"].to_json(),
                         rule_finding_config_in_json=json_rule_finding_config,
                         affected_columns=st.session_state[

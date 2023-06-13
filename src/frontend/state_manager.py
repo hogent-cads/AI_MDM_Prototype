@@ -47,7 +47,7 @@ class StateManager:
                 for k, v in t_dict.items():
                     st.session_state[k] = v
 
-                st.session_state["rule_finding_config"] = RuleFindingConfig(
+                st.session_state[Variables.RL_CONFIG] = RuleFindingConfig(
                     cols_to_use=t_dict["cols_to_use"],
                     rule_length=t_dict["rule_length"],
                     confidence=t_dict["confidence"],

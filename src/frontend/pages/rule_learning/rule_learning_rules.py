@@ -15,29 +15,6 @@ class RuleLearnerSummaryRulesPage:
         self.canvas = canvas
         self.handler = handler
 
-    def _calculate_entropy(self, row, df, len_vm):
-        querystring_list = []
-        pre = row[:-1]
-        post = row[-1:]
-        for k, v in pre.items():
-            querystring_list.append(f"`{k}` == {v}")
-        querystring = " and ".join(querystring_list)
-        df_new = df.query(querystring)
-        total_instances = len(df_new)
-        # Zit maar 1 k-v pair in
-        for k, v in post.items():
-            other_query_string = f"`{k}` == {v}"
-        correct_instances = len(df_new.query(other_query_string))
-        percentage_correct = correct_instances / total_instances
-        if math.isclose(1, percentage_correct):
-            entropy = 0
-        else:
-            entropy = (-1 * percentage_correct) * math.log(percentage_correct, 2) + (
-                -1 * (1 - percentage_correct) * math.log(1 - percentage_correct, 2)
-            )
-
-        return entropy
-
     def show(self):
         extra_grid_options = {
             "alwaysShowHorizontalScroll": True,
@@ -56,12 +33,6 @@ class RuleLearnerSummaryRulesPage:
                 # Stukje voor de selectionFinder
                 if st.session_state["gevonden_rules_dict"] != {}:
                     st.subheader("Choose rules to give suggestions:")
-                    if "list_of_rule_string" in st.session_state:
-                        pre_selected = json.loads(
-                            st.session_state["list_of_rule_string"]
-                        )
-                    else:
-                        pre_selected = []
                     df_of_column_rules_for_suggestion_finder = pd.DataFrame(
                         {
                             "Regel": st.session_state["gevonden_rules_dict"].keys(),
@@ -80,7 +51,7 @@ class RuleLearnerSummaryRulesPage:
                     gb1.configure_grid_options(fit_columns_on_grid_load=True)
                     gb1.configure_selection(
                         "multiple",
-                        pre_selected_rows=pre_selected,
+                        # pre_selected_rows=pre_selected,
                         use_checkbox=True,
                         groupSelectsChildren=True,
                         header_checkbox=True,
@@ -106,7 +77,7 @@ class RuleLearnerSummaryRulesPage:
                         ] = self.handler.get_suggestions_given_dataframe_and_column_rules(
                             dataframe_in_json=st.session_state[
                                 Variables.SB_LOADED_DATAFRAME
-                            ][st.session_state["cols_to_use"]].to_json(),
+                            ].to_json(),
                             list_of_rule_string_in_json=json.dumps(
                                 [
                                     x["Regel"]
@@ -192,9 +163,10 @@ class RuleLearnerSummaryRulesPage:
                 )
 
             if st.session_state["validate_own_rule_btn"]:
+
                 filtered_cols = ant_set + [con_set]
                 rule_string = ",".join(ant_set) + " => " + con_set
-                found_rule = self.handler.get_column_rule_from_string(
+                found_rule = self.handler.get_column_rules_from_strings(
                     dataframe_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME][
                         filtered_cols
                     ].to_json(),
@@ -252,23 +224,14 @@ class RuleLearnerSummaryRulesPage:
                         on_click=StateManager.turn_state_button_true,
                         args=("add_own_rule_btn",),
                     )
-                    # calculate_entropy_btn = st.button(
-                    #     "Calculate entropy for specific rule",
-                    #     on_click=StateManager.turn_state_button_true,
-                    #     args=("calculate_entropy_btn",))
 
-            if st.session_state["add_own_rule_btn"]:
-                st.session_state["gevonden_rules_dict"][
-                    found_rule.rule_string
-                ] = found_rule
-                StateManager.reset_all_buttons()
-                st.experimental_rerun()
-
-            # if st.session_state["calculate_entropy_btn"]:
-            #     vm = found_rule.value_mapping
-            #     df = st.session_state[VarEnum.sb_LOADED_DATAFRAME]
-            #     vm['entropy'] = vm.apply(
-            #         lambda row: self._calculate_entropy(row, df, len(vm)), axis=1)
-            #     st.write(vm)
-            #     st.write("SOM:")
-            #     st.write(np.sum(vm['entropy'].values))
+                    if st.session_state["add_own_rule_btn"]:  
+                        st.session_state["gevonden_rules_dict"][
+                            found_rule.rule_string
+                        ] = found_rule
+                        self.handler.add_rule_to_local_storage(dataframe_in_json=st.session_state[Variables.SB_LOADED_DATAFRAME].to_json(), 
+                                                               new_rule=found_rule.to_json(), 
+                                                               rule_finding_config_in_json=st.session_state[Variables.RL_CONFIG].to_json(), 
+                                                               seq=st.session_state[Variables.GB_CURRENT_SEQUENCE_NUMBER])
+                        StateManager.reset_all_buttons()
+                        st.experimental_rerun()

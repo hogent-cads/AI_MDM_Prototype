@@ -40,7 +40,7 @@ class RuleLearnerInitPage:
     def show(self):
         with self.canvas.container():
             # # Default values:
-            if "rule_finding_config" not in st.session_state:
+            if Variables.RL_CONFIG not in st.session_state:
                 default_rule_length = 3
                 default_confidence = 0.95
                 default_speed = 0.95
@@ -50,16 +50,16 @@ class RuleLearnerInitPage:
                 default_fi_threshold = 0.9
             else:
                 default_rule_length = st.session_state[
-                    "rule_finding_config"
+                    Variables.RL_CONFIG
                 ].rule_length
-                default_confidence = st.session_state["rule_finding_config"].confidence
-                default_speed = st.session_state["rule_finding_config"].speed
-                default_quality = st.session_state["rule_finding_config"].quality
+                default_confidence = st.session_state[Variables.RL_CONFIG].confidence
+                default_speed = st.session_state[Variables.RL_CONFIG].speed
+                default_quality = st.session_state[Variables.RL_CONFIG].quality
                 default_abs_min_support = st.session_state[
-                    "rule_finding_config"
+                    Variables.RL_CONFIG
                 ].abs_min_support
-                default_g3_threshold = st.session_state["rule_finding_config"].g3_threshold
-                default_fi_threshold = st.session_state["rule_finding_config"].fi_threshold
+                default_g3_threshold = st.session_state[Variables.RL_CONFIG].g3_threshold
+                default_fi_threshold = st.session_state[Variables.RL_CONFIG].fi_threshold
 
             #     default_binning_option = st.session_state["binning_option"]
             #
@@ -211,7 +211,7 @@ class RuleLearnerInitPage:
                         fi_threshold=st.session_state["fi_threshold"],
                     )
                     # Sla rule finding config op in de session_state
-                    st.session_state["rule_finding_config"] = rule_finding_config
+                    st.session_state[Variables.RL_CONFIG] = rule_finding_config
                     json_rule_finding_config = rule_finding_config.to_json()
 
                     # Set session_state attributes

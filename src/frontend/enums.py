@@ -195,7 +195,7 @@ class Variables(str, enum.Enum):
     DD_CLUSTER_DF = "zingg_cluster_df"
 
     # Rule-Learning
-
+    RL_CONFIG = "rule_finding_config"
     RL_SETTING_GRID_COLUMN = "Column"
     RL_SETTING_GRID_PERCENT_NAN = "Percentage of missing values"
     RL_SETTING_GRID_DOMINANT_COLUMN = "Percentage of occurrence of the most frequent value"

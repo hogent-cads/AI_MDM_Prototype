@@ -202,7 +202,7 @@ class ColumnRule:
             rule_string=self.rule_string,
             idx_to_correct=json.dumps(self.df_to_correct.index.tolist()),
             confidence=self.confidence,
-            value_mapping=self.mapping_df.reset_index().to_json())
+            value_mapping=self.mapping_df.reset_index())
 
     def compute_c_measure(self) -> float:
         """
