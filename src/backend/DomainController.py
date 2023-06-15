@@ -438,8 +438,14 @@ class DomainController(FlaskView):
             list_of_affected_rule_strings = []
             if dict_of_column_rules is not None:
                 for k in dict_of_column_rules.keys():
-                    if k.split(" => ")[1] in affected_columns:
-                        list_of_affected_rule_strings.append(k)
+
+                    # Check if affected columns are in the rule_string
+                    af = json.loads(affected_columns)
+                    for e in af:
+                        if e in k.split(" => ")[1] or e in k.split(" => ")[0]:
+                            list_of_affected_rule_strings.append(k)
+
+                list_of_affected_rule_strings = list(set(list_of_affected_rule_strings))
                         
                 new_column_rules_dict = json.loads(self.get_column_rules_from_strings(
                                 dataframe_in_json=new_df_in_json, list_of_rule_string=list_of_affected_rule_strings

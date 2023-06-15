@@ -242,8 +242,8 @@ def _compute_affected_columns(
     for idx_in_idx in indices_in_index:
         idx = predictions_df.index[idx_in_idx]
         rule_str = predictions_df.loc[idx, "__BEST_RULE"]
-        antecedents = rule_str.split(" => ")[0].split(",")
-        cols.update(antecedents)
+        # antecedents = rule_str.split(" => ")[0].split(",")
+        # cols.update(antecedents)
         consequent = rule_str.split(" => ")[1]
         cols.add(consequent)
 
