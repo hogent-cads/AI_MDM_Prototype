@@ -356,7 +356,7 @@ class DomainController(FlaskView):
             }
 
             # SAVE RESULTS
-            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            parsed_date_time = ""
             file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_hash}"
             file_path = (
                 f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
@@ -450,7 +450,7 @@ class DomainController(FlaskView):
 
 
             # Schrijf aanpassingen weg naar de schijf
-            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            parsed_date_time = ""
             file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_config}"
             file_path = (
                 f"storage/{unique_storage_id}/{md5_of_new_dataframe}/{file_name}.json"
@@ -517,7 +517,7 @@ class DomainController(FlaskView):
 
 
             # Schrijf aanpassingen weg naar de schijf
-            parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+            parsed_date_time = ""
             file_name = f"Rule-learning_rules_{parsed_date_time}_{md5_of_config}"
             file_path = (
                 f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
@@ -607,7 +607,7 @@ class DomainController(FlaskView):
         )
 
         # SAVE RESULTS
-        parsed_date_time = datetime.now().strftime("%m_%d_%H_%M_%S")
+        parsed_date_time = ""
         file_name = f"Rule-learning_suggestions_{parsed_date_time}_{hashlib.md5(list_of_rule_string_in_json.encode('utf-8')).hexdigest()}"
         file_path = f"storage/{unique_storage_id}/{md5_of_dataframe}/{file_name}.json"
         _save_results_to(

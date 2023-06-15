@@ -138,7 +138,7 @@ class RuleLearnerSuggestionsPage:
             with colb1:
                 submitted = st.button("Update rules", disabled=(not "columns_affected_by_suggestion_application" in st.session_state))
                 if submitted:
-                    json_rule_finding_config = st.session_state["rule_finding_config"].to_json()
+                    json_rule_finding_config = st.session_state[Variables.RL_CONFIG].to_json()
 
                     st.session_state[Variables.SB_LOADED_DATAFRAME_HASH] = hashlib.md5(
                         st.session_state["temp_dataframe"].to_json().encode("utf-8")

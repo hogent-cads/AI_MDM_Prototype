@@ -253,32 +253,6 @@ def main():
         ) or st.session_state[v.DDC_FORCE_RELOAD_CACHE]:
             _reload_dataframe(uploaded_file, handler)
 
-        # CALCULATE CURRENT SEQ IF NOT ALREADY PRESENT
-        # if v.gb_CURRENT_SEQUENCE_NUMBER not in st.session_state:
-        #     st.session_state[v.gb_CURRENT_SEQUENCE_NUMBER] = \
-        #       str(max([int(x) for x in st.session_state[v.gb_SESSION_MAP].keys()], default=0)+1)
-
-        # CREATE BUTTONS FROM SESSION_MAP
-        button_container = st.sidebar.expander(
-            label=d.SB_PREVIOUS_RESULTS, expanded=False
-        )
-        if st.session_state[v.GB_SESSION_MAP] is not None:
-            for seq, method_dict in st.session_state[v.GB_SESSION_MAP].items():
-                button_container.write(seq)
-                for method, file_name in method_dict.items():
-                    button_container.write(method)
-                    button_container.button(
-                        "⏪ "
-                        + seq
-                        + file_name.split("/")[-1],  # file_name.split("\\")[1],
-                        on_click=StateManager.restore_state,
-                        kwargs={
-                            "handler": handler,
-                            "file_path": file_name,
-                            "chosen_seq": seq,
-                        },
-                    )
-
         # Toevoegen van download knop:
         # st.sidebar.button('Download huidige dataset')
         st.sidebar.download_button(

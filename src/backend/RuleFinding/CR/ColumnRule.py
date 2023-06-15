@@ -200,7 +200,7 @@ class ColumnRule:
     def parse_self_to_view(self) -> ColumnRuleView:
         return ColumnRuleView(
             rule_string=self.rule_string,
-            idx_to_correct=json.dumps(self.df_to_correct.index.tolist()),
+            idx_to_correct=self.df_to_correct.index.tolist(),
             confidence=self.confidence,
             value_mapping=self.mapping_df.reset_index())
 
