@@ -84,5 +84,5 @@ def test_compute_affected_columns():
         indices_in_index=[2,1,0]
     )
 
-    # 'g' and 'h' should not be present
-    assert sorted(affected_cols) == ['a','b','c','d','e','f']
+    # Only consequent columns should be present
+    assert sorted(affected_cols) == ['b', 'd', 'f']
