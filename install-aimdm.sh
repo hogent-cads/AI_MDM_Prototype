@@ -20,13 +20,20 @@ cp -r spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/
 ln -sr AI_MDM_Prototype/external/zingg-0.3.4 AI_MDM_Prototype/external/zingg
 ln -sr AI_MDM_Prototype/external/spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/spark
 
+# Download and install miniconda
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b
+source ./miniconda3/etc/profile.d/conda.sh
 
+
+# Change the zingg script by adding a line to activate the virtual environment "aimdm"
+sed -i '/SPARK_HOME\/bin\/spark-submit/i source \/home\/vagrant\/miniconda3\/etc\/profile.d\/conda.sh && conda activate aimdm' AI_MDM_Prototype/external/scripts/zingg.sh
 
 cd AI_MDM_Prototype
-# Do not use virtual environment for now. This causes problems with Popen
-#mkdir envs
-#python -m venv envs/ai-mdm
-#source envs/ai-mdm/bin/activate
+# Create and activate a virtual environment with conda.
+conda create -y -n aimdm python=3.10
+conda activate aimdm
+# Install the packages in this virtual environment
 pip install -r requirements.txt
 pip install gunicorn gunicorn[gevent]
 

@@ -6,6 +6,10 @@
 # Start the websocket relay server
 # nohup python run_websocketrelay_server.py &
 
+
+# Activate the conda virtual environment
+source /home/vagrant/miniconda3/etc/profile.d/conda.sh && conda activate aimdm
+
 # Start gunicorn and streamlit
 nohup gunicorn -t 0 --worker-class gevent -w 3 run_flask:app --access-logfile gunicorn.access.log --error-logfile gunicorn.error.log &
 nohup streamlit run run_streamlit.py --server.port 8501 --server.baseUrlPath /aimdmtool/ --server.enableCORS true --server.enableXsrfProtection true --server.headless=true --browser.gatherUsageStats false &
