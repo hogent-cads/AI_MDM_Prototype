@@ -1,4 +1,4 @@
-dask==2023.4.1
+dask==2023.3.0
 dataprep==0.4.5
 extra_streamlit_components==0.1.56
 Flask
