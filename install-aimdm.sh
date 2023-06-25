@@ -27,7 +27,7 @@ source ./miniconda3/etc/profile.d/conda.sh
 
 
 # Change the zingg script by adding a line to activate the virtual environment "aimdm"
-sed -i '/SPARK_HOME\/bin\/spark-submit/i source \/home\/vagrant\/miniconda3\/etc\/profile.d\/conda.sh && conda activate aimdm' AI_MDM_Prototype/external/scripts/zingg.sh
+sed -i '/SPARK_HOME\/bin\/spark-submit/i source \/home\/vagrant\/miniconda3\/etc\/profile.d\/conda.sh && conda activate aimdm' AI_MDM_Prototype/external/zingg/scripts/zingg.sh
 
 cd AI_MDM_Prototype
 # Create and activate a virtual environment with conda.
