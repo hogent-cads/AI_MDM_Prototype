@@ -35,13 +35,13 @@
 * Bouw de image:
 
     ```
-    sudo docker build --tag aimdm .
+    sudo docker build --tag hogentcads/aimdm .
     ```
 
 * Start de container (je kan poort 8080 vervangen naar een poort naar keuze):
 
     ```
-    sudo docker run --publish "8080:80/tcp" --name "aimdm_container" aimdm
+    sudo docker run --publish "8080:80/tcp" --name "aimdm_container" hogentcads/aimdm
     ```
 
     Surf nu naar http://localhost:8080/aimdmtool
@@ -63,13 +63,13 @@
 * Exporteren van de image:
 
     ```
-    sudo docker save --output aimdm_latest.tar aimdm:latest
+    sudo docker save --output aimdm_latest.tar hogentcads/aimdm:latest
     ```
 
     Je kan ook extra comprimeren:
 
     ```
-    sudo docker save aimdm:latest | gzip --best > aimdm_latest.tar.gz
+    sudo docker save hogentcads/aimdm:latest | gzip --best > aimdm_latest.tar.gz
     ```
 
 
@@ -85,6 +85,11 @@
     gunzip aimdm_latest.tar.gz
     sudo docker load --input aimdm_latest.tar
     ```
+
+* Push naar Docker:
+     ```
+     docker push hogentcads/aimdm:tagname
+     ```
 
 
 ## Stand-alone installatie
