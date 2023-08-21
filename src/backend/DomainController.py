@@ -442,7 +442,7 @@ class DomainController(FlaskView):
                     # Check if affected columns are in the rule_string
                     af = json.loads(affected_columns)
                     for e in af:
-                        if e in k.split(" => ")[1] or e in k.split(" => ")[0]:
+                        if e in k.split(" => ")[1] or e in k.split(" => ")[0].split(','):
                             list_of_affected_rule_strings.append(k)
 
                 list_of_affected_rule_strings = list(set(list_of_affected_rule_strings))
