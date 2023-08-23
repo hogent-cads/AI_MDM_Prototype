@@ -19,7 +19,6 @@ configuration = {
     "HANDLER_TYPE": "Remote", # "Local" or "Remote
     "remote_url": '127.0.0.1',
     "remote_port": '8000',
-    # Port for the web socket server
-    "WEBSOCKET_SERVER_URL": "wss://linode.liquidco.in",
+    "WEBSOCKET_SERVER_URL": "wss://wsauthserver.supergroup.ai",
     "WEBSOCKET_SERVER_PORT": 80
 }
