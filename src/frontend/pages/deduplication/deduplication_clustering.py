@@ -253,9 +253,12 @@ class ZinggClusterPage:
         merged_df = pd.DataFrame(fast_rows)
 
         st.session_state[Variables.GB_CURRENT_STATE] = None
+        # TODO: check if this is still needed
         if set(["_selectedRowNodeInfo", "exists"]) <= set(list(merged_df.columns)):
             merged_df = merged_df.drop(columns=["_selectedRowNodeInfo", "exists"])
-
+        # Drop column "exists".
+        if "exists" in merged_df.columns:
+            merged_df = merged_df.drop(columns=["exists"])
         if set(["z_minScore", "z_maxScore", "z_cluster"]) <= set(
             list(merged_df.columns)
         ):
