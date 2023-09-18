@@ -131,7 +131,7 @@ class ZinggClusterPage:
             st.title("Found Clusters")
             # Give which columns are primary keys
             pks = st.multiselect(
-                "Select the columns that form primary key, they well be left alone during merging of records",
+                "Select the columns that form primary key, they will be left alone during merging of records",
                 st.session_state[Variables.SB_LOADED_DATAFRAME].columns,
             )
 
@@ -140,10 +140,10 @@ class ZinggClusterPage:
                 sort_clusters = st.selectbox(
                     "Sort clusters on:",
                     (
-                        "Amount of records in a cluster",
+                        "Number of records in a cluster",
                         "Cluster confidence score",
-                        "Lowest cluster Similairty",
-                        "Highest cluster Similairty",
+                        "Lowest cluster similarity",
+                        "Highest cluster similarity",
                     ),
                 )
                 if sort_clusters == "Cluster confidence score":
@@ -152,19 +152,19 @@ class ZinggClusterPage:
                         key=lambda x: x.cluster_confidence,
                         reverse=True,
                     )
-                if sort_clusters == "Amount of records in a cluster":
+                if sort_clusters == "Number of records in a cluster":
                     st.session_state["list_of_cluster_view"] = sorted(
                         st.session_state["list_of_cluster_view"],
                         key=lambda x: len(x.records_df),
                         reverse=True,
                     )
-                if sort_clusters == "Lowest cluster Similairty":
+                if sort_clusters == "Lowest cluster similarity":
                     st.session_state["list_of_cluster_view"] = sorted(
                         st.session_state["list_of_cluster_view"],
                         key=lambda x: x.cluster_low,
                         reverse=False,
                     )
-                if sort_clusters == "Highest cluster Similairty":
+                if sort_clusters == "Highest cluster similarity":
                     st.session_state["list_of_cluster_view"] = sorted(
                         st.session_state["list_of_cluster_view"],
                         key=lambda x: x.cluster_high,
@@ -253,9 +253,12 @@ class ZinggClusterPage:
         merged_df = pd.DataFrame(fast_rows)
 
         st.session_state[Variables.GB_CURRENT_STATE] = None
+        # TODO: check if this is still needed
         if set(["_selectedRowNodeInfo", "exists"]) <= set(list(merged_df.columns)):
             merged_df = merged_df.drop(columns=["_selectedRowNodeInfo", "exists"])
-
+        # Drop column "exists".
+        if "exists" in merged_df.columns:
+            merged_df = merged_df.drop(columns=["exists"])
         if set(["z_minScore", "z_maxScore", "z_cluster"]) <= set(
             list(merged_df.columns)
         ):
