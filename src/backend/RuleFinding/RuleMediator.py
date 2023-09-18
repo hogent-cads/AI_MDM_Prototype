@@ -1,6 +1,7 @@
 from typing import Dict, Sequence, Set
 
 import pandas as pd
+import hashlib
 
 from src.backend.RuleFinding.VR.ValueRule import ValueRule
 from src.backend.RuleFinding.VR.ValueRuleFactory import ValueRuleFactory
@@ -12,6 +13,7 @@ from src.backend.RuleFinding.AR.AssociationRuleFinder import AssociationRuleFind
 from src.backend.RuleFinding.CR.CRFilters.ColumnRuleFilter import (
     ColumnRuleFilterCMetric,
 )
+from src.backend.RuleFinding.Pyro import Pyro
 import config as cfg
 
 
@@ -38,42 +40,48 @@ class RuleMediator:
         abs_min_support,
         g3_threshold,
         fi_threshold,
+        pyro,
     ) -> None:
         """
         Create column rules and store them in `self.column_rule_repo`.
         """
 
-        ar_df = self._find_association_rules(
-            df_ohe=self.df_ohe,
-            abs_min_support=abs_min_support,
-            rule_length=rule_length
-        )
+        if pyro:
+            modelID = hashlib.md5(self.original_df.to_string().encode()).hexdigest()
+            column_rules = Pyro.run_pyro(df=self.original_df, modelID=modelID)
 
-        cfg.logger.debug(
-            "Dataframe with association rules created."
-            + " has %s rows.", ar_df.shape[0]
-        )
+        else:
+            ar_df = self._find_association_rules(
+                df_ohe=self.df_ohe,
+                abs_min_support=abs_min_support,
+                rule_length=rule_length
+            )
 
-        # Maak een dict van ValueRules aan in de VR Factory
-        vr_dict: Dict[
-            str, Set[ValueRule]
-        ] = self.value_rule_factory.transform_ar_dataframe_to_value_rules_dict(ar_df)
+            cfg.logger.debug(
+                "Dataframe with association rules created."
+                + " has %s rows.", ar_df.shape[0]
+            )
 
-        # Maak een VR Repo aan door de dict van ValueRules mee te geven
-        self.value_rule_repo = ValueRuleRepo(vr_dict)
+            # Maak een dict van ValueRules aan in de VR Factory
+            vr_dict: Dict[
+                str, Set[ValueRule]
+            ] = self.value_rule_factory.transform_ar_dataframe_to_value_rules_dict(ar_df)
 
-        # Bereken de rule strings die we verder nog gaan bekijken
-        # gebaseerd op de support van de waarderegel en de mogelijke confidence
-        # die deze regel nog kan bereiken
-        rule_strings: Sequence[str] = self.value_rule_repo.filter_column_rule_strings(
-            min_support=speed,
-            confidence=confidence,
-        )
-        # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
-        column_rules: Sequence[ColumnRule] = \
-            self.column_rule_factory.create_column_rules_from_strings(
-            rule_strings
-        )
+            # Maak een VR Repo aan door de dict van ValueRules mee te geven
+            self.value_rule_repo = ValueRuleRepo(vr_dict)
+
+            # Bereken de rule strings die we verder nog gaan bekijken
+            # gebaseerd op de support van de waarderegel en de mogelijke confidence
+            # die deze regel nog kan bereiken
+            rule_strings: Sequence[str] = self.value_rule_repo.filter_column_rule_strings(
+                min_support=speed,
+                confidence=confidence,
+            )
+            # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
+            column_rules: Sequence[ColumnRule] = \
+                self.column_rule_factory.create_column_rules_from_strings(
+                rule_strings
+            )
 
         # Maak een CR Repo aan door de dict van ColumnRules mee te geven
         self.column_rule_repo = ColumnRuleRepo(column_rules)

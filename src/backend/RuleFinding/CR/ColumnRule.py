@@ -231,7 +231,8 @@ class ColumnRule:
             if self.has_predominant_rhs() and self.compute_rfi_measure() < 0.75:
                 c_measure -= 2
         else:
-            raise ValueError("C-measure computed when both g3 and fi are < 0.75")
+            pass
+            # raise ValueError("C-measure computed when both g3 and fi are < 0.75")
 
         # Stage 4 and 5 not yet implemented
         self.c_measure_ = c_measure

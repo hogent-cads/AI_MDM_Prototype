@@ -1,6 +1,7 @@
 import json
 import asyncio
 import time
+import datetime
 import uuid
 import hashlib
 
@@ -153,7 +154,8 @@ def _reload_dataframe(uploaded_file, handler):
                 pd.read_csv(uploaded_file, delimiter=separator if separator else ",")
             )
         except Exception as e:
-            st.error(f"Error while reading the file, please check if the 'optional separator' is correct.")
+            # st.error(f"Error while reading the file, please check if the 'optional separator' is correct.")
+            st.error(e)
             st.session_state[v.SB_LOADED_DATAFRAME] = pd.DataFrame()
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = uploaded_file.name
         st.session_state[v.SB_LOADED_DATAFRAME_ID] = uploaded_file.id
@@ -210,6 +212,13 @@ def main():
     # if st.session_state[v.sb_LOADED_DATAFRAME] is not None:
     #     st.session_state[v.sb_LOADED_DATAFRAME_HASH] = \
     #        _hash_dataframe(st.session_state[v.sb_LOADED_DATAFRAME])
+
+    # Sidebar vullen met timestamp difference
+    if v.GB_TIMING not in st.session_state:
+        st.session_state[v.GB_TIMING] = time.time()
+    else:
+        st.session_state[v.GB_TIMING] = time.time() - st.session_state[v.GB_TIMING]
+        st.sidebar.write(f"Time elapsed: {str(datetime.timedelta(seconds=st.session_state[v.GB_TIMING]))} ")
 
     # Sidebar vullen met functionaliteit-mogelijkheden
     st.session_state[v.SB_CURRENT_FUNCTIONALITY] = st.sidebar.selectbox(

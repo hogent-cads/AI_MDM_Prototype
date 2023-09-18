@@ -10,11 +10,6 @@ from src.frontend.components.dataset_displayer import (
     DatasetDisplayerComponent,
 )
 
-
-# def _create_total_binning_dict(dict_to_show):
-#     st.session_state["binning_option"] = dict_to_show
-#     return st.session_state["binning_option"]
-
 def _create_js_code_for_specific_column(var):
     return JsCode(f"""
         function(params) {{
@@ -48,6 +43,7 @@ class RuleLearnerInitPage:
                 default_abs_min_support = 3
                 default_g3_threshold = 0.9
                 default_fi_threshold = 0.9
+                default_pyro = False
             else:
                 default_rule_length = st.session_state[
                     Variables.RL_CONFIG
@@ -60,16 +56,7 @@ class RuleLearnerInitPage:
                 ].abs_min_support
                 default_g3_threshold = st.session_state[Variables.RL_CONFIG].g3_threshold
                 default_fi_threshold = st.session_state[Variables.RL_CONFIG].fi_threshold
-
-            #     default_binning_option = st.session_state["binning_option"]
-            #
-            # if "binning_option" in st.session_state:
-            #     preview_total_to_show_binning = _create_total_binning_dict(
-            #         st.session_state["binning_option"]
-            #     )
-            # else:
-            #     preview_total_to_show_binning = _create_total_binning_dict({})
-            # # END DEFAULTS
+                default_pyro = st.session_state[Variables.RL_CONFIG].pyro
 
             chosen_tab = stx.tab_bar(
                 data=[
@@ -97,7 +84,7 @@ class RuleLearnerInitPage:
                     colA_1, colA_2, colA_3 = st.columns([1, 1, 1])
                     with colA_1:
                         percent_nan_threshold = st.slider(
-                            "Percentage of non empty values:",
+                            "Ratio of non empty values:",
                             min_value=0.0,
                             max_value=1.0,
                             value=0.5,
@@ -175,6 +162,10 @@ class RuleLearnerInitPage:
                         value=default_quality,
                     )
 
+                    st.session_state["pyro"] = st.checkbox(
+                        "Use Pyro", value=default_pyro
+                    )
+
                 adv_settings_exp = st.expander("Advanced Settings")
                 with adv_settings_exp:
                     st.session_state["abs_min_support"] = st.number_input(
@@ -209,6 +200,7 @@ class RuleLearnerInitPage:
                         abs_min_support=st.session_state["abs_min_support"],
                         g3_threshold=st.session_state["g3_threshold"],
                         fi_threshold=st.session_state["fi_threshold"],
+                        pyro=st.session_state["pyro"],
                     )
                     # Sla rule finding config op in de session_state
                     st.session_state[Variables.RL_CONFIG] = rule_finding_config
@@ -225,70 +217,6 @@ class RuleLearnerInitPage:
                     )
                     st.session_state[Variables.GB_CURRENT_STATE] = "BekijkRules"
                     st.experimental_rerun()
-
-            # if chosen_tab == "4":
-            #     colA_binning, colB_binning = st.columns(2)
-            #     with colA_binning:
-            #         st.subheader("Default Binning Option:")
-            #
-            #         default_binning_option = st.selectbox(
-            #             "Binning method:",
-            #             [e.value for e in BinningEnum],
-            #             key="kolom_default_binning",
-            #         )
-            #         use_default_binning = st.checkbox(
-            #             "Use the default condition",
-            #             value=False,
-            #             key="checkbox_default_binning",
-            #         )
-            #         temp_dict_binning = {
-            #             key: default_binning_option
-            #             for key in st.session_state[Variables.SB_LOADED_DATAFRAME].columns
-            #         }
-            #
-            #         if use_default_binning:
-            #             for k, v in temp_dict_binning.items():
-            #                 preview_total_to_show_binning[k] = v
-            #         else:
-            #             for k, v in temp_dict_binning.items():
-            #                 if k in preview_total_to_show_binning:
-            #                     del preview_total_to_show_binning[k]
-            #
-            #     with colB_binning:
-            #         st.subheader("Column-specific Binning Options:")
-            #         kolom_specific_binnig = None
-            #         col1, col2, col3 = st.columns(3)
-            #         with col1:
-            #             kolom_specific_binnig = st.selectbox(
-            #                 "Column:",
-            #                 [
-            #                     e
-            #                     for e in st.session_state[
-            #                     Variables.SB_LOADED_DATAFRAME
-            #                 ].columns
-            #                 ],
-            #                 key="Kolom_Binning",
-            #             )
-            #         with col2:
-            #             specific_binnig = st.selectbox(
-            #                 "Binning method:", [e.value for e in BinningEnum]
-            #             )
-            #
-            #         colC_1_binning, colC_2_binning, _ = st.columns([5, 7, 14])
-            #         with colC_1_binning:
-            #             buttonC_1_binning = st.button("Add Binning")
-            #             if buttonC_1_binning:
-            #                 preview_total_to_show_binning[
-            #                     kolom_specific_binnig
-            #                 ] = specific_binnig
-            #         with colC_2_binning:
-            #             buttonC_2_binning = st.button("Remove Binning")
-            #             if buttonC_2_binning:
-            #                 if k in preview_total_to_show_binning:
-            #                     del preview_total_to_show_binning[kolom_specific_binnig]
-            #
-            #     st.subheader("Options that will be applied:")
-            #     st.write(preview_total_to_show_binning)
 
     def show_column_filtering(
             self,
@@ -324,9 +252,9 @@ class RuleLearnerInitPage:
                     or key_column_threshold <= key_column_value:
                 dict_to_append[Variables.RL_SETTING_GRID_COLUMN.value] = col
                 dict_to_append[
-                    Variables.RL_SETTING_GRID_PERCENT_NAN.value] = percent_nan_value * 100
+                    Variables.RL_SETTING_GRID_PERCENT_NAN.value] = percent_nan_value
                 dict_to_append[
-                    Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value] = dominant_column_value * 100
+                    Variables.RL_SETTING_GRID_DOMINANT_COLUMN.value] = dominant_column_value
                 dict_to_append[Variables.RL_SETTING_GRID_KEY_COLUMN.value] = key_column_value
                 list_of_dicts.append(dict_to_append)
         df_of_columns_to_exclude_for_rl = pd.DataFrame(list_of_dicts)

@@ -348,6 +348,7 @@ class DomainController(FlaskView):
                 abs_min_support=rfc.abs_min_support,
                 g3_threshold=rfc.g3_threshold,
                 fi_threshold=rfc.fi_threshold,
+                pyro = rfc.pyro,
             )
 
             result = {

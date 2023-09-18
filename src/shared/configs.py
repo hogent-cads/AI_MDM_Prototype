@@ -22,7 +22,8 @@ class RuleFindingConfig:
                  quality: int,
                  abs_min_support: int,
                  g3_threshold: float,
-                 fi_threshold: float) -> None:
+                 fi_threshold: float,
+                 pyro: bool) -> None:
         self.rule_length = rule_length
         self.confidence = confidence
         self.speed = speed
@@ -31,6 +32,7 @@ class RuleFindingConfig:
         self.cols_to_use = cols_to_use
         self.g3_threshold = g3_threshold
         self.fi_threshold = fi_threshold
+        self.pyro = pyro
 
     def to_json(self):
         return json.dumps(self.__dict__)
@@ -46,6 +48,7 @@ class RuleFindingConfig:
             abs_min_support=data["abs_min_support"],
             cols_to_use=data["cols_to_use"],
             g3_threshold=data["g3_threshold"],
-            fi_threshold=data["fi_threshold"]
+            fi_threshold=data["fi_threshold"],
+            pyro=data["pyro"]
         )
 

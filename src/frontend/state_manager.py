@@ -2,10 +2,10 @@ import json
 
 import streamlit as st
 
-from src.shared.views import ColumnRuleView
-from src.shared.configs import RuleFindingConfig
 from src.frontend.enums import Variables
 from src.frontend.handler import IHandler
+from src.shared.configs import RuleFindingConfig
+from src.shared.views import ColumnRuleView
 
 
 class StateManager:
@@ -102,6 +102,15 @@ class StateManager:
 
         if current_state == Variables.ST_DD_CLUSTERING:
             st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DD_LABELING
+            return
+
+        # Data Extractor
+        if current_state == Variables.ST_DE_RESULTS:
+            st.session_state[Variables.GB_CURRENT_STATE] = None
+            return
+
+        if current_state == Variables.ST_DE_COMBINE:
+            st.session_state[Variables.GB_CURRENT_STATE] = None
             return
 
     @staticmethod
@@ -226,6 +235,13 @@ class StateManager:
 
         if "list_of_fuzzy_cluster_view" not in st.session_state:
             st.session_state["list_of_fuzzy_cluster_view"] = []
+
+        # DATA EXTRACTOR
+        if Variables.DE_SCORES not in st.session_state:
+            st.session_state[Variables.DE_SCORES] = None
+
+        if Variables.DE_STORED_CONFIG not in st.session_state:
+            st.session_state[Variables.DE_STORED_CONFIG] = {}
 
     @staticmethod
     def reset_all_buttons():

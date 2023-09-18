@@ -158,11 +158,15 @@ class Variables(str, enum.Enum):
     ST_RL_RULES = "BekijkRules"
     ST_RL_SUGGESTIONS = "BekijkSuggesties"
 
+    ST_DE_RESULTS = "DataExtractorResults"
+    ST_DE_COMBINE = "DataExtractorCombine"
+
     # Global
     GB_CURRENT_STATE = "currentState"
     GB_SESSION_MAP = "session_map"
     GB_SESSION_ID = "session_flask_local_id"
     GB_CURRENT_SEQUENCE_NUMBER = "current_seq"
+    GB_TIMING = "time_stamp"
 
     # Sidebar
     SB_LOADED_DATAFRAME = "dataframe"
@@ -186,6 +190,15 @@ class Variables(str, enum.Enum):
     DP_DATAPREP_PROFILE = "generated_dataprep_profile"
 
     # Data Extraction
+    DE_SCORES = "scores"
+    DE_CLUSTER_DF = "cluster_df"
+    DE_CONFIG = "config"
+    DE_STORED_CONFIG = "stored_config"
+    DE_FINAL_CONFIG = "final_config"
+    DE_FINAL_CONFIG_COLUMN = "final_config_column"
+    DE_FINAL_CONFIG_TYPE = "final_config_type"
+    DE_FINAL_CONFIG_ALGORITHM = "final_config_algorithm"
+    DE_FINAL_CONFIG_PARAM = "final_config_param"
 
     # Deduplication
     DD_TYPE_DICT = "dedupe_type_dict"
@@ -197,8 +210,8 @@ class Variables(str, enum.Enum):
     # Rule-Learning
     RL_CONFIG = "rule_finding_config"
     RL_SETTING_GRID_COLUMN = "Column"
-    RL_SETTING_GRID_PERCENT_NAN = "Percentage of missing values"
-    RL_SETTING_GRID_DOMINANT_COLUMN = "Percentage of occurrence of the most frequent value"
+    RL_SETTING_GRID_PERCENT_NAN = "Ratio of missing values"
+    RL_SETTING_GRID_DOMINANT_COLUMN = "Ratio of occurrence of the most frequent value"
     RL_SETTING_GRID_KEY_COLUMN = "Uniqueness of the column"
 
 
