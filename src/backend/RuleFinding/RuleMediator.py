@@ -48,7 +48,7 @@ class RuleMediator:
 
         if pyro:
             modelID = hashlib.md5(self.original_df.to_string().encode()).hexdigest()
-            column_rules = Pyro.run_pyro(df=self.original_df, modelID=modelID)
+            column_rules = Pyro.run_pyro(df2=self.original_df, modelID=modelID)
 
         else:
             ar_df = self._find_association_rules(

@@ -55,7 +55,7 @@ class Pyro:
         return rule_strings
 
     @staticmethod
-    def run_pyro(modelID, df, ):
+    def run_pyro(modelID, df2, ):
 
         # if phase == "findTrainingData":
         #     # remove existing unmarked pairs and run findTrainingData phase
@@ -75,7 +75,10 @@ class Pyro:
         # Create an input file for Pyro
         
         Path(f"storage/{modelID}/input_dir").mkdir(parents=True, exist_ok=True)
-        df.to_csv(f"storage/{modelID}/input_dir/input.csv", index=False)
+        df2.to_csv(f"storage/{modelID}/input_dir/input.csv", index=False)
+
+        if os.path.exists(f"./results"):
+            shutil.rmtree(f"./results")
 
         system = platform.system()
         if system == "Windows":
@@ -119,8 +122,40 @@ class Pyro:
             cfg.logger.debug(err.decode("utf-8") if err is not None else "")
         else:
             raise ValueError("Unsupported OS")
+        
 
-        return "200"
+        # Read in the data from the output file that ends with .fds
+        path = os.path.join("./results", [f for f in os.listdir("./results") if f.endswith("_fds")][0])
+        with open(path, 'r') as f:
+            all_data = f.readlines()
+            all_data = [json.loads(line) for line in all_data]
+
+        df = pd.DataFrame(columns=['list_of_determinants', 'dependant'])
+
+        for idx, e in enumerate(all_data):
+            list_of_dicts = e["determinant"]["columnIdentifiers"]
+            # extract all 'columnIdentifier' values and place them in a list
+            list_of_determinants = [d['columnIdentifier'] for d in list_of_dicts]
+            dependant = e["dependant"]["columnIdentifier"]
+            df.loc[idx] = [list_of_determinants, dependant]
+
+        col_dict = {}
+        for idx, colname in enumerate(df2.columns):
+            col_dict['column'+str(idx+1)] = str(df2.columns[idx])
+
+        # Transform the column numbers to column names based on col_dict
+        for idx, row in df.iterrows():
+            for idx2, col in enumerate(row['list_of_determinants']):
+                df.at[idx, 'list_of_determinants'][idx2] = col_dict[col]
+            df.at[idx, 'dependant'] = col_dict[row['dependant']]
+
+        # Create a list of strings of the form "A,B => C"
+        rule_strings = []
+        for idx, row in df.iterrows():
+            rule_strings.append(','.join(row['list_of_determinants']) + ' => ' + row['dependant'])
+
+        print(rule_strings)
+        return rule_strings
 
     @staticmethod
     def _read_parquet_schema_df(uri: str) -> pd.DataFrame:
