@@ -56,22 +56,6 @@ class Pyro:
 
     @staticmethod
     def run_pyro(modelID, df2, ):
-
-        # if phase == "findTrainingData":
-        #     # remove existing unmarked pairs and run findTrainingData phase
-        #     if os.path.exists(
-        #         f"storage/{modelID}/models/{modelID}/trainingData/unmarked"
-        #     ):
-        #         shutil.rmtree(
-        #             f"storage/{modelID}/models/{modelID}/trainingData/unmarked"
-        #         )
-
-        # # If phase is train, clear output directory
-        # if phase == "train":
-        #     if os.path.exists(f"storage/{modelID}/output_dir"):
-        #         shutil.rmtree(f"storage/{modelID}/output_dir")
-
-
         # Create an input file for Pyro
         
         Path(f"storage/{modelID}/input_dir").mkdir(parents=True, exist_ok=True)
@@ -153,8 +137,7 @@ class Pyro:
         rule_strings = []
         for idx, row in df.iterrows():
             rule_strings.append(','.join(row['list_of_determinants']) + ' => ' + row['dependant'])
-
-        print(rule_strings)
+            
         return rule_strings
 
     @staticmethod

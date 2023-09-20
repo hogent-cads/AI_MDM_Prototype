@@ -48,7 +48,7 @@ class RuleMediator:
 
         if pyro:
             modelID = hashlib.md5(self.original_df.to_string().encode()).hexdigest()
-            column_rules = Pyro.run_pyro(df2=self.original_df, modelID=modelID)
+            rule_strings = Pyro.run_pyro(df2=self.original_df, modelID=modelID)
 
         else:
             ar_df = self._find_association_rules(
@@ -77,11 +77,11 @@ class RuleMediator:
                 min_support=speed,
                 confidence=confidence,
             )
-            # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
-            column_rules: Sequence[ColumnRule] = \
-                self.column_rule_factory.create_column_rules_from_strings(
-                rule_strings
-            )
+        # De overige ValueRules worden gebruikt om opnieuw een dict aan te maken in de CR Factory
+        column_rules: Sequence[ColumnRule] = \
+            self.column_rule_factory.create_column_rules_from_strings(
+            rule_strings
+        )
 
         # Maak een CR Repo aan door de dict van ColumnRules mee te geven
         self.column_rule_repo = ColumnRuleRepo(column_rules)
