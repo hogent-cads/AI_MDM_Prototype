@@ -275,7 +275,6 @@ class DataExtractorResultsPage:
         }
 
     def perform_pca(self, tfidf_vectorizer_vectors, variance_expl=0.95):
-        # Loop Function to identify number of principal components that explain at least 85% of the variance
         print(f"total features: {tfidf_vectorizer_vectors.shape[1]}")
 
         if tfidf_vectorizer_vectors.shape[1] <= 10:
