@@ -213,6 +213,9 @@ class Variables(str, enum.Enum):
     RL_SETTING_GRID_PERCENT_NAN = "Ratio of missing values"
     RL_SETTING_GRID_DOMINANT_COLUMN = "Ratio of occurrence of the most frequent value"
     RL_SETTING_GRID_KEY_COLUMN = "Uniqueness of the column"
+    RL_SETTING_ALGO = 'rl_algo'
+    RL_SETTING_ALGO_Pyro = "Pyro"
+    RL_SETTING_ALGO_FPG_FD = "FPG-FD"
 
 
 class ZingTypes(str, enum.Enum):

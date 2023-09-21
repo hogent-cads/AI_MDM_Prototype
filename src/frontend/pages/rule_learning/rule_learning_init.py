@@ -71,7 +71,7 @@ class RuleLearnerInitPage:
 
             if chosen_tab == "2":
                 st.header("Column Selection Settings")
-                col_selection_settings_exp = st.expander("Exclusion Settings", expanded=True)
+                col_selection_settings_exp = st.expander("Exclusion Settings", expanded=False)
                 with col_selection_settings_exp:
                     if "cols_to_exclude" not in st.session_state:
                         st.session_state["cols_to_exclude"] = []
@@ -137,34 +137,45 @@ class RuleLearnerInitPage:
                 st.header("Rule quality Settings")
                 basic_settings_exp = st.expander("Basic Settings", expanded=True)
                 with basic_settings_exp:
-                    st.session_state["rule_length"] = st.number_input(
-                        "Rule length:", value=default_rule_length, format="%d"
-                    )
 
-                    st.session_state["confidence"] = st.slider(
-                        "Minimum confidence",
-                        min_value=0.0,
-                        max_value=1.0,
-                        value=default_confidence,
-                    )
+                    rl_algo_col1,rl_algo_col2, rl_algo_col3 = st.columns([1, 1, 1])
+                    with rl_algo_col1:
+                        st.session_state[Variables.RL_SETTING_ALGO] = st.selectbox(
+                            "Choose a rule learning algorithm",
+                            options=[Variables.RL_SETTING_ALGO_Pyro.value, Variables.RL_SETTING_ALGO_FPG_FD.value],
+                            index=1,
+                        )
 
-                    st.session_state["speed"] = st.slider(
-                        "Speed",
-                        min_value=0.0,
-                        max_value=1.0,
-                        value=default_speed,
-                    )
+                    if st.session_state[Variables.RL_SETTING_ALGO] == Variables.RL_SETTING_ALGO_FPG_FD.value:
 
-                    st.session_state["quality"] = st.slider(
-                        "Quality",
-                        min_value=0,
-                        max_value=5,
-                        value=default_quality,
-                    )
+                        with rl_algo_col2:
+                            st.session_state["rule_length"] = st.number_input(
+                                "Rule length:", value=default_rule_length, format="%d"
+                            )
 
-                    st.session_state["pyro"] = st.checkbox(
-                        "Use Pyro", value=default_pyro
-                    )
+                        with rl_algo_col3:
+                            st.session_state["speed"] = st.slider(
+                                "Speed",
+                                min_value=0.0,
+                                max_value=1.0,
+                                value=default_speed,
+                            )
+
+                    rl_opt_col1, rl_opt_col2= st.columns([1, 1])
+                    with rl_opt_col1:
+                        st.session_state["confidence"] = st.slider(
+                            "Minimum confidence",
+                            min_value=0.0,
+                            max_value=1.0,
+                            value=default_confidence,
+                        )
+                    with rl_opt_col2:
+                        st.session_state["quality"] = st.slider(
+                            "Quality",
+                            min_value=0,
+                            max_value=5,
+                            value=default_quality,
+                        )
 
                 adv_settings_exp = st.expander("Advanced Settings")
                 with adv_settings_exp:
@@ -200,7 +211,7 @@ class RuleLearnerInitPage:
                         abs_min_support=st.session_state["abs_min_support"],
                         g3_threshold=st.session_state["g3_threshold"],
                         fi_threshold=st.session_state["fi_threshold"],
-                        pyro=st.session_state["pyro"],
+                        pyro=True if (st.session_state[Variables.RL_SETTING_ALGO] == Variables.RL_SETTING_ALGO_Pyro.value) else False,
                     )
                     # Sla rule finding config op in de session_state
                     st.session_state[Variables.RL_CONFIG] = rule_finding_config
