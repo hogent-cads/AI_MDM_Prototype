@@ -1,7 +1,6 @@
 import json
 import asyncio
 import time
-import datetime
 import uuid
 import hashlib
 
@@ -212,13 +211,6 @@ def main():
     # if st.session_state[v.sb_LOADED_DATAFRAME] is not None:
     #     st.session_state[v.sb_LOADED_DATAFRAME_HASH] = \
     #        _hash_dataframe(st.session_state[v.sb_LOADED_DATAFRAME])
-
-    # Sidebar vullen met timestamp difference
-    if v.GB_TIMING not in st.session_state:
-        st.session_state[v.GB_TIMING] = time.time()
-    else:
-        st.session_state[v.GB_TIMING] = time.time() - st.session_state[v.GB_TIMING]
-        st.sidebar.write(f"Time elapsed: {str(datetime.timedelta(seconds=st.session_state[v.GB_TIMING]))} ")
 
     # Sidebar vullen met functionaliteit-mogelijkheden
     st.session_state[v.SB_CURRENT_FUNCTIONALITY] = st.sidebar.selectbox(

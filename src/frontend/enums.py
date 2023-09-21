@@ -166,7 +166,6 @@ class Variables(str, enum.Enum):
     GB_SESSION_MAP = "session_map"
     GB_SESSION_ID = "session_flask_local_id"
     GB_CURRENT_SEQUENCE_NUMBER = "current_seq"
-    GB_TIMING = "time_stamp"
 
     # Sidebar
     SB_LOADED_DATAFRAME = "dataframe"

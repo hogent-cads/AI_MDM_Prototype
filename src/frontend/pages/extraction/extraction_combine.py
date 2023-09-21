@@ -42,7 +42,6 @@ class DataExtractorCombinePage:
                 mode_values_df = tmp.groupby("Cluster").agg({st.session_state[Variables.DE_FINAL_CONFIG][
                                                                  Variables.DE_FINAL_CONFIG_COLUMN]: lambda x:
                 x.value_counts().index[0]})
-                st.write(mode_values_df)
             else:
                 # Determine min and max values of each cluster
                 min_values_df = tmp.groupby("Cluster").agg(

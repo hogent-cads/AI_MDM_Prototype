@@ -112,7 +112,6 @@ class DataExtractorResultsPage:
         with self.canvas.container():
 
             try:
-
                 centers = list(
                     range(st.session_state[Variables.DE_CONFIG]['range_iteration_lower'],
                           st.session_state[Variables.DE_CONFIG]['range_iteration_upper'],
@@ -278,14 +277,24 @@ class DataExtractorResultsPage:
     def perform_pca(self, tfidf_vectorizer_vectors, variance_expl=0.95):
         # Loop Function to identify number of principal components that explain at least 85% of the variance
         print(f"total features: {tfidf_vectorizer_vectors.shape[1]}")
-        iteration_step_size = math.floor(tfidf_vectorizer_vectors.shape[1] / 200)
-        for comp in range(3, tfidf_vectorizer_vectors.shape[1], 1570):
+
+        if tfidf_vectorizer_vectors.shape[1] <= 10:
+            iteration_step_size = 1
+        elif tfidf_vectorizer_vectors.shape[1] <= 100:
+            iteration_step_size = 10
+        else:
+            iteration_step_size = math.floor(tfidf_vectorizer_vectors.shape[1] / 25)
+
+        print(f"iteration step size: {iteration_step_size}")
+        # 1570 is the step size for the products.csv dataset
+        for comp in range(1, tfidf_vectorizer_vectors.shape[1], iteration_step_size):
             pca = TruncatedSVD(n_components=comp, random_state=42)
             pca.fit(tfidf_vectorizer_vectors)
             comp_check = pca.explained_variance_ratio_
             final_comp = comp
             print(f"size: {comp}, variance: {comp_check.sum()}")
             if comp_check.sum() > variance_expl:
+                print(f"final size: {final_comp}, final variance: {comp_check.sum()}")
                 break
         Final_PCA = TruncatedSVD(n_components=final_comp, random_state=42)
         Final_PCA.fit(tfidf_vectorizer_vectors)
@@ -300,7 +309,15 @@ class DataExtractorResultsPage:
         chosen_ngrams = "char"
         # Bepaalde range van ngrams
         chosen_ngram_range = (2, 4)
-        tfidf_vectorizer = TfidfVectorizer(use_idf=True, analyzer=chosen_ngrams, ngram_range=chosen_ngram_range)
-        tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(
-            st.session_state[Variables.SB_LOADED_DATAFRAME][chosen_column].to_list())
-        return tfidf_vectorizer_vectors
+        try:
+            tfidf_vectorizer = TfidfVectorizer(use_idf=True, analyzer=chosen_ngrams, ngram_range=chosen_ngram_range)
+            tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(
+                st.session_state[Variables.SB_LOADED_DATAFRAME][chosen_column].astype(str).to_list())
+            return tfidf_vectorizer_vectors
+        except Exception as e:
+            chosen_ngram_range = (1, 1)
+            tfidf_vectorizer = TfidfVectorizer(use_idf=True, analyzer=chosen_ngrams, ngram_range=chosen_ngram_range)
+            tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(
+                st.session_state[Variables.SB_LOADED_DATAFRAME][chosen_column].astype(str).to_list())
+            return tfidf_vectorizer_vectors
+        

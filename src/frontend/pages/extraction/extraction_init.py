@@ -58,19 +58,19 @@ class DataExtractorInitPage:
                 col_range_1, col_range_2, col_range_3 = st.columns([1, 1, 1])
 
                 with col_range_1:
-                    range_iteration_lower = st.number_input(label="range_iteration_lower: ",
+                    range_iteration_lower = st.number_input(label="Min. number of clusters:" if chosen_algorithm == "K-means" else "Min. cluster size",
                                                             min_value=2, max_value=len(
                             st.session_state[Variables.SB_LOADED_DATAFRAME]),
                                                             value=dict_config["range_iteration_lower"], step=1)
 
                 with col_range_2:
-                    range_iteration_upper = st.number_input(label="range_iteration_upper: ",
+                    range_iteration_upper = st.number_input(label="Max. number of clusters:" if chosen_algorithm == "K-means" else "Max. cluster size",
                                                             min_value=2, max_value=len(
                             st.session_state[Variables.SB_LOADED_DATAFRAME]),
                                                             value=dict_config["range_iteration_upper"], step=1)
 
                 with col_range_3:
-                    number_of_scores = st.slider(label="number_of_scores: ", value=dict_config["number_of_scores"],
+                    number_of_scores = st.slider(label="Number of iterations between min and max value: ", value=dict_config["number_of_scores"],
                                                  min_value=2, max_value=(range_iteration_upper - range_iteration_lower),
                                                  step=1)
 
