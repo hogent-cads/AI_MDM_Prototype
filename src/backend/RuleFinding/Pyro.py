@@ -1,39 +1,39 @@
 import os
 from pathlib import Path
-import hashlib
 from subprocess import Popen, PIPE, STDOUT
-import subprocess
 import platform
 import shutil
 import json
 
 import pandas as pd
-import pyarrow.parquet as pq
 
 import config as cfg
 
+
 class Pyro:
+
     def __init__(
-        self,  
+        self,
     ) -> None:
         pass
 
     @staticmethod
     def run_pyro(modelID, df2, ):
         # Create an input file for Pyro
-        
+
         Path(f"storage/{modelID}/input_dir").mkdir(parents=True, exist_ok=True)
         df2.to_csv(f"storage/{modelID}/input_dir/input.csv", index=False)
 
-        if os.path.exists(f"./results"):
-            shutil.rmtree(f"./results")
+        if os.path.exists("./results"):
+            shutil.rmtree("./results")
 
         system = platform.system()
         if system == "Windows":
             cmd = (
                 ["java"]
                 + ["-classpath"]
-                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar;./external/metanome-utils/metanome-cli-1.1.0.jar"]
+                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar;"
+                   + "./external/metanome-utils/metanome-cli-1.1.0.jar"]
                 + ["de.metanome.cli.App"]
                 + ["--algorithm"]
                 + ["de.hpi.isg.pyro.algorithms.Pyro"]
@@ -50,9 +50,10 @@ class Pyro:
 
         elif system == "Linux":
             cmd = (
-                  ["java"]
+                ["java"]
                 + ["-classpath"]
-                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar:./external/metanome-utils/metanome-cli-1.1.0.jar"]
+                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar:"
+                   + "./external/metanome-utils/metanome-cli-1.1.0.jar"]
                 + ["de.metanome.cli.App"]
                 + ["--algorithm"]
                 + ["de.hpi.isg.pyro.algorithms.Pyro"]
@@ -69,10 +70,10 @@ class Pyro:
             cfg.logger.debug(err.decode("utf-8") if err is not None else "")
         else:
             raise ValueError("Unsupported OS")
-        
 
         # Read in the data from the output file that ends with .fds
-        path = os.path.join("./results", [f for f in os.listdir("./results") if f.endswith("_fds")][0])
+        path = os.path.join("./results",
+                            [f for f in os.listdir("./results") if f.endswith("_fds")][0])
         with open(path, 'r') as f:
             all_data = f.readlines()
             all_data = [json.loads(line) for line in all_data]
@@ -87,8 +88,8 @@ class Pyro:
             df.loc[idx] = [list_of_determinants, dependant]
 
         col_dict = {}
-        for idx, colname in enumerate(df2.columns):
-            col_dict['column'+str(idx+1)] = str(df2.columns[idx])
+        for idx, col_name in enumerate(df2.columns):
+            col_dict['column'+str(idx+1)] = str(col_name)
 
         # Transform the column numbers to column names based on col_dict
         for idx, row in df.iterrows():
@@ -99,6 +100,7 @@ class Pyro:
         # Create a list of strings of the form "A,B => C"
         rule_strings = []
         for idx, row in df.iterrows():
-            rule_strings.append(','.join(row['list_of_determinants']) + ' => ' + row['dependant'])
-            
+            rule_strings.append(','.join(row['list_of_determinants'])
+                                + ' => ' + row['dependant'])
+
         return rule_strings
