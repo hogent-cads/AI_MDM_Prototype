@@ -55,7 +55,8 @@ class StateManager:
                     quality=t_dict["quality"],
                     abs_min_support=t_dict["abs_min_support"],
                     g3_threshold=t_dict["g3_threshold"],
-                    fi_threshold=t_dict["fi_threshold"]
+                    fi_threshold=t_dict["fi_threshold"],
+                    pyro=t_dict["pyro"],
                 )
                 st.session_state[Variables.GB_CURRENT_STATE] = "BekijkRules"
 
