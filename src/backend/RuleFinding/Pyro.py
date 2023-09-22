@@ -50,10 +50,9 @@ class Pyro:
 
         elif system == "Linux":
             cmd = (
-                ["/bin/bash"]
-                + ["java"]
+                  ["java"]
                 + ["-classpath"]
-                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar;./external/metanome-utils/metanome-cli-1.1.0.jar"]
+                + ["./external/metanome-utils/pyro-distro-1.0-SNAPSHOT-distro.jar:./external/metanome-utils/metanome-cli-1.1.0.jar"]
                 + ["de.metanome.cli.App"]
                 + ["--algorithm"]
                 + ["de.hpi.isg.pyro.algorithms.Pyro"]

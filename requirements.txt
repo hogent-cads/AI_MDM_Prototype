@@ -24,3 +24,6 @@ streamlit_aggrid
 streamlit_javascript
 websockets
 zingg
+hdbscan
+plotly
+kneed

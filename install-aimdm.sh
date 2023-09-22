@@ -3,11 +3,13 @@
 # This is a script that installs the AI-MDM tool on a Linux Alma server using Vagrant
 # This assumes that there is a nginx.conf file in the shared folder /vagrant
 
-sudo dnf -y install git nginx java-1.8.0-openjdk wget pip
+sudo dnf -y install git nginx java-1.8.0-openjdk wget pip gcc
 
 # Download external files
 wget https://github.com/zinggAI/zingg/releases/download/v0.3.4/zingg-0.3.4-SNAPSHOT-spark-3.1.2.tar.gz
 wget https://archive.apache.org/dist/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+wget https://github.com/sekruse/metanome-cli/releases/download/v1.1.0/metanome-cli-1.1.0.jar
+wget https://github.com/HPI-Information-Systems/pyro/releases/download/v1.0/pyro-distro-1.0-SNAPSHOT-distro.jar
 tar xf zingg-0.3.4-SNAPSHOT-spark-3.1.2.tar.gz
 mv zingg-0.3.4-SNAPSHOT zingg-0.3.4
 tar xf spark-3.1.2-bin-hadoop3.2.tgz
@@ -19,6 +21,10 @@ cp -r zingg-0.3.4 AI_MDM_Prototype/external/
 cp -r spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/
 ln -sr AI_MDM_Prototype/external/zingg-0.3.4 AI_MDM_Prototype/external/zingg
 ln -sr AI_MDM_Prototype/external/spark-3.1.2-bin-hadoop3.2 AI_MDM_Prototype/external/spark
+mkdir AI_MDM_Prototype/external/metanome-utils
+mv metanome-cli-1.1.0.jar AI_MDM_Prototype/external/metanome-utils
+mv pyro-distro-1.0-SNAPSHOT-distro.jar AI_MDM_Prototype/external/metanome-utils
+
 
 # Download and install miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
