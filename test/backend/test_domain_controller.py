@@ -18,7 +18,8 @@ def test_get_all_column_rules_from_df_and_config_1():
         speed=1.0,
         quality=0,
         g3_threshold=0.75,
-        fi_threshold=0.75
+        fi_threshold=0.75,
+        pyro=False
     )
     domain_controller = dc.DomainController()
     df = pd.DataFrame({
