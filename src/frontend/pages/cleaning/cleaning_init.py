@@ -697,7 +697,7 @@ class CleanerInitPage:
             with colB:
                 # checkbox om te mergen, default actief
                 st.session_state[f"fuzzy_merge_{cv.cluster_id}"] = st.checkbox(
-                    "Voeg samen",
+                    "merge",
                     value=st.session_state[f"fuzzy_merge_{cv.cluster_id}"],
                     key=f"key_fuzzy_merge_{cv.cluster_id}",
                 )
