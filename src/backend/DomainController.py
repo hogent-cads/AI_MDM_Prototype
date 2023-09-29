@@ -1,7 +1,6 @@
 import hashlib
 import glob
 import os
-from datetime import datetime
 
 import pandas as pd
 from flask import json, request
