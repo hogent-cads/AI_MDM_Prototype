@@ -95,21 +95,21 @@ class ZinggClusterPage:
         last_page = len(colstoUse) // N
 
         # Add a next button and a previous button
-        prev, _, tussen, _, next = st.columns([2, 1, 2, 1, 2])
+        prev_btn, _, mid_btn, _, next_btn = st.columns([2, 1, 2, 1, 2])
 
-        if next.button("Next results"):
+        if next_btn.button("Next results"):
             if st.session_state[key] + 1 > last_page:
                 st.session_state[key] = 0
             else:
                 st.session_state[key] += 1
 
-        if prev.button("Previous results"):
+        if prev_btn.button("Previous results"):
             if st.session_state[key] - 1 < 0:
                 st.session_state[key] = last_page
             else:
                 st.session_state[key] -= 1
 
-        with tussen:
+        with mid_btn:
             st.write(
                 str(st.session_state[key] + 1)
                 + "/"

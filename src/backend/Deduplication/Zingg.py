@@ -122,10 +122,10 @@ class Zingg:
     @staticmethod
     def get_unmarked_pairs(modelID):
         # Go to directory and read in parquet files
-        dir = f"storage/{modelID}/models/{modelID}/trainingData/unmarked"
+        directory = f"storage/{modelID}/models/{modelID}/trainingData/unmarked"
 
-        files = os.listdir(dir)
-        files = [os.path.join(dir, f) for f in files if f.endswith(".parquet")]
+        files = os.listdir(directory)
+        files = [os.path.join(directory, f) for f in files if f.endswith(".parquet")]
 
         return pd.concat([pd.read_parquet(f) for f in files])
 
@@ -137,8 +137,8 @@ class Zingg:
 
     @staticmethod
     def mark_pairs(modelID, dataframe):
-        dir = f"storage/{modelID}/models/{modelID}/trainingData/marked"
-        Path(dir).mkdir(parents=True, exist_ok=True)
+        directory = f"storage/{modelID}/models/{modelID}/trainingData/marked"
+        Path(directory).mkdir(parents=True, exist_ok=True)
 
         for z_cluster_id, z_cluster_df in dataframe.groupby("z_cluster"):
             # create md5 hash of z_cluster_id
@@ -158,20 +158,20 @@ class Zingg:
 
             # save to parquet file
             z_cluster_df.to_parquet(
-                f"{dir}/{label}{z_cluster_id}.parquet",
+                f"{directory}/{label}{z_cluster_id}.parquet",
                 index=False,
             )
-            tmp = Zingg._read_parquet_schema_df(f"{dir}/{label}{z_cluster_id}.parquet")
+            tmp = Zingg._read_parquet_schema_df(f"{directory}/{label}{z_cluster_id}.parquet")
             cfg.logger.debug("Saved %s.parquet", z_cluster_id)
 
     @staticmethod
     def get_stats(modelID):
         # Go to directory and read in parquet files
-        dir = f"storage/{modelID}/models/{modelID}/trainingData/marked"
+        directory = f"storage/{modelID}/models/{modelID}/trainingData/marked"
         # check if directory exists
-        if not os.path.exists(dir):
+        if not os.path.exists(directory):
             return {"match_files": 0, "no_match_files": 0, "unsure_files": 0}
-        files = os.listdir(dir)
+        files = os.listdir(directory)
 
         match_files = len(
             [f for f in files if f.startswith("1") & f.endswith(".parquet")]

@@ -13,12 +13,12 @@ class StateManager:
         pass
 
     @staticmethod
-    def turn_state_button_true(id):
-        st.session_state[id] = True
+    def turn_state_button_true(button_id):
+        st.session_state[button_id] = True
 
     @staticmethod
-    def turn_state_button_false(id):
-        st.session_state[id] = False
+    def turn_state_button_false(button_id):
+        st.session_state[button_id] = False
 
     @staticmethod
     def restore_state(**kwargs) -> None:

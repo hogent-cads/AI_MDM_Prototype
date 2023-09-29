@@ -38,6 +38,7 @@ class InitPage:
             )
 
         with colB:
+            # pylint: disable=no-member
             selected_type = st.selectbox("Type:", ZingTypes._member_names_)
 
         with colC:
