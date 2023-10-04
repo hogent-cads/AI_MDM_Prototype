@@ -607,21 +607,21 @@ class CleanerInitPage:
         last_page = len(cols_to_use) // N
 
         # Add a next button and a previous button
-        prev, _, tussen, _, next, _ = st.columns([3, 1, 2, 1, 3, 2])
+        prev_btn, _, mid_btn, _, next_btn, _ = st.columns([3, 1, 2, 1, 3, 2])
 
-        if next.button("Next results"):
+        if next_btn.button("Next results"):
             if st.session_state[key] + 1 > last_page:
                 st.session_state[key] = 0
             else:
                 st.session_state[key] += 1
 
-        if prev.button("Previous results"):
+        if prev_btn.button("Previous results"):
             if st.session_state[key] - 1 < 0:
                 st.session_state[key] = last_page
             else:
                 st.session_state[key] -= 1
 
-        with tussen:
+        with mid_btn:
             st.write(
                 str(st.session_state[key] + 1)
                 + "/"
@@ -697,7 +697,7 @@ class CleanerInitPage:
             with colB:
                 # checkbox om te mergen, default actief
                 st.session_state[f"fuzzy_merge_{cv.cluster_id}"] = st.checkbox(
-                    "Voeg samen",
+                    "merge",
                     value=st.session_state[f"fuzzy_merge_{cv.cluster_id}"],
                     key=f"key_fuzzy_merge_{cv.cluster_id}",
                 )

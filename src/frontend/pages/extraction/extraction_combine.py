@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import streamlit as st
 from hdbscan import HDBSCAN
 from sklearn.cluster import MiniBatchKMeans
 
@@ -37,7 +36,7 @@ class DataExtractorCombinePage:
                                                 default=st.session_state['tmp']["Values"][e],
                                                 key=f"multiselect_{e}")
                     with col2AA:
-                        st.session_state['tmp']["Cluster"][e] = st.text_input(label=f"New Value: ",
+                        st.session_state['tmp']["Cluster"][e] = st.text_input(label="New Value: ",
                                                                               value=value_to_replace,
                                                                               key=f"text_input_{e}", )
 

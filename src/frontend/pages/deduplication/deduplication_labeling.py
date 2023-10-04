@@ -84,15 +84,15 @@ class ZinggLabelPage:
                 colB_2_1, colB_2_2, colB_2_3 = st.columns([1, 1, 1])
                 with colB_2_1:
                     st.write("")
-                    next = st.button(d.DD_DEDUPLICATION_UPDATE_BTN.value)
+                    next_btn = st.button(d.DD_DEDUPLICATION_UPDATE_BTN.value)
                 with colB_2_2:
                     st.write("")
-                    clear = st.button(d.DD_DEDUPLICATION_CLEAR_BTN.value)
+                    clear_btn = st.button(d.DD_DEDUPLICATION_CLEAR_BTN.value)
                 with colB_2_3:
                     st.write("")
-                    finish = st.button(d.DD_DEDUPLICATION_FINISH_BTN.value)
+                    finish_btn = st.button(d.DD_DEDUPLICATION_FINISH_BTN.value)
 
-        if next:
+        if next_btn:
             _ = self.handler.zingg_mark_pairs(
                 st.session_state[Variables.DD_CURRENT_LABEL_ROUND].to_json()
             )
@@ -103,7 +103,7 @@ class ZinggLabelPage:
             st.session_state[Variables.DD_LABEL_STATS] = self.handler.zingg_get_stats()
             st.experimental_rerun()
 
-        if clear:
+        if clear_btn:
             _ = self.handler.zingg_clear()
             _ = self.handler.run_zingg_phase("findTrainingData")
             st.session_state[Variables.DD_CURRENT_LABEL_ROUND] = pd.DataFrame(
@@ -112,7 +112,7 @@ class ZinggLabelPage:
             st.session_state[Variables.DD_LABEL_STATS] = self.handler.zingg_get_stats()
             st.experimental_rerun()
 
-        if finish:
+        if finish_btn:
             # Moet nog een nagegaan worden of model gemaakt is, of er een error is opgetreden door te weinig gelaabelde data => check op bestaan van folder 'model'
             response = self.handler.run_zingg_phase("train").json()
             if response == "200":

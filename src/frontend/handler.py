@@ -1,6 +1,5 @@
 import json
 from abc import ABC, abstractmethod
-from typing import List
 
 import requests
 import streamlit as st
