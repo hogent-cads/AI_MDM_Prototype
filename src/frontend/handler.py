@@ -96,6 +96,16 @@ class IHandler(ABC):
             rule_finding_config_in_json,
             seq)-> json:
         raise Exception("Not implemented Exception")
+    
+    @abstractmethod
+    def calculate_data_extraction_evaluation_scores(
+            self, config_dict, df_chosen_column) -> json:
+        raise Exception("Not implemented Exception")
+    
+    @abstractmethod
+    def perform_data_extraction_clustering(
+            self, config_dict="", original_df="", df_to_cluster="") -> json:
+        raise Exception("Not implemented Exception")
 
 
 class LocalHandler(IHandler):
@@ -208,7 +218,21 @@ class LocalHandler(IHandler):
             exception_chars=exception_chars,
             compress=compress,
         )
-
+    
+    def calculate_data_extraction_evaluation_scores(
+            self, config_dict, df_chosen_column) -> json:
+        return self.dc.calculate_data_extraction_evaluation_scores(
+            config_dict=config_dict,
+            df_chosen_column=df_chosen_column
+        )
+    
+    def perform_data_extraction_clustering(
+            self, config_dict="", original_df="", df_to_cluster="") -> json:
+        return self.dc.perform_data_extraction_clustering(
+            config_dict=config_dict,
+            original_df=original_df,
+            df_to_cluster=df_to_cluster
+        )
 
 class RemoteHandler(IHandler):
     def __init__(self, connection_string) -> None:
@@ -455,4 +479,23 @@ class RemoteHandler(IHandler):
         data["compress"] = compress
         return requests.post(
             f"{self.connection_string}/structure_detection", data=json.dumps(data)
+        ).json()
+    
+    def calculate_data_extraction_evaluation_scores(
+            self, config_dict, df_chosen_column) -> json:
+        data = {}
+        data["config_dict"] = config_dict
+        data["df_chosen_column"] = df_chosen_column.to_json()
+        return requests.post(
+            f"{self.connection_string}/calculate_data_extraction_evaluation_scores", data=json.dumps(data)
+        ).json()
+    
+    def perform_data_extraction_clustering(
+            self, config_dict="", original_df="", df_to_cluster="") -> json:
+        data = {}
+        data["config_dict"] = config_dict
+        data["original_df"] = original_df.to_json()
+        data["df_to_cluster"] = df_to_cluster
+        return requests.post(
+            f"{self.connection_string}/perform_data_extraction_clustering", data=json.dumps(data)
         ).json()

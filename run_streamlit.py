@@ -153,8 +153,10 @@ def _reload_dataframe(uploaded_file, handler):
                 pd.read_csv(uploaded_file, delimiter=separator if separator else ",")
             )
         except Exception as e:
-            # st.error(f"Error while reading the file, please check if the 'optional separator' is correct.")
-            st.error(e)
+            if e.__class__ == pd.errors.ParserError:
+                st.error(f"Error while reading the file, please check if the 'optional separator' is correct.")
+            else:
+                st.error(f"Unable to read in file: {e}")
             st.session_state[v.SB_LOADED_DATAFRAME] = pd.DataFrame()
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = uploaded_file.name
         st.session_state[v.SB_LOADED_DATAFRAME_ID] = uploaded_file.id
@@ -230,6 +232,7 @@ def main():
         d.SB_UPLOAD_DATASET, key="_uploaded_file_widget"
     )
 
+    
     # Sidebar vullen met optionele separator
     if uploaded_file:
         if v.SB_LOADED_DATAFRAME_ID not in st.session_state:

@@ -120,34 +120,14 @@ class DataExtractorResultsPage:
 
                 if st.session_state[Variables.DE_STORED_CONFIG] != st.session_state[Variables.DE_CONFIG]:
 
-                    if st.session_state[Variables.DE_CONFIG]['chosen_type'] == "Categorical":
-                        # If categorical, we need to extract the tfidf vectors and use PCA to reduce the dimensionality
-                        tfidf_vectorizer_vectors = self.extract_tfidf_vectors(
-                            st.session_state[Variables.DE_CONFIG]['chosen_column'])
-                        st.session_state[Variables.DE_CLUSTER_DF] = self.perform_pca(tfidf_vectorizer_vectors, 0.95)
-                    else:
-                        # Numerical
-                        st.session_state[Variables.DE_CLUSTER_DF] = st.session_state[Variables.SB_LOADED_DATAFRAME][
-                            st.session_state[Variables.DE_CONFIG]['chosen_column']].astype(float).to_frame()
-
-                    # K-means
-                    if st.session_state[Variables.DE_CONFIG]['chosen_algorithm'] == "K-means":
-                        scores = {}
-                        for center in centers:
-                            print(f"calculating scores for: {center}")
-                            scores[center] = self.get_cluster_scores_kmeans(st.session_state[Variables.DE_CLUSTER_DF],
-                                                                            center)
-                        st.session_state[Variables.DE_SCORES] = scores
-
-                        # HDBSCAN
-                    if st.session_state[Variables.DE_CONFIG]['chosen_algorithm'] == "HDBSCAN":
-                        scores = {}
-                        for min_sample in centers:
-                            print(f"calculating scores for: {min_sample}")
-                            scores[min_sample] = self.get_cluster_scores_hdbscan(
-                                st.session_state[Variables.DE_CLUSTER_DF], min_sample)
-                        st.session_state[Variables.DE_SCORES] = scores
-
+                    # Fetch scores from back-end
+                    result = self.handler.calculate_data_extraction_evaluation_scores(
+                        st.session_state[Variables.DE_CONFIG],
+                        st.session_state[Variables.SB_LOADED_DATAFRAME][
+                            st.session_state[Variables.DE_CONFIG]['chosen_column']])
+                    st.session_state[Variables.DE_CLUSTER_DF] = result["cluster_df"]
+                    st.session_state[Variables.DE_SCORES] = result["scores"]
+                    scores = result["scores"]
                     st.session_state[Variables.DE_STORED_CONFIG] = st.session_state[Variables.DE_CONFIG]
 
                 else:
@@ -164,7 +144,7 @@ class DataExtractorResultsPage:
                 st.write('Avg Silhouette')
                 st.write(self.plot_figure(x=centers, y=[v['avg_silhouette'] for v in scores.values()],
                                           kl=self.find_knee(x=centers, y=[v['avg_silhouette'] for v in scores.values()],
-                                                            S=1.0, curve="concave", direction="increasing",
+                                                            S=3.0, curve="concave", direction="increasing",
                                                             online=False,
                                                             interp_method="interp1d", polynomial_degree=3),
                                           all_knees=True))
@@ -175,24 +155,24 @@ class DataExtractorResultsPage:
                     st.write('Inertia')
                     st.write(self.plot_figure(x=centers, y=[v['inertia'] for v in scores.values()],
                                               kl=self.find_knee(x=centers, y=[v['inertia'] for v in scores.values()],
-                                                                S=1.0,
-                                                                curve="convex", direction="increasing", online=True,
+                                                                S=3.0,
+                                                                curve="convex", direction="decreasing", online=True,
                                                                 interp_method="interp1d", polynomial_degree=3),
                                               all_knees=False))
 
                 st.write('CH Index')
                 st.write(self.plot_figure(x=centers, y=[v['ch_index'] for v in scores.values()],
                                           kl=self.find_knee(x=centers, y=[v['ch_index'] for v in scores.values()],
-                                                            S=1.0,
-                                                            curve="convex", direction="increasing", online=True,
+                                                            S=3.0,
+                                                            curve="concave", direction="decreasing", online=True,
                                                             interp_method="interp1d", polynomial_degree=3),
                                           all_knees=False))
 
                 st.write('DB Index')
                 st.write(self.plot_figure(x=centers, y=[v['db_index'] for v in scores.values()],
                                           kl=self.find_knee(x=centers, y=[v['db_index'] for v in scores.values()],
-                                                            S=1.0,
-                                                            curve="convex", direction="increasing", online=True,
+                                                            S=3.0,
+                                                            curve="concave", direction="decreasing", online=True,
                                                             interp_method="interp1d", polynomial_degree=3),
                                           all_knees=False))
 
@@ -233,90 +213,5 @@ class DataExtractorResultsPage:
                     Variables.DE_FINAL_CONFIG_ALGORITHM: f_algo,
                     Variables.DE_FINAL_CONFIG_PARAM: f_param
                 }
+                del st.session_state['tmp']
                 st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DE_COMBINE
-
-    def get_cluster_scores_kmeans(self, cluster_df, center):
-        # Create a KMeans instance with k clusters: model
-        kmeans = MiniBatchKMeans(n_clusters=center)
-        # Then fit the model to your data using the fit method
-        model = kmeans.fit_predict(cluster_df)
-
-        # Calculate Davies Bouldin score
-        db_index = davies_bouldin_score(cluster_df, model)
-        inertia = kmeans.inertia_
-        ch_index = calinski_harabasz_score(cluster_df, model)
-        avg_silhouette = silhouette_score(cluster_df, model)
-
-        return {
-            'db_index': db_index,
-            'inertia': inertia,
-            'ch_index': ch_index,
-            'avg_silhouette': avg_silhouette
-        }
-
-    def get_cluster_scores_hdbscan(self, cluster_df, min_sample):
-        # Create a HDSCAN instance
-        hdbscan = HDBSCAN(min_cluster_size=min_sample)
-        # Then fit the model to your data using the fit method
-        model = hdbscan.fit_predict(cluster_df)
-
-        # Calculate Davies Bouldin score
-        db_index = davies_bouldin_score(cluster_df, model)
-        # TODO Change
-        inertia = 0
-        ch_index = calinski_harabasz_score(cluster_df, model)
-        avg_silhouette = silhouette_score(cluster_df, model)
-
-        return {
-            'db_index': db_index,
-            'inertia': inertia,
-            'ch_index': ch_index,
-            'avg_silhouette': avg_silhouette
-        }
-
-    def perform_pca(self, tfidf_vectorizer_vectors, variance_expl=0.95):
-        print(f"total features: {tfidf_vectorizer_vectors.shape[1]}")
-
-        if tfidf_vectorizer_vectors.shape[1] <= 10:
-            iteration_step_size = 1
-        elif tfidf_vectorizer_vectors.shape[1] <= 100:
-            iteration_step_size = 10
-        else:
-            iteration_step_size = math.floor(tfidf_vectorizer_vectors.shape[1] / 25)
-
-        print(f"iteration step size: {iteration_step_size}")
-        # 1570 is the step size for the products.csv dataset
-        for comp in range(1, tfidf_vectorizer_vectors.shape[1], iteration_step_size):
-            pca = TruncatedSVD(n_components=comp, random_state=42)
-            pca.fit(tfidf_vectorizer_vectors)
-            comp_check = pca.explained_variance_ratio_
-            final_comp = comp
-            print(f"size: {comp}, variance: {comp_check.sum()}")
-            if comp_check.sum() > variance_expl:
-                print(f"final size: {final_comp}, final variance: {comp_check.sum()}")
-                break
-        Final_PCA = TruncatedSVD(n_components=final_comp, random_state=42)
-        Final_PCA.fit(tfidf_vectorizer_vectors)
-        cluster_df = Final_PCA.transform(tfidf_vectorizer_vectors)
-        # num_comps = comp_check.shape[0]
-        # st.write(
-        #     f"Using {final_comp} components, we can explain {comp_check.sum()}% of the variability in the original data.")
-        return cluster_df
-
-    def extract_tfidf_vectors(self, chosen_column):
-        # keuze tussen char of word
-        chosen_ngrams = "char"
-        # Bepaalde range van ngrams
-        chosen_ngram_range = (2, 4)
-        try:
-            tfidf_vectorizer = TfidfVectorizer(use_idf=True, analyzer=chosen_ngrams, ngram_range=chosen_ngram_range)
-            tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(
-                st.session_state[Variables.SB_LOADED_DATAFRAME][chosen_column].astype(str).to_list())
-            return tfidf_vectorizer_vectors
-        except Exception as e:
-            chosen_ngram_range = (1, 1)
-            tfidf_vectorizer = TfidfVectorizer(use_idf=True, analyzer=chosen_ngrams, ngram_range=chosen_ngram_range)
-            tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(
-                st.session_state[Variables.SB_LOADED_DATAFRAME][chosen_column].astype(str).to_list())
-            return tfidf_vectorizer_vectors
-        

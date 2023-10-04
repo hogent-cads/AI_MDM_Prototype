@@ -111,7 +111,7 @@ class StateManager:
             return
 
         if current_state == Variables.ST_DE_COMBINE:
-            st.session_state[Variables.GB_CURRENT_STATE] = None
+            st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DE_RESULTS
             return
 
     @staticmethod

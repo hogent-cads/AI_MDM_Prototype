@@ -15,6 +15,7 @@ from src.shared.configs import RuleFindingConfig
 from src.backend.DataCleaning.FuzzyMatcher import FuzzyMatcher
 from src.backend.DataCleaning.StructureDetector import StructureDetector
 from src.backend.Deduplication.Zingg import Zingg
+from src.backend.DataExtraction.DataExtractor import DataExtractor
 import config as cfg
 from src.shared.views import ColumnRuleView
 
@@ -34,6 +35,7 @@ class DomainController(FlaskView):
         self.data_prepper = DataPrepper()
         self.rule_mediator = None
         self.suggestion_finder = None
+        self.data_extractor = DataExtractor()
 
     # ZINGG METHODS
     @route("/prepare_zingg", methods=["POST"])
@@ -629,3 +631,34 @@ class DomainController(FlaskView):
 
         # RETURN RESULTS
         return json.dumps(result)
+    
+
+    # DATA EXTRACTION
+    @route("/perform_data_extraction_clustering", methods=["POST"])
+    def perform_data_extraction_clustering(
+            self, config_dict="", original_df="", df_to_cluster="") -> json:
+        
+        try:
+            data_to_use = json.loads(request.data)
+            config_dict = data_to_use["config_dict"]
+            original_df = pd.read_json(data_to_use["original_df"])
+            df_to_cluster = pd.read_json(data_to_use["df_to_cluster"])
+        finally:
+            result = self.data_extractor.perform_data_extraction_clustering(
+                config_dict=config_dict, df_to_cluster=df_to_cluster, original_df=original_df
+            )
+            # RETURN RESULTS
+            return result.to_json()
+    
+    @route("/calculate_data_extraction_evaluation_scores", methods=["POST"])
+    def calculate_data_extraction_evaluation_scores(
+            self, config_dict="", df_chosen_column="") -> json:
+        
+        try:
+            data_to_use = json.loads(request.data)
+            config_dict = data_to_use["config_dict"]
+            df_chosen_column = pd.Series(json.loads(data_to_use["df_chosen_column"]))
+        finally:
+            result = self.data_extractor.calculate_data_extraction_evaluation_scores(config_dict, df_chosen_column)
+            # RETURN RESULTS
+            return json.dumps(result)
