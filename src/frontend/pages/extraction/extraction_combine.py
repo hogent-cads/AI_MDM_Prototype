@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-from hdbscan import HDBSCAN
-from sklearn.cluster import MiniBatchKMeans
 
 from src.frontend.enums import Variables
 

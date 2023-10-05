@@ -1,16 +1,7 @@
-import math
-
 import plotly.graph_objects as go
 import streamlit as st
-from hdbscan import HDBSCAN
 from kneed import KneeLocator
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.decomposition import TruncatedSVD
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import davies_bouldin_score, calinski_harabasz_score, silhouette_score
-
 from src.frontend.enums import Variables
-
 
 class DataExtractorResultsPage:
     def __init__(self, canvas, handler):
