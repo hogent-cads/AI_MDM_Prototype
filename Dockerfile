@@ -48,6 +48,10 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 
 ENV PATH="/root/miniconda/bin:${PATH}"
 
+# Change the Zingg script
+RUN sed -i '/SPARK_HOME\/bin\/spark-submit/i source \/root\/miniconda\/etc\/profile.d\/conda.sh && conda activate aimdm' ./external/zingg/scripts/zingg.sh
+
+
 # Create a virtual environment
 RUN conda init bash && \
     conda create -y -n aimdm python=3.10
