@@ -20,8 +20,6 @@ class DataExtractorCombinePage:
                 st.session_state[Variables.DE_CLUSTER_DF],
             ))
                 st.session_state['tmp'] = tmp
-            else: 
-                tmp = st.session_state['tmp']
             
             merge_dict = {}
 

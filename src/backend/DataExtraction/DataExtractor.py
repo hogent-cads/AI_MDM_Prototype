@@ -2,7 +2,6 @@ import math
 import pandas as pd
 
 from hdbscan import HDBSCAN
-from kneed import KneeLocator
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -41,7 +40,6 @@ class DataExtractor:
 
         # Calculate Davies Bouldin score
         db_index = davies_bouldin_score(cluster_df, model)
-        # TODO Change
         inertia = 0
         ch_index = calinski_harabasz_score(cluster_df, model)
         avg_silhouette = silhouette_score(cluster_df, model)

@@ -169,7 +169,7 @@ class CleanerInitPage:
         with colI_3:
             st.write("")
             st.write("")
-            if st.button(d.DC_CLEANING_APPLY_PIPELINE_COLUMN.value):
+            if st.button(d.DC_CLEANING_APPLY_PIPELINE_COLUMN.value) & (st.session_state[Variables.DC_PIPELINE] != {}):
                 # Make a copy of the pipeline, this is the one that will be given to the backend.
                 # The pipeline in the session state will be used to show the pipeline in the frontend
                 copied_pipeline = deepcopy(st.session_state[Variables.DC_PIPELINE])
@@ -257,7 +257,7 @@ class CleanerInitPage:
         with colI4:
             st.write("")
             st.write("")
-            if st.button(d.DC_CLEANING_APPLY_PIPELINE_ALL.value):
+            if st.button(d.DC_CLEANING_APPLY_PIPELINE_ALL.value) & (st.session_state[Variables.DC_PIPELINE] != {}):
                 for e in st.session_state[Variables.SB_LOADED_DATAFRAME].columns:
                     copied_pipeline = deepcopy(st.session_state[Variables.DC_PIPELINE])
                     # iterate over alle value parameters in the pipeline
