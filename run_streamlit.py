@@ -159,7 +159,7 @@ def _reload_dataframe(uploaded_file, handler):
                 st.error(f"Unable to read in file: {e}")
             st.session_state[v.SB_LOADED_DATAFRAME] = pd.DataFrame()
         st.session_state[v.SB_LOADED_DATAFRAME_NAME] = uploaded_file.name
-        st.session_state[v.SB_LOADED_DATAFRAME_ID] = uploaded_file.id
+        st.session_state[v.SB_LOADED_DATAFRAME_ID] = uploaded_file.file_id
 
     st.session_state[v.SB_LOADED_DATAFRAME_SEPARATOR] = separator
     st.session_state[v.SB_LOADED_DATAFRAME_HASH] = _hash_dataframe(
@@ -253,7 +253,7 @@ def main():
                     _reload_dataframe(uploaded_file, handler)
 
         if (
-            st.session_state[v.SB_LOADED_DATAFRAME_ID] != uploaded_file.id
+            st.session_state[v.SB_LOADED_DATAFRAME_ID] != uploaded_file.file_id
         ) or st.session_state[v.DDC_FORCE_RELOAD_CACHE]:
             _reload_dataframe(uploaded_file, handler)
 

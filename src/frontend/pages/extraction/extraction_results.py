@@ -100,8 +100,8 @@ class DataExtractorResultsPage:
         return fig
 
     def show(self):
-        with self.canvas.container():
 
+        with self.canvas.container():
             try:
                 centers = list(
                     range(st.session_state[Variables.DE_CONFIG]['range_iteration_lower'],
@@ -204,5 +204,7 @@ class DataExtractorResultsPage:
                     Variables.DE_FINAL_CONFIG_ALGORITHM: f_algo,
                     Variables.DE_FINAL_CONFIG_PARAM: f_param
                 }
-                del st.session_state['tmp']
+                if 'tmp' in st.session_state:
+                    del st.session_state['tmp']
                 st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DE_COMBINE
+                st.rerun()

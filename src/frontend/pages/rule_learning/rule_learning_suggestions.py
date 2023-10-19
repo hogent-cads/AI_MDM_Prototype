@@ -46,17 +46,23 @@ class RuleLearnerSuggestionsPage:
                 )
             ]
 
+            # Add a column that displays the actual value of the right hand side of the rule
+            df_with_predictions["__ACTUAL_RHS"] = df_with_predictions.apply(
+                lambda row: row[row["__BEST_RULE"].split("=>")[1].strip()], axis=1
+            )
+
             # Order columns: __BEST_RULE and __BEST_PREDICTION at the front
             # TODO: this seems brittle, relies on the order of the columns in dataframe
             cols = df_with_predictions.columns.tolist()
-            cols = cols[-2:] + cols[:-2]
+            cols = cols[-3:] + cols[:-3]
             df_with_predictions = df_with_predictions[cols]
 
             suggestions_rows_selected = []
             list_of_df_idx = []
 
-            gb1 = GridOptionsBuilder.from_dataframe(df_with_predictions)
+            gb1 = GridOptionsBuilder.from_dataframe(df_with_predictions.reset_index())
             gb1.configure_grid_options(fit_columns_on_grid_load=True)
+            gb1.configure_first_column_as_index(headerText="Row in the data:")
             gb1.configure_selection(
                 "multiple",
                 pre_select_all_rows=False,
@@ -66,7 +72,7 @@ class RuleLearnerSuggestionsPage:
                 header_checkbox=True,
             )
             response_selection_suggestion_finder = AgGrid(
-                df_with_predictions,
+                df_with_predictions.reset_index(),
                 height=350,
                 editable=False,
                 gridOptions=gb1.build() | extra_grid_options,

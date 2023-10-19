@@ -84,3 +84,4 @@ class DataExtractorInitPage:
                                                              "range_iteration_upper": range_iteration_upper,
                                                              "number_of_scores": number_of_scores}
                     st.session_state[Variables.GB_CURRENT_STATE] = Variables.ST_DE_RESULTS
+                    st.experimental_rerun()

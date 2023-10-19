@@ -154,11 +154,11 @@ class CleanerInitPage:
             d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value: d.DC_CLEANING_METHOD_REMOVE_PREFIXED_DESCRIPTION.value,
         }
 
-        colG_1, colG_2, colG_3 = st.columns([1, 1, 1])
+        colG_1, colG_2, colG_3 = st.columns([1, 2, 1])
 
         st.write("")
         st.write("")
-        colI_1, colI_3, colI4, _ = st.columns([4, 3, 3, 3])
+        colI_1, colI_3, colI4= st.columns([4, 3, 3])
 
         with colI_1:
             chosen_column = st.selectbox(
@@ -301,35 +301,42 @@ class CleanerInitPage:
         with colG_3:
             st.write("")
             st.write("")
-            if st.button(d.DC_CLEANING_ADD_PIPELINE.value):
-                # check if the pipeline is empty
-                if st.session_state[Variables.DC_PIPELINE] == {}:
-                    st.session_state[Variables.DC_PIPELINE]["text"] = []
+            colH_1, colH_2 = st.columns([1, 1])
+            with colH_1:
+                if st.button(d.DC_CLEANING_ADD_PIPELINE.value):
+                    # check if the pipeline is empty
+                    if st.session_state[Variables.DC_PIPELINE] == {}:
+                        st.session_state[Variables.DC_PIPELINE]["text"] = []
 
-                to_append = {}
-                if cleaning_method not in special_methods:
-                    to_append = {
-                        "operator": cleaning_method_translations[cleaning_method]
-                    }
-                if cleaning_method == d.DC_CLEANING_METHOD_FILLNA.value:
-                    to_append = {
-                        "operator": cleaning_method_translations[cleaning_method],
-                        "parameters": {"value": str(value)},
-                    }
-                if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value:
-                    to_append = {
-                        "operator": cleaning_method_translations[cleaning_method],
-                        "parameters": {"brackets": value},
-                    }
-                if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value:
-                    to_append = {
-                        "operator": cleaning_method_translations[cleaning_method],
-                        "parameters": {"prefix": value},
-                    }
-                st.session_state[Variables.DC_PIPELINE]["text"].append(to_append)
-
-            if st.button(d.DC_CLEANING_CLEAR_PIPELINE.value):
-                st.session_state[Variables.DC_PIPELINE] = {}
+                    to_append = {}
+                    if cleaning_method not in special_methods:
+                        to_append = {
+                            "operator": cleaning_method_translations[cleaning_method]
+                        }
+                    if cleaning_method == d.DC_CLEANING_METHOD_FILLNA.value:
+                        to_append = {
+                            "operator": cleaning_method_translations[cleaning_method],
+                            "parameters": {"value": str(value)},
+                        }
+                    if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_BRACKETED.value:
+                        to_append = {
+                            "operator": cleaning_method_translations[cleaning_method],
+                            "parameters": {"brackets": value},
+                        }
+                    if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_PREFIXED.value:
+                        to_append = {
+                            "operator": cleaning_method_translations[cleaning_method],
+                            "parameters": {"prefix": value},
+                        }
+                    if cleaning_method == d.DC_CLEANING_METHOD_REMOVE_STOPWORDS.value:
+                        to_append = {
+                            "operator": cleaning_method_translations[cleaning_method],
+                            "parameters": {"stopwords": value.split(',')},
+                        }
+                    st.session_state[Variables.DC_PIPELINE]["text"].append(to_append)
+            with colH_2:
+                if st.button(d.DC_CLEANING_CLEAR_PIPELINE.value):
+                    st.session_state[Variables.DC_PIPELINE] = {}
 
         with colG_1:
             st.subheader(d.DC_CLEANING_CURRENT_PIPELINE.value)
@@ -405,7 +412,7 @@ class CleanerInitPage:
                 groupSelectsFiltered=True,
             )
             extra_grid_options_1 = {
-                "alwaysShowHorizontalScroll": True,
+                # "alwaysShowHorizontalScroll": True,
                 "alwaysShowVerticalScroll": True,
             }
             response_patterns = AgGrid(
@@ -439,7 +446,10 @@ class CleanerInitPage:
                         st.session_state["idx_of_structure_df"] = list(
                             df_for_aggrid2.index
                         )
+                    # Add index column
+                    df_for_aggrid2 = df_for_aggrid2.reset_index()
                     gb2 = GridOptionsBuilder.from_dataframe(df_for_aggrid2)
+                    gb2.configure_first_column_as_index(headerText="Row in the data:", )
                     gb2.configure_side_bar()
                     gb2.configure_default_column(
                         groupable=False,
@@ -450,6 +460,7 @@ class CleanerInitPage:
                     )
                     gridOptions = gb2.build()
                     extra_grid_options_2 = {
+                        "valueGetter": "node.rowIndex + 1",
                         "alwaysShowHorizontalScroll": True,
                         "alwaysShowVerticalScroll": True,
                         "pagination": True,
@@ -477,7 +488,7 @@ class CleanerInitPage:
 
     def _show_fuzzy_matching_tab(self):
         st.header("Fuzzy Matching:")
-        colC_1, colC_2, colC_3 = st.columns([1, 1, 1])
+        colC_1, colC_2 = st.columns([1, 1])
         with colC_1:
             chosen_column = st.selectbox(
                 "Select the column that you want to cluster:",
@@ -496,7 +507,7 @@ class CleanerInitPage:
 
         fuzzy_matching_form = st.form(key="fuzzy_matching_form")
         with fuzzy_matching_form:
-            colD_2, colD_1, _ = st.columns([1, 3, 2])
+            colD_2, colD_1 = st.columns([1, 3])
 
             with colD_1:
                 n_gram = 0
@@ -521,7 +532,9 @@ class CleanerInitPage:
 
             with colD_2:
                 st.write("")
+                st.write("")
                 fuzzy_matching_btn = st.form_submit_button(label="Cluster")
+                st.write("")
 
         if fuzzy_matching_btn:
             # Iterate over clusters
@@ -560,24 +573,22 @@ class CleanerInitPage:
         if st.session_state["list_of_fuzzy_cluster_view"] != []:
             st.header("Found clusters:")
 
-            col0, _ = st.columns([6, 2])
-            with col0:
-                sort_clusters = st.selectbox(
-                    "Sort clusters on:",
-                    ("Cluster size: increasing", "Cluster size: decreasing"),
+            sort_clusters = st.selectbox(
+                "Sort clusters on:",
+                ("Cluster size: increasing", "Cluster size: decreasing"),
+            )
+            if sort_clusters == "Cluster size: increasing":
+                st.session_state["list_of_fuzzy_cluster_view"] = sorted(
+                    st.session_state["list_of_fuzzy_cluster_view"],
+                    key=lambda x: len(x.distinct_values_in_cluster),
+                    reverse=False,
                 )
-                if sort_clusters == "Cluster size: increasing":
-                    st.session_state["list_of_fuzzy_cluster_view"] = sorted(
-                        st.session_state["list_of_fuzzy_cluster_view"],
-                        key=lambda x: len(x.distinct_values_in_cluster),
-                        reverse=False,
-                    )
-                if sort_clusters == "Cluster size: decreasing":
-                    st.session_state["list_of_fuzzy_cluster_view"] = sorted(
-                        st.session_state["list_of_fuzzy_cluster_view"],
-                        key=lambda x: len(x.distinct_values_in_cluster),
-                        reverse=True,
-                    )
+            if sort_clusters == "Cluster size: decreasing":
+                st.session_state["list_of_fuzzy_cluster_view"] = sorted(
+                    st.session_state["list_of_fuzzy_cluster_view"],
+                    key=lambda x: len(x.distinct_values_in_cluster),
+                    reverse=True,
+                )
 
             st.write("")
             st.write("")
@@ -586,7 +597,7 @@ class CleanerInitPage:
             )
             for idx, cv in enumerate(sub_rows_to_use):
                 self._create_cluster_card(idx, cv)
-            if st.button("Bevestig clusters"):
+            if st.button("Apply clusters"):
                 self._merge_clusters(
                     st.session_state["list_of_fuzzy_cluster_view"], chosen_column
                 )
@@ -607,7 +618,7 @@ class CleanerInitPage:
         last_page = len(cols_to_use) // N
 
         # Add a next button and a previous button
-        prev_btn, _, mid_btn, _, next_btn, _ = st.columns([3, 1, 2, 1, 3, 2])
+        prev_btn, _, mid_btn, _, next_btn = st.columns([1, 2, 2, 1, 1])
 
         if next_btn.button("Next results"):
             if st.session_state[key] + 1 > last_page:
@@ -662,9 +673,17 @@ class CleanerInitPage:
         cont = st.container()
 
         with cont:
-            col0, colA, colB, colC, _ = st.columns([2, 4, 2, 2, 4])
+            col0, colA, colB, colC = st.columns([1, 4, 2, 2,])
             with col0:
-                st.subheader(f"Cluster #{cv.cluster_id}")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.subheader(f" #{cv.cluster_id}")
             with colA:
                 gb1 = GridOptionsBuilder.from_dataframe(cv.distinct_values_in_cluster)
                 gb1.configure_side_bar()
@@ -695,6 +714,14 @@ class CleanerInitPage:
                 )
                 cv.selected_rows = tmp["selected_rows"]
             with colB:
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
                 # checkbox om te mergen, default actief
                 st.session_state[f"fuzzy_merge_{cv.cluster_id}"] = st.checkbox(
                     "merge",
@@ -703,6 +730,12 @@ class CleanerInitPage:
                 )
 
             with colC:
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
+                st.write("")
                 # st.write("Verander naar")
                 st.session_state[f"new_value_{cv.cluster_id}"] = st.text_input(
                     "New value",

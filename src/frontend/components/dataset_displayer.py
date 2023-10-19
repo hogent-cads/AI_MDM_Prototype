@@ -1,5 +1,6 @@
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode
+from mitosheet.streamlit.v1 import spreadsheet
 
 from src.frontend.enums import Variables
 
@@ -10,34 +11,41 @@ class DatasetDisplayerComponent:
 
     def show(self, min_height: int = 50, max_height: int = 500, row_height: int = 60):
         st.header("Loaded dataset:")
-        gb = GridOptionsBuilder.from_dataframe(
-            st.session_state[Variables.SB_LOADED_DATAFRAME]
-        )
-        gb.configure_side_bar()
-        gb.configure_default_column(editable=True)
-        standard_grid_options = gb.build()
-
-        extra_grid_options = {
-            "alwaysShowHorizontalScroll": True,
-            "alwaysShowVerticalScroll": True,
-            "pagination": True,
-            "paginationPageSize": len(st.session_state[Variables.SB_LOADED_DATAFRAME]),
-        }
-
-        grid_options = standard_grid_options | extra_grid_options
-        grid_response = AgGrid(
-            st.session_state[Variables.SB_LOADED_DATAFRAME],
-            update_mode=GridUpdateMode.GRID_CHANGED,
-            gridOptions=grid_options,
-            enable_enterprise_modules=True,
-            height=min(
-                min_height
-                + len(st.session_state[Variables.SB_LOADED_DATAFRAME]) * row_height,
-                max_height,
-            ),
-        )
-        # Check if data is changed
-        if st.session_state[Variables.SB_LOADED_DATAFRAME] is not grid_response["data"]:
-            st.session_state[Variables.SB_LOADED_DATAFRAME] = grid_response["data"]
-            # Force cache refresh when data is changed, (However the file will not be reloaded)
+        _, code = spreadsheet(st.session_state[Variables.SB_LOADED_DATAFRAME])
+        st.write("Note: Changes made to the dataset will only be persisted when pressing the button below.")
+        if st.button("Persist changes made to the dataset"):
+            code_to_run = "df1 = st.session_state[Variables.SB_LOADED_DATAFRAME] \n" + code + "st.session_state[Variables.SB_LOADED_DATAFRAME] = df1"
+            exec(code_to_run)
             st.session_state[Variables.DDC_FORCE_RELOAD_CACHE] = True
+
+        # gb = GridOptionsBuilder.from_dataframe(
+        #     st.session_state[Variables.SB_LOADED_DATAFRAME]
+        # )
+        # gb.configure_side_bar()
+        # gb.configure_default_column(editable=True)
+        # standard_grid_options = gb.build()
+        #
+        # extra_grid_options = {
+        #     "alwaysShowHorizontalScroll": True,
+        #     "alwaysShowVerticalScroll": True,
+        #     "pagination": True,
+        #     "paginationPageSize": len(st.session_state[Variables.SB_LOADED_DATAFRAME]),
+        # }
+        #
+        # grid_options = standard_grid_options | extra_grid_options
+        # grid_response = AgGrid(
+        #     st.session_state[Variables.SB_LOADED_DATAFRAME],
+        #     update_mode=GridUpdateMode.GRID_CHANGED,
+        #     gridOptions=grid_options,
+        #     enable_enterprise_modules=True,
+        #     height=min(
+        #         min_height
+        #         + len(st.session_state[Variables.SB_LOADED_DATAFRAME]) * row_height,
+        #         max_height,
+        #     ),
+        # )
+        # # Check if data is changed
+        # if st.session_state[Variables.SB_LOADED_DATAFRAME] is not grid_response["data"]:
+        #     st.session_state[Variables.SB_LOADED_DATAFRAME] = grid_response["data"]
+        #     # Force cache refresh when data is changed, (However the file will not be reloaded)
+        #     st.session_state[Variables.DDC_FORCE_RELOAD_CACHE] = True
