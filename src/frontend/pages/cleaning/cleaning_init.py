@@ -517,7 +517,7 @@ class CleanerInitPage:
                     colE_1, _ = st.columns([1, 1])
                     with colE_1:
                         n_gram = st.slider(
-                            "The Number of N-Grams", min_value=1, max_value=10, value=2
+                            "The N for N-Grams", min_value=1, max_value=10, value=2
                         )
                 if cluster_method == "levenshtein":
                     colF_1, colF_2 = st.columns([1, 1])
