@@ -342,18 +342,32 @@ class DomainController(FlaskView):
 
     @route("/structure_detection", methods=["POST"])
     def structure_detection(
-            self, series_in_json:str="", exception_chars:str="", compress:bool=False
+            self, series_in_json: str="", exception_chars: str="", compress: bool=False
     ) -> json:
         '''
-        This method is used to detect the structure of a column in a dataframe. By default, the values of a column will be analyzed, by changing all letters to "X", all numbers to "9" and all other special character will be not regarded in the analysis.
-        Additionally, the user can specify exception characters, which will be added to the pattern during the analysis. F.e. '-' in a phone number: 123-456-789 will be analyzed as 999-999-999.
-        The user can also specify whether the values should be compressed or not. Meaning all subsequent characters in the structure will be reduced to a single occurance of that character.
-        F.e. 123-456-789 would have the structure: 999-999-999, but with the compress parameter, the structure would be 9-9-9.
+        This method is used to detect the structure of a column in a dataframe.
+        By default, the values of a column will be analyzed, by changing all
+        letters to "X", all numbers to "9" and all other special characters
+        will be not regarded in the analysis.
+        Additionally, the user can specify exception characters, which will be
+        added to the pattern during the analysis. E.g. '-' in a phone number:
+        123-456-789 will be analyzed as 999-999-999.
+        The user can also specify whether the values should be compressed or not.
+        Meaning all multiple consecutive characters in the structure will be
+        reduced to a single occurrence of that character.
+        E.g. 123-456-789 would have the structure: 999-999-999, but with the
+        compress parameter, the structure would be 9-9-9.
         :param series_in_json: A column of a dataframe (a Pandas.Series) in json format
         :type str
-        :param exception_chars: the exception characters, which will be used in the pattern during the analysis. When using multiple exception characters, they should be concatenated to each other. F.e: "," and '.' should be specified as ",."
+        :param exception_chars: the exception characters, which will be used in the
+                                pattern during the analysis. When using multiple exception characters,
+                                they should be concatenated to each other. 
+                                E.g: "," and '.' should be specified as ",."
         :type str
-        :param compress: whether the values should be compressed or not. Meaning all subsequent characters in the structure will be reduced to a single occurance of that character. Is False by default.
+        :param compress: whether the values should be compressed or not.
+                         Meaning all subsequent characters in the structure will be
+                         reduced to a single occurrence of that character.
+                         Is False by default.
         :type bool
         :return: the structure of the column as a pandas series in json format
         :type: json
