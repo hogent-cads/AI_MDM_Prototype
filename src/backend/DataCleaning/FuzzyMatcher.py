@@ -194,10 +194,10 @@ class FuzzyMatcher:
 
         - convert to lowercase
         - remove punctuation, whitespace and control characters
+        - normalize extended western characters to ASCII
         - get string n-grams
         - sort n-grams and remove duplicates
         - join sorted n grams back together
-        - normalize extended western characters to ASCII
 
         Method taken from OpenRefine:
         https://github.com/OpenRefine/OpenRefine/wiki/Clustering-In-Depth
