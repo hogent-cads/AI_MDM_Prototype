@@ -481,7 +481,7 @@ class CleanerInitPage:
                         # Replace values in the dataframe with the (possibly) new values
                         st.session_state[Variables.SB_LOADED_DATAFRAME].loc[
                             grid["data"].index
-                        ] = grid["data"]
+                        ] = grid["data"].iloc[:, 1:]  # Drop the first column
                         st.experimental_rerun()
             else:
                 st.session_state["idx_of_structure_df"] = None
