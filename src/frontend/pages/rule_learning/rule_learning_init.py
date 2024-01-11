@@ -39,7 +39,7 @@ class RuleLearnerInitPage:
                 default_rule_length = 3
                 default_confidence = 0.95
                 default_speed = 0.95
-                default_quality = 4
+                default_quality = 4.0
                 default_abs_min_support = 3
                 default_g3_threshold = 0.9
                 default_fi_threshold = 0.9
@@ -172,9 +172,10 @@ class RuleLearnerInitPage:
                     with rl_opt_col2:
                         st.session_state["quality"] = st.slider(
                             "Quality",
-                            min_value=0,
-                            max_value=5,
+                            min_value=0.0,
+                            max_value=5.0,
                             value=default_quality,
+                            step=0.05
                         )
 
                 adv_settings_exp = st.expander("Advanced Settings")
