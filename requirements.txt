@@ -23,7 +23,7 @@ werkzeug==2.1.2
 streamlit_aggrid
 streamlit_javascript
 websockets
-zingg
+zingg==0.3.4
 hdbscan
 plotly
 kneed
