@@ -180,11 +180,13 @@ class RuleLearnerInitPage:
 
                 adv_settings_exp = st.expander("Advanced Settings")
                 with adv_settings_exp:
-                    st.session_state["abs_min_support"] = st.number_input(
-                        "Minimum number of records for a mapping of a rule:",
-                        value=default_abs_min_support,
-                        format="%d"
-                    )
+
+                    if st.session_state[Variables.RL_SETTING_ALGO] == Variables.RL_SETTING_ALGO_FPG_FD.value:
+                    	st.session_state["abs_min_support"] = st.number_input(
+                        	"Minimum number of records for a mapping of a rule:",
+                        	value=default_abs_min_support,
+                        	format="%d"
+                    	)
 
                     st.session_state["g3_threshold"] = st.slider(
                         "g3_threshold",
