@@ -174,7 +174,7 @@ class RuleLearnerSummaryRulesPage:
                 st.write(" ")
                 st.write(" ")
                 validate_own_rule_btn = st.button(
-                    "Valiate own rule",
+                    "Validate own rule",
                     on_click=StateManager.turn_state_button_true,
                     args=("validate_own_rule_btn",),
                 )
