@@ -52,7 +52,7 @@ class ProfilerInitPage:
                 st.session_state[v.DP_PANDAS_PROFILE] = ProfileReport(
                     st.session_state[v.SB_LOADED_DATAFRAME]
                 )
-                st_profile_report(st.session_state[v.DP_PANDAS_PROFILE])
+                st.rerun()
         else:
             st_profile_report(st.session_state[v.DP_PANDAS_PROFILE])
 
@@ -80,10 +80,7 @@ class ProfilerInitPage:
                     "reports",
                     f"{st.session_state[v.SB_LOADED_DATAFRAME_HASH]}.html",
                 )
-                st.markdown(
-                    f'<a href="{st.session_state[v.DP_DATAPREP_PROFILE]}">Link to the report</a>',
-                    unsafe_allow_html=True,
-                )
+                st.rerun()
         else:
             st.header("Click on the link below to view the report")
             st.markdown(
